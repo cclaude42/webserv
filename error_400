@@ -1,0 +1,14 @@
+HTTP/1.1 400 Bad Request
+Server: nginx/1.18.0 (Ubuntu)
+Date: Fri, 30 Oct 2020 14:23:57 GMT
+Content-Type: text/html
+Content-Length: 166
+Connection: close
+
+<html>
+<head><title>400 Bad Request</title></head>
+<body>
+<center><h1>400 Bad Request</h1></center>
+<hr><center>nginx/1.18.0 (Ubuntu)</center>
+</body>
+</html>
