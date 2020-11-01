@@ -6,6 +6,14 @@ Team : [cclaude](https://github.com/cclaude42) / [frthierr](https://github.com/F
 
 ## Resources
 
+### Server setup
+
+[How to build a simple HTTP server](https://medium.com/from-the-scratch/http-server-what-do-you-need-to-know-to-build-a-simple-http-server-from-scratch-d1ef8945e4fa)
+
+[Simple server with C++](https://ncona.com/2019/04/building-a-simple-server-with-cpp/)
+
+[C++ Web Programming](https://www.tutorialspoint.com/cplusplus/cpp_web_programming.htm)
+
 ### HTTP 1.1 (standard to follow) :
 
 [HTTP/1.1 (RFC 2616)](https://www.rfc-editor.org/rfc/rfc2616.html)
@@ -40,6 +48,14 @@ Team : [cclaude](https://github.com/cclaude42) / [frthierr](https://github.com/F
 
 [HTTP Header Break Style](https://stackoverflow.com/questions/5757290/http-header-line-break-style)
 
-### Server setup
+### Select and non-blocking
 
-[How to build a simple HTTP server](https://medium.com/from-the-scratch/http-server-what-do-you-need-to-know-to-build-a-simple-http-server-from-scratch-d1ef8945e4fa)
+[Select](https://www.lowtek.com/sockets/select.html)
+
+[Non-blocking I/O](https://www.ibm.com/support/knowledgecenter/ssw_ibm_i_72/rzab6/xnonblock.htm)
+
+### CGI
+
+[CGI : Getting Started](http://www.mnuwer.dbasedeveloper.co.uk/dlearn/web/session01.htm)
+
+[CGI 1.1 Documentation](http://www.wijata.com/cgi/cgispec.html#4.0)
