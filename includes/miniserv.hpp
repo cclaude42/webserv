@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/31 13:44:42 by cclaude           #+#    #+#             */
-/*   Updated: 2020/10/31 22:10:43 by cclaude          ###   ########.fr       */
+/*   Updated: 2020/11/01 16:56:01 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,9 @@
 # define BYTE_2 0x0000ff00
 # define BYTE_3 0x000000ff
 
+// HEADER
+void			make_header(char *header, const char *file);
+
 // NTOH / HTON
 unsigned short	ft_ntohs(unsigned short s);
 unsigned short	ft_htons(unsigned short s);
@@ -39,6 +42,6 @@ unsigned int	ft_htonl(unsigned int l);
 
 // TOOLS
 char			*ft_memset(char *mem, int c, unsigned int size);
-void			make_header(char *header, const char *file);
+int				ft_strlen(char *str);
 
 #endif

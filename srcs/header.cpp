@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/31 22:05:04 by cclaude           #+#    #+#             */
-/*   Updated: 2020/10/31 22:32:37 by cclaude          ###   ########.fr       */
+/*   Updated: 2020/10/31 23:28:51 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 void	fill_head(char *header)
 {
-	char	str[60] = "HTTP/1.1 200 OK\nContent-Type: text/html\nContent-Length: ";
+	char	str[74] = "HTTP/1.1 200 OK\nContent-Type: text/html; charset UTF-8\nContent-Length: ";
 
-	for (int i = 0 ; i < 58 ; i++)
+	for (int i = 0 ; i < 74 ; i++)
 		header[i] = str[i];
 }
 

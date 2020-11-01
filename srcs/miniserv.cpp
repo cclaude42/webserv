@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/31 20:40:00 by cclaude           #+#    #+#             */
-/*   Updated: 2020/10/31 22:33:37 by cclaude          ###   ########.fr       */
+/*   Updated: 2020/11/01 16:54:44 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,8 @@ void	accept_request(int server_fd)
 	ft_memset(buffer, 0, 50000);
 	recv(socket_fd, buffer, 50000, 0);
 	make_header(buffer, "index.html");
-	send(socket_fd, buffer, 7, 0);
+	printf("Sending index.html...\n");
+	send(socket_fd, buffer, ft_strlen(buffer), 0);
 	close(socket_fd);
 }
 
