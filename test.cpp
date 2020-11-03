@@ -44,7 +44,7 @@ int main() {
 		// Read from the connection
 		char buffer[1000];
 		auto bytesRead = read(connection, buffer, 1000);
-		std::cout << "The message was: " << buffer;
+		std::cout << "The message (" << bytesRead << ") was : " << buffer;
 
 		// Send a message to the connection
 		std::stringstream resp;
