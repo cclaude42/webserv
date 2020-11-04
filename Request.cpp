@@ -6,13 +6,13 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 16:27:33 by hbaudet           #+#    #+#             */
-/*   Updated: 2020/11/03 18:55:40 by hbaudet          ###   ########.fr       */
+/*   Updated: 2020/11/04 12:56:03 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Request.hpp"
 
-Request::Request()
+Request::Request() : method(""), version(""), ret(200)
 {
 	if (PRINT)
 		std::cout << "Constructor called\n";
@@ -55,6 +55,16 @@ Request&	Request::operator=(const Request& obj)
 const std::map<std::string, std::string>&	Request::getHeaders() const
 {
 	return this->headers;
+}
+
+const std::string&	Request::getMethod() const
+{
+	return this->method;
+}
+
+const std::string&	Request::getVersion() const
+{
+	return this->version;
 }
 
 /*** SETTERS ***/

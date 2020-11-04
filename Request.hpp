@@ -6,7 +6,7 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 16:27:33 by hbaudet           #+#    #+#             */
-/*   Updated: 2020/11/03 23:33:36 by hbaudet          ###   ########.fr       */
+/*   Updated: 2020/11/04 12:56:24 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,12 @@ extern "C" {
 class Request
 {
 		private:
+			std::string							method;
+			std::string							version;
 			std::map<std::string, std::string>	headers;
 			int									ret;
+
+			void	readFirstLine(char *line);
 
 		public:
 			Request();
@@ -39,7 +43,9 @@ class Request
 			Request&	operator=(const Request&);
 
 			/*** GETTERS ***/
-			const std::map<std::string, std::string>&	getHeaders() const;
+			const	std::map<std::string, std::string>&	getHeaders() const;
+			const	std::string&						getMethod() const;
+			const	std::string&						getVersion() const;
 
 			/*** SETTERS **/
 			void	setHeader(const std::string& key, const std::string& value);
