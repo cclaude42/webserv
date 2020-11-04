@@ -1,20 +1,14 @@
-NAME = webserv
+NAME = miniserv
 
 CC = clang++
 
-CFLAGS = -Wall -Wextra -Werror -I includes/ -I srcs/classes/
+CFLAGS = -Wall -Wextra -Werror -std=c++98 -I includes/
 
-HEADER = webserv.hpp
+HEADER = miniserv.hpp
 
-MAIN = webserv
+LIST = miniserv header ntoh tools
 
-TOOLS = ntoh cstring
-
-CLASSES = Response ResponseHeader Server
-
-SRC = $(addprefix srcs/, $(addsuffix .cpp, $(MAIN))) \
-	$(addprefix srcs/tools/, $(addsuffix .cpp, $(TOOLS))) \
-	$(addprefix srcs/classes/, $(addsuffix .cpp, $(CLASSES))) \
+SRC = $(addprefix srcs/, $(addsuffix .cpp, $(LIST)))
 
 OBJ = $(SRC:cpp=o)
 
@@ -27,7 +21,7 @@ $(NAME): $(OBJ)
 	@echo "\n\033[0mDone !"
 
 %.o: %.cpp
-	@printf "\033[0;33mGenerating webserv objects... %-33.33s\r" $@
+	@printf "\033[0;33mGenerating miniserv objects... %-33.33s\r" $@
 	@${CC} ${CFLAGS} -c $< -o $@
 
 clean:
@@ -45,9 +39,9 @@ fclean:
 re: fclean all
 
 test: re
-	./webserv
+	./miniserv
 
 norm:
 	norminette $(SRC) includes/$(HEADER)
 
-.PHONY: clean fclean re test norm
+.PHONY: clean fclean re test
