@@ -6,13 +6,15 @@
 #    By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/11/26 18:03:34 by hbaudet           #+#    #+#              #
-#    Updated: 2020/11/03 23:34:21 by hbaudet          ###   ########.fr        #
+#    Updated: 2020/11/05 16:33:09 by hbaudet          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-SRCS			=	main.cpp \
-					Request.cpp \
-					Request_utils.cpp
+REQUEST			=	Request/
+
+SRCS			=	$(REQUEST)main.cpp \
+					$(REQUEST)Request.cpp \
+					$(REQUEST)Request_utils.cpp
 			
 BONUS			=
 
@@ -43,7 +45,7 @@ $(NAME):		$(OBJS_DIR) $(OBJS)
 				$(CC) -o $(NAME) $(OBJS) $(LINK)
 
 $(OBJS_DIR):	
-				mkdir $(OBJS_DIR)
+				mkdir -p $(OBJS_DIR)$(REQUEST)
 
 $(LIBFT):
 				$(MAKE) -C $(PATH_LIBFT)
