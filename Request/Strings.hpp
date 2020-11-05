@@ -1,33 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   strings.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/11/03 17:12:11 by hbaudet           #+#    #+#             */
-/*   Updated: 2020/11/04 13:07:46 by hbaudet          ###   ########.fr       */
+/*   Created: 2020/11/05 17:38:50 by hbaudet           #+#    #+#             */
+/*   Updated: 2020/11/05 17:42:48 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Request.hpp"
-#include <fstream>
-#include <sstream>
+#pragma once
+#include <string>
 
-int	main(int ac, char *av[])
-{
-	
-	(void)ac;
-	(void)av;
-
-	std::ifstream get("GET");
-	std::stringstream in;
-
-	in << get.rdbuf();
-
-	Request test(in.str().c_str());
-
-	std::cout << test;
-
-	return 0;
-}
+std::string		readKey(char *line);
+std::string		readValue(char *line);
+std::string		strip(std::string& str, char c);

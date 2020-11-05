@@ -6,28 +6,39 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 16:27:33 by hbaudet           #+#    #+#             */
-/*   Updated: 2020/11/05 16:39:13 by hbaudet          ###   ########.fr       */
+/*   Updated: 2020/11/05 18:09:25 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Request.hpp"
 
-Request::Request() : method(""), version(""), ret(200)
+std::vector<std::string>	Request::methods  = {
+				"GET",
+				"HEAD",
+				"POST",
+				"PUT",
+				"DELETE",
+				"CONNECT",
+				"OPTIONS",
+				"TRACE",
+				"PACH" };
+
+Request::Request() : _method(""), _version(""), _ret(200), _body("")
 {
 	if (PRINT)
 		std::cout << "Constructor called\n";
 	this->resetHeaders();
 }
 
-Request::Request(const char *str) : method (""), version(""), ret(200)
+Request::Request(const char *str) : _method (""), _version(""), _ret(200), _body("")
 {
 	if (PRINT)
 		std::cout << "C-String constructor called\n";
 
 	this->resetHeaders();
 	this->parse(str);
-	if (this->ret != 200)
-		std::cout << "Parse error : " << this->ret << '\n';
+	if (this->_ret != 200)
+		std::cout << "Parse error : " << this->_ret << '\n';
 }
 
 Request::~Request()
@@ -47,10 +58,10 @@ Request&	Request::operator=(const Request& obj)
 {
 	if (PRINT)
 		std::cout << "Assignation operator called\n";
-	this->headers = obj.getHeaders();
-	this->method = obj.getMethod();
-	this->version = obj.getVersion();
-	this->ret = obj.getRet();
+	this->_headers = obj.getHeaders();
+	this->_method = obj.getMethod();
+	this->_version = obj.getVersion();
+	this->_ret = obj.getRet();
 
 	return *this;
 }
@@ -59,27 +70,44 @@ Request&	Request::operator=(const Request& obj)
 
 const std::map<std::string, std::string>&	Request::getHeaders() const
 {
-	return this->headers;
+	return this->_headers;
 }
 
 const std::string&	Request::getMethod() const
 {
-	return this->method;
+	return this->_method;
 }
 
 const std::string&	Request::getVersion() const
 {
-	return this->version;
+	return this->_version;
 }
 
-const int			Request::getVersion() const
+int			Request::getRet() const
 {
-	return this->ret;
+	return this->_ret;
+}
+
+const std::string&	Request::getBody() const
+{
+	return this->_body;
 }
 
 /*** SETTERS ***/
-
+/*
 void	Request::setHeader(const std::string& key, const std::string& value)
 {
-	this->headers[key] = value;
+	this->_headers[key] = value;
 }
+*/
+
+void	Request::setBody(char **line, int i)
+{
+	while (line[i])
+	{
+		this->_body.append(line[i]);
+		this->_body.push_back('\n');
+		i++;
+	}
+}
+

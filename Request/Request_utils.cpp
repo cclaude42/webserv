@@ -6,7 +6,7 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 17:10:06 by hbaudet           #+#    #+#             */
-/*   Updated: 2020/11/05 16:36:16 by hbaudet          ###   ########.fr       */
+/*   Updated: 2020/11/05 18:08:48 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,13 +26,15 @@ std::ostream&	operator<<(std::ostream& os, const Request& re)
 
 	for (it = re.getHeaders().begin(); it != re.getHeaders().end(); it++)
 		os << it->first << ": " << it->second << '\n';
+	
+	os << '\n' << "Request body :\n" << re.getBody() << '\n';
 
 	return os;
 }
 
 void	Request::resetHeaders()
 {
-	this->headers = {
+	this->_headers = {
 	{"Accept-Charsets", ""},
 	{"Accept-Language", ""},
 	{"Allow", ""},
@@ -59,69 +61,57 @@ void	Request::readFirstLine(char *line)
 	size_t	i;
 
 	for (i = 0; line[i] && line[i] != ' '; i++)
-		this->method.push_back(line[i]);
+		this->_method.push_back(line[i]);
 	while (line[++i] == ' ');
 	if (line[i] == '/')
 		i++;
 	while (line[++i] == ' ');
-	if (ft_strlen(line) < i + 13)
-	{
-		this->ret = 400;
-		return;
-	}
 	if (line[i] == 'H' && line[i + 1] == 'T' && line[i + 2] == 'T' &&
 		line[i + 3] == 'P' && line[i + 4] == '/')
-		this->version.append(line, i + 5, 3);
+		this->_version.append(line, i + 5, 3);
+	if (this->_version != "1.0" && this->_version != "1.1")
+		this->_ret = 400;
+	this->checkMethod();
 }
 
-static std::string	readKey(char *line)
+void	Request::checkMethod()
 {
-	std::string	ret;
-
-	for (int i = 0; line[i] && line[i] != ':'; i++)
-		ret.push_back(line[i]);
-	return (ret);
-}
-
-static std::string	readValue(char *line)
-{
-	int i;
-	std::string	ret;
-
-	for (i = 0; line[i] && line[i] != ':'; i++);
-	while (line[++i] && line[i] == ' ');
-	i--;
-	while (line[++i])
-		ret.push_back(line[i]);
-	return ret;
+	for (size_t i = 0; i < this->methods.size(); i++)
+		if (this->methods[i] == this->_method)
+			return;
+	std::cout << "Invalid _method requested\n";
+	this->_ret = 400;
 }
 
 int		Request::parse(const char *str)
 {
 	char 			**line = ft_split(str, '\n');
 	std::string		key;
-	std::string		value;;
+	std::string		value;
+	int				i;
 
 	if (!line || !line[0] || !line[1])
-		this->ret = 400;
+		this->_ret = 400;
 	else
 	{
-	this->readFirstLine(line[0]);
-	for (int i = 1; line[i]; i++)
-	{
-		key = readKey(line[i]);
-		value = readValue(line[i]);
-		if (line[i][0] == '\r')
-			break;
-		if (line[i][ft_strlen(line[i]) - 1] == '\r')
-			line[i][ft_strlen(line[i]) - 1] = '\0'; //	useless ?
-		if (this->headers.count(key))
-			this->headers[key] = value;
-	}
-	for (int i = 0; line[i]; i++)
-		free(line[i]);
+		this->readFirstLine(line[0]);
+		for (i = 1; line[i]; i++)
+		{
+			key = readKey(line[i]);
+			value = readValue(line[i]);
+			if (line[i][0] == '\r')
+				break;
+			if (line[i][ft_strlen(line[i]) - 1] == '\r')
+				line[i][ft_strlen(line[i]) - 1] = '\0';
+			if (this->_headers.count(key))
+				this->_headers[key] = strip(value, ' ');
+		}
+		if (line[i])
+			this->setBody(line, i);
+		for (int i = 0; line[i]; i++)
+			free(line[i]);
 	}
 	free(line);
 
-	return (this->ret);
+	return (this->_ret);
 }
