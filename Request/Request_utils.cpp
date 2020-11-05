@@ -6,7 +6,7 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 17:10:06 by hbaudet           #+#    #+#             */
-/*   Updated: 2020/11/05 18:08:48 by hbaudet          ###   ########.fr       */
+/*   Updated: 2020/11/05 18:21:09 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ int		Request::parse(const char *str)
 			if (line[i][ft_strlen(line[i]) - 1] == '\r')
 				line[i][ft_strlen(line[i]) - 1] = '\0';
 			if (this->_headers.count(key))
-				this->_headers[key] = strip(value, ' ');
+				this->_headers[key] = strip(value, ' '); //stripping might be overkill
 		}
 		if (line[i])
 			this->setBody(line, i);
