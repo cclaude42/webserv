@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/31 13:44:42 by cclaude           #+#    #+#             */
-/*   Updated: 2020/11/04 16:24:10 by cclaude          ###   ########.fr       */
+/*   Updated: 2020/11/05 12:25:29 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,12 @@
 
 // CPP Includes
 # include <iostream>
+# include <iomanip>
 # include <string>
+# include <vector>
+# include <sstream>
+# include <algorithm>
+# include <iterator>
 
 // C Includes
 # include <unistd.h>
