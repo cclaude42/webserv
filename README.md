@@ -4,6 +4,8 @@
 
 Team : [cclaude](https://github.com/cclaude42) / [frthierr](https://github.com/Franciszer) / [hbaudet](https://github.com/hbaudet)
 
+[Subject](https://cdn.intra.42.fr/pdf/pdf/13265/en.subject.pdf)
+
 ## Resources
 
 ### Server setup
