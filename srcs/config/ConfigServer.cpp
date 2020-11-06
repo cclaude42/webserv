@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 15:28:08 by user42            #+#    #+#             */
-/*   Updated: 2020/11/05 22:24:15 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/06 14:45:11 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,26 +43,26 @@ ConfigServer	&ConfigServer::operator=(ConfigServer const &src) {
 }
 
 int     ConfigServer::parse(unsigned int &index, fileVector &file) {
-    std::string                 directive = "";
     fileVector                  args;
     parseMap::iterator          iter;
-    parseMap::iterator          tmpIter;
+    std::string                 directive = "";
 
     for (index ; index < file.size() && file[index] != "}"; index++) {
-        if ((tmpIter = Config::parsingMap.find(file[index])) == Config::parsingMap.end()) {
+        if ((iter = Config::parsingMap.find(file[index])) == Config::parsingMap.end()) {
             if (directive == "")
                 return file[index] == "}" ? 1 : 0;
             args.push_back(file[index]);
         }
         else
         {
-            (this->*iter->second)(args);
+            (this->*Config::parsingMap[directive])(args);
             args.clear();
-            directive = "";
-            iter = tmpIter;
+            directive = iter->first;
         }
     }
 
+    if (directive != "")
+        (this->*Config::parsingMap[directive])(args);
     //  if listen is not set, listen to port 80 on localhost by default
     if (file[index] == "}") {
         if (this->_listen.size() == 0) {
