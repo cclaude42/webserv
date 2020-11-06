@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 15:27:44 by user42            #+#    #+#             */
-/*   Updated: 2020/11/05 18:25:54 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/06 15:15:54 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,10 @@
 	// sends all request starting with prefix to the path specified by the root directive
 //  add_header [http methods]: list all of the allowed http methods for a certain route, separated by whitespace
 //      by default, all methods should be allowed
+
+bool isDigits(const std::string &str) {
+	return str.find_first_not_of("0123456789") == std::string::npos;
+}
 
 typedef struct	s_listen {
 	std::string	host;
@@ -53,6 +57,9 @@ class ConfigServer {
         void    addErrorPage(std::vector<std::string> args);
         void    addClientBodyBufferSize(std::vector<std::string> args);
         
+		class	ExceptionInvalidArguments: public std::exception {
+			virtual const char	*what() const throw();
+		};
 	private:
 		std::vector<t_listen>		_listen;
 		std::string					_root;
