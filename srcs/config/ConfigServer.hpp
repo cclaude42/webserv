@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 15:27:44 by user42            #+#    #+#             */
-/*   Updated: 2020/11/05 12:34:42 by cclaude          ###   ########.fr       */
+/*   Updated: 2020/11/05 18:25:54 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 # define CONFIG_SERVER_HPP
 
-# include "webserv.hpp"
+# include "Config.hpp"
 # include "ConfigReader.hpp"
 
 //  listen struct with host and port: default host: localhost; default port:80
@@ -46,6 +46,13 @@ class ConfigServer {
 
 		ConfigServer	&operator=(ConfigServer const &src);
 		int		parse(unsigned int &i, std::vector<std::string> &file);
+
+		void    addListen(std::vector<std::string> args);
+        void    addRoot(std::vector<std::string> args);
+        void    addServerName(std::vector<std::string> args);
+        void    addErrorPage(std::vector<std::string> args);
+        void    addClientBodyBufferSize(std::vector<std::string> args);
+        
 	private:
 		std::vector<t_listen>		_listen;
 		std::string					_root;

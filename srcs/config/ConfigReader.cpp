@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 14:34:43 by user42            #+#    #+#             */
-/*   Updated: 2020/11/05 12:15:18 by cclaude          ###   ########.fr       */
+/*   Updated: 2020/11/05 14:51:55 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ ConfigReader	&ConfigReader::operator=(ConfigReader const &src) {
 int          ConfigReader::readFile() {
 	int							ret = this->_bufferSize;
 	char						buffer[this->_bufferSize];
-	std::vector<std::string>	file;
+	fileVector					file;
 	std::string					line = "";
 
 	for (int i = 0; i < this->_bufferSize; i++)
@@ -75,8 +75,8 @@ int          ConfigReader::readFile() {
 
 	//	Separate tokens by whitespace and putting them in a vector,
 	//	then put these in another vector which contains the whole file
-	for (std::vector<std::string>::iterator i = file.begin(); i != file.end(); i++) {
-		std::vector<std::string>    tokens;
+	for (fileVector::iterator i = file.begin(); i != file.end(); i++) {
+		fileVector    tokens;
 
 		if (*i != "") {
 			std::istringstream iss(*i);
@@ -98,7 +98,7 @@ tokenizedFile	ConfigReader::getFile() const {
 	return this->_file;
 }
 
-void			ConfigReader::getFileOneLine(std::vector<std::string>	&line) const {
+void			ConfigReader::getFileOneLine(fileVector	&line) const {
 
 	for (unsigned int i = 0 ; i < this->_file.size() ; i++) {
 		for (unsigned int j = 0; j < this->_file[i].size(); j++) {

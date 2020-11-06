@@ -6,11 +6,13 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 14:30:01 by user42            #+#    #+#             */
-/*   Updated: 2020/11/05 12:32:12 by cclaude          ###   ########.fr       */
+/*   Updated: 2020/11/05 17:57:14 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Config.hpp"
+
+ parseMap Config::parsingMap = init_map();
 
 Config::Config(void) {
 	return ;
@@ -33,8 +35,8 @@ Config	&Config::operator=(Config const &src) {
 }
 
 int     Config::parse(char * const filename) {
-	ConfigReader                 fileReader(filename);
-	std::vector<std::string>   file;
+	ConfigReader               fileReader(filename);
+	fileVector				   file;
 	unsigned int               fileSize;
 
 	fileReader.readFile();
@@ -45,8 +47,12 @@ int     Config::parse(char * const filename) {
 		if (file[i] == "server") {
 			ConfigServer  server;
 
+			++i;
+			if (file[i] != "{")
+				std::cerr << "Error: expecter '{' after server directive" << std::endl;
+			++i;
 			if (!server.parse(i, file))
-				std::cerr << "Error: error in config file" << std::endl;
+				std::cerr << "Error: error in config file " << filename << std::endl;
 			else
 				this->_servers.push_back(server);
 		}

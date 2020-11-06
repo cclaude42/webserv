@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 14:33:47 by user42            #+#    #+#             */
-/*   Updated: 2020/11/05 12:25:41 by cclaude          ###   ########.fr       */
+/*   Updated: 2020/11/05 17:12:24 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,24 @@
 
 # define CONFIG_READER_HPP
 
-# include "webserv.hpp"
+# include <vector>
+
+# include <iostream>
+# include <iomanip>
+# include <string>
+# include <vector>
+# include <sstream>
+# include <algorithm>
+# include <iterator>
+# include <sys/stat.h>
+# include <fcntl.h>
+# include <unistd.h>
+# include <stdio.h>
+# include <stdlib.h>
+
 
 typedef std::vector<std::vector<std::string>> tokenizedFile;
+typedef std::vector<std::string> fileVector;
 
 // Usage:
 // - initialize an instance of this class with the name of the file you want to read
@@ -34,7 +49,7 @@ class ConfigReader {
 		ConfigReader				&operator=(ConfigReader const &src);
 		int          			readFile();
 		tokenizedFile			getFile() const;
-		void					getFileOneLine(std::vector<std::string>	&line) const;
+		void					getFileOneLine(fileVector	&line) const;
 		void         			close() const;
 
 		class		CannotOpenFileException: public std::exception {

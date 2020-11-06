@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 15:28:08 by user42            #+#    #+#             */
-/*   Updated: 2020/11/05 12:13:44 by cclaude          ###   ########.fr       */
+/*   Updated: 2020/11/05 22:24:15 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,10 +42,36 @@ ConfigServer	&ConfigServer::operator=(ConfigServer const &src) {
     return *this;
 }
 
-int     ConfigServer::parse(int pos[2], tokenizedFile &file) {
-    for (int i = X; i < file.size(); i++) {
-        for (int j = Y; j < file[X].size(); j++) {
+int     ConfigServer::parse(unsigned int &index, fileVector &file) {
+    std::string                 directive = "";
+    fileVector                  args;
+    parseMap::iterator          iter;
+    parseMap::iterator          tmpIter;
 
+    for (index ; index < file.size() && file[index] != "}"; index++) {
+        if ((tmpIter = Config::parsingMap.find(file[index])) == Config::parsingMap.end()) {
+            if (directive == "")
+                return file[index] == "}" ? 1 : 0;
+            args.push_back(file[index]);
+        }
+        else
+        {
+            (this->*iter->second)(args);
+            args.clear();
+            directive = "";
+            iter = tmpIter;
         }
     }
+
+    //  if listen is not set, listen to port 80 on localhost by default
+    if (file[index] == "}") {
+        if (this->_listen.size() == 0) {
+            args.push_back("localhost");
+            args.push_back("80");
+            (this->*Config::parsingMap["listen"])(args);
+        }
+        ++index;
+        return 1;
+    }
+    return 0;
 }
