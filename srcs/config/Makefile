@@ -28,7 +28,7 @@ NC=\033[0m
 all: ${NAME}
 
 ${NAME}: ${OBJS}
-	@printf "${YELLOW}=>	"
+	@printf "=>	"
 	${CPP} ${FLAGS} ${INCLUDE_DIRS} ${OBJS} -o ${NAME}
 	@echo "${GREEN}✓ ${NAME} compiled${NC}"
 

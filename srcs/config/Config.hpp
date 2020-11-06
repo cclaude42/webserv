@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 14:29:38 by user42            #+#    #+#             */
-/*   Updated: 2020/11/05 17:56:51 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/06 16:04:47 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@
 
 #define parseMap std::map<std::string, void (ConfigServer::*)(fileVector)>
 
+class	ConfigServer;
+
 class Config {
 	public:
 		Config(void);
@@ -30,17 +32,13 @@ class Config {
 		Config      &operator=(Config const &src);
 		int         parse(char * const filename);
 		static  parseMap parsingMap;
+		
+		friend	std::ostream	&operator<<(std::ostream &out, const Config &config);
 	private:
-		static parseMap init_map() {
-		    parseMap     myMap;
-		    myMap["listen"] = ConfigServer::addListen;
-		    myMap["root"] = ConfigServer::addRoot;
-		    myMap["server_name"] = ConfigServer::addServerName;
-		    myMap["error_page"] = ConfigServer::addErrorPage;
-		    myMap["client_body_buffer_size"] = ConfigServer::addClientBodyBufferSize;
-		    return myMap;
-		}
+		static parseMap init_map();
 		std::vector<ConfigServer>  _servers;    
 };
+
+std::ostream	&operator<<(std::ostream &out, const Config &config);
 
 #endif

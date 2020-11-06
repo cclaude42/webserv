@@ -6,23 +6,19 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 15:28:08 by user42            #+#    #+#             */
-/*   Updated: 2020/11/06 15:25:35 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/06 16:11:38 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ConfigServer.hpp"
 
+bool isDigits(const std::string &str) {
+	return str.find_first_not_of("0123456789") == std::string::npos;
+}
+
 ConfigServer::ConfigServer(void):
-_root("/"),
 _client_body_buffer_size(8000)
 {
-	t_listen    listenDefault;
-
-	listenDefault.host = "localhost";
-	listenDefault.port = 80;
-	this->_listen.push_back(listenDefault);
-
-	//  maybe set default error pages
 	return ;
 }
 
@@ -47,7 +43,8 @@ int     ConfigServer::parse(unsigned int &index, fileVector &file) {
 	parseMap::iterator          iter;
 	std::string                 directive = "";
 
-	for (index ; index < file.size() && file[index] != "}"; index++) {
+	//	calling the function that corresponds to a directive with its args as parameters
+	for ( ; index < file.size() && file[index] != "}"; index++) {
 		if ((iter = Config::parsingMap.find(file[index])) == Config::parsingMap.end()) {
 			if (directive == "")
 				return file[index] == "}" ? 1 : 0;
@@ -63,20 +60,21 @@ int     ConfigServer::parse(unsigned int &index, fileVector &file) {
 
 	if (directive != "")
 		(this->*Config::parsingMap[directive])(args);
-	//  if listen is not set, listen to port 80 on localhost by default
+	//  set up default values if they were not set by the config file
 	if (file[index] == "}") {
 		if (this->_listen.size() == 0) {
 			args.push_back("localhost:80");
 			(this->*Config::parsingMap["listen"])(args);
 		}
+		if (this->_root == "") {
+			args.clear();
+			args.push_back("/");
+			(this->*Config::parsingMap["root"])(args);
+		}
 		++index;
 		return 1;
 	}
 	return 0;
-}
-
-const char		*ConfigReader::CannotOpenFileException::what() const throw() {
-	return "Exception: invalid arguments";
 }
 
 void        ConfigServer::addListen(std::vector<std::string> args) {
@@ -108,7 +106,7 @@ void        ConfigServer::addRoot(std::vector<std::string> args) {
 void        ConfigServer::addServerName(std::vector<std::string> args) {
 	if (args.size() == 0)
 		throw ConfigServer::ExceptionInvalidArguments();
-	for (int i = 0; i < args.size(); i++)
+	for (unsigned int i = 0; i < args.size(); i++)
 		this->_server_name.push_back(args[i]);
 }
 
@@ -135,4 +133,28 @@ void        ConfigServer::addClientBodyBufferSize(std::vector<std::string> args)
 	if (args.size() != 1 || !isDigits(args[0]))
 		throw ConfigServer::ExceptionInvalidArguments();
 	this->_client_body_buffer_size = std::stoi(args[0]);
+}
+
+std::ostream	&operator<<(std::ostream &out, const ConfigServer &server) {
+	out << "Listen:" << std::endl;
+	for (size_t i = 0; i < server._listen.size(); i++) {
+		out << "\thost: " << server._listen[i].host << " port: " << server._listen[i].port << std::endl;
+	}
+	out << "root: " << server._root << std::endl;
+	out << "server_name: ";
+	for (size_t i = 0; i < server._server_name.size(); i++) {
+		out << server._server_name[i];
+		if (i != server._server_name.size() - 1)
+			out << " ";
+	}
+	out << "error_page:" << std::endl;
+	for (size_t i = 0; i < server._error_page.size(); i++) {
+		out << "\t";
+		for (size_t j = 0; j < server._error_page[i].errorCodes.size(); j++) {
+			out << server._error_page[i].errorCodes[j] << " ";
+		}
+		out << server._error_page[i].uri << std::endl;
+	}
+	out << "client_body_buffer_size: " << server._client_body_buffer_size << std::endl;
+	return out;
 }

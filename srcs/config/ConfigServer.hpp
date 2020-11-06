@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 15:27:44 by user42            #+#    #+#             */
-/*   Updated: 2020/11/06 15:15:54 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/06 16:07:43 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,7 @@
 //  add_header [http methods]: list all of the allowed http methods for a certain route, separated by whitespace
 //      by default, all methods should be allowed
 
-bool isDigits(const std::string &str) {
-	return str.find_first_not_of("0123456789") == std::string::npos;
-}
-
+bool isDigits(const std::string &str);
 typedef struct	s_listen {
 	std::string	host;
 	int			port;
@@ -60,6 +57,8 @@ class ConfigServer {
 		class	ExceptionInvalidArguments: public std::exception {
 			virtual const char	*what() const throw();
 		};
+
+		friend	std::ostream &operator<<(std::ostream &out, const ConfigServer &server);
 	private:
 		std::vector<t_listen>		_listen;
 		std::string					_root;
@@ -68,5 +67,7 @@ class ConfigServer {
 		int							_client_body_buffer_size; // max size for the client body, defaults to 8 000
 
 };
+
+std::ostream	&operator<<(std::ostream &out, const ConfigServer &server);
 
 #endif

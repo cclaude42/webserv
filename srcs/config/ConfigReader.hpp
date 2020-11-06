@@ -6,15 +6,13 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 14:33:47 by user42            #+#    #+#             */
-/*   Updated: 2020/11/05 17:12:24 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/06 16:09:02 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CONFIG_READER_HPP
 
 # define CONFIG_READER_HPP
-
-# include <vector>
 
 # include <iostream>
 # include <iomanip>
