@@ -6,13 +6,13 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 14:30:01 by user42            #+#    #+#             */
-/*   Updated: 2020/11/06 16:03:37 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/06 16:16:39 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Config.hpp"
 
-parseMap init_map() {
+parseMap Config::init_map() {
 		    parseMap     myMap;
 		    myMap["listen"] = &ConfigServer::addListen;
 		    myMap["root"] = &ConfigServer::addRoot;
@@ -22,7 +22,7 @@ parseMap init_map() {
 		    return myMap;
 }
 
- parseMap Config::parsingMap = init_map();
+ parseMap Config::parsingMap = Config::init_map();
 
 Config::Config(void) {
 	return ;

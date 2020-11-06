@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 15:28:08 by user42            #+#    #+#             */
-/*   Updated: 2020/11/06 16:11:38 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/06 16:16:06 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,4 +157,8 @@ std::ostream	&operator<<(std::ostream &out, const ConfigServer &server) {
 	}
 	out << "client_body_buffer_size: " << server._client_body_buffer_size << std::endl;
 	return out;
+}
+
+const char		*ConfigServer::ExceptionInvalidArguments::what() const throw() {
+	return "Exception: invalid arguments in configuration file";
 }
