@@ -6,7 +6,7 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 16:27:33 by hbaudet           #+#    #+#             */
-/*   Updated: 2020/11/05 18:29:38 by hbaudet          ###   ########.fr       */
+/*   Updated: 2020/11/06 14:08:37 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,18 +33,18 @@ extern "C" {
 -	char * constructor turns the output of a read call into a map of strings
 
 -	Method and version are stored separtely in a string.
-	Any version other than 1.0 or 1.1 is considered invali
+	Any version other than 1.0 or 1.1 is considered invalid
 	if the method or the HTTP version is invalid, ret is set to 400 (BAD Request)
 	otherwise it stays at its default 200 value
 
 -	Implemented headers are parsed as follows : "KEY:[OWS]VALUE[OWS]"
-	and stored in a map<string, string> as (key, value)
+	and stored in a map<string, string> as (KEY, VALUE)
 	OWS = optionnal whitespace
 
 -	An empty line ended by CRLF is considered to be the end of the header section
 	anything that follows is stored in a single string labelled "_body"
 
--	Calling reset and parsing methods would have the same effect as
+-	Calling 'reset' and 'parse' methods would have the same effect as
 	calling the char * constructor
 
 */
