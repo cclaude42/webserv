@@ -1,0 +1,4 @@
+webserv
+srcs/*/*.o
+miniserv/miniserv
+miniserv/srcs/*.o

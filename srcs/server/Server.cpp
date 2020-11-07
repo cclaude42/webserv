@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:29:28 by cclaude           #+#    #+#             */
-/*   Updated: 2020/11/07 15:49:12 by cclaude          ###   ########.fr       */
+/*   Updated: 2020/11/07 19:32:46 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,8 @@ std::string	Server::recv(void)
 
 void		Server::send(std::string resp)
 {
+	// std::cout << resp << std::endl;
+
 	if (::send(_socket, resp.c_str(), resp.size(), 0) == -1)
 		std::cout << "Could not send response." << std::endl;
 }

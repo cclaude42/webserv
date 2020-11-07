@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/31 20:40:00 by cclaude           #+#    #+#             */
-/*   Updated: 2020/11/07 18:47:54 by cclaude          ###   ########.fr       */
+/*   Updated: 2020/11/07 18:54:46 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	run(Server & serv)
 
 	// parse request
 
-	resp.setFilename("index.html");
+	resp.setFilename("miniserv/index.html");
 	resp.make();
 
 	serv.send(resp.getResponse());
