@@ -1,0 +1,7 @@
+server {
+    listen localhost:80
+    root /
+    server_name francisServer
+    error_page 404 405 510 /data/errors/
+    client_body_buffer_size 5000
+}

@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 15:28:08 by user42            #+#    #+#             */
-/*   Updated: 2020/11/06 16:16:06 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/07 17:07:02 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,20 @@ bool isDigits(const std::string &str) {
 }
 
 ConfigServer::ConfigServer(void):
+_root(""),
 _client_body_buffer_size(8000)
 {
 	return ;
 }
 
 ConfigServer::ConfigServer(ConfigServer const &src) {
-	if (this != &src)
-		*this = src;
+	if (this != &src) {
+		this->_listen = src._listen;		
+		this->_root = src._root;		
+		this->_server_name = src._server_name;		
+		this->_error_page = src._error_page;		
+		this->_client_body_buffer_size = src._client_body_buffer_size;		
+	}
 	return ;
 }
 
@@ -41,13 +47,18 @@ ConfigServer	&ConfigServer::operator=(ConfigServer const &src) {
 int     ConfigServer::parse(unsigned int &index, fileVector &file) {
 	fileVector                  args;
 	parseMap::iterator          iter;
-	std::string                 directive = "";
+	std::string                 directive;
 
 	//	calling the function that corresponds to a directive with its args as parameters
-	for ( ; index < file.size() && file[index] != "}"; index++) {
+	if ((iter = Config::parsingMap.find(file[index])) == Config::parsingMap.end())
+		return 0;
+	directive = iter->first;
+	index++;
+	std::cout << "in ConfigServer::parse " << file[index] << std::endl;
+	for ( ; index < file.size() && file[index].compare("}") ; index++) {
 		if ((iter = Config::parsingMap.find(file[index])) == Config::parsingMap.end()) {
-			if (directive == "")
-				return file[index] == "}" ? 1 : 0;
+			if (!directive.compare(""))
+				return !file[index].compare("}") ? 1 : 0;
 			args.push_back(file[index]);
 		}
 		else
@@ -61,7 +72,7 @@ int     ConfigServer::parse(unsigned int &index, fileVector &file) {
 	if (directive != "")
 		(this->*Config::parsingMap[directive])(args);
 	//  set up default values if they were not set by the config file
-	if (file[index] == "}") {
+	if (!file[index].compare("}")) {
 		if (this->_listen.size() == 0) {
 			args.push_back("localhost:80");
 			(this->*Config::parsingMap["listen"])(args);
@@ -71,6 +82,7 @@ int     ConfigServer::parse(unsigned int &index, fileVector &file) {
 			args.push_back("/");
 			(this->*Config::parsingMap["root"])(args);
 		}
+		std::cout << "PARSE SERVER END" << std::endl;
 		++index;
 		return 1;
 	}
@@ -81,10 +93,12 @@ void        ConfigServer::addListen(std::vector<std::string> args) {
 	t_listen    listen;
 	size_t      separator;
 	
+	std::cout << "in addListen" << std::endl;
+	for (unsigned int i = 0; i < args.size(); i++)
+		std::cout << args[i] << std::endl;
 	if (args.size() != 1)
 		throw ConfigServer::ExceptionInvalidArguments();
-
-	if ((separator = args[0].find(";")) == std::string::npos)
+	if ((separator = args[0].find(":")) == std::string::npos)
 		throw ConfigServer::ExceptionInvalidArguments();
 	
 	listen.host = args[0].substr(0, separator);
@@ -95,15 +109,19 @@ void        ConfigServer::addListen(std::vector<std::string> args) {
 		throw ConfigServer::ExceptionInvalidArguments();
 	listen.port = std::stoi(strPort);
 	this->_listen.push_back(listen);
+	std::cout << "addListen END" << std::endl;
 }
 
 void        ConfigServer::addRoot(std::vector<std::string> args) {
-	if (args.size() != 1 || this->_root.size() != 0)
+	std::cout << "in addRoot" << std::endl;
+	if (args.size() != 1 || this->_root != "")
 		throw ConfigServer::ExceptionInvalidArguments();
 	this->_root = args[0];
+	std::cout << "addRoot END" << std::endl;
 }
 
 void        ConfigServer::addServerName(std::vector<std::string> args) {
+	std::cout << "in addServerName" << std::endl;
 	if (args.size() == 0)
 		throw ConfigServer::ExceptionInvalidArguments();
 	for (unsigned int i = 0; i < args.size(); i++)
@@ -111,6 +129,7 @@ void        ConfigServer::addServerName(std::vector<std::string> args) {
 }
 
 void        ConfigServer::addErrorPage(std::vector<std::string> args) {
+	std::cout << "in addErrorPage" << std::endl;
 	bool	codeFound = false;
 	t_error_page	error_page;
 	size_t			len = args.size();
@@ -127,9 +146,11 @@ void        ConfigServer::addErrorPage(std::vector<std::string> args) {
 		else
 			throw ConfigServer::ExceptionInvalidArguments();		
 	}
+	this->_error_page.push_back(error_page);
 }
 
 void        ConfigServer::addClientBodyBufferSize(std::vector<std::string> args) {
+	std::cout << "in addBodySize" << std::endl;
 	if (args.size() != 1 || !isDigits(args[0]))
 		throw ConfigServer::ExceptionInvalidArguments();
 	this->_client_body_buffer_size = std::stoi(args[0]);
@@ -147,7 +168,7 @@ std::ostream	&operator<<(std::ostream &out, const ConfigServer &server) {
 		if (i != server._server_name.size() - 1)
 			out << " ";
 	}
-	out << "error_page:" << std::endl;
+	out << std::endl<< "error_page:" << std::endl;
 	for (size_t i = 0; i < server._error_page.size(); i++) {
 		out << "\t";
 		for (size_t j = 0; j < server._error_page[i].errorCodes.size(); j++) {

@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 14:29:38 by user42            #+#    #+#             */
-/*   Updated: 2020/11/06 16:04:47 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/07 16:47:08 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,8 @@ class Config {
 		
 		friend	std::ostream	&operator<<(std::ostream &out, const Config &config);
 	private:
-		static parseMap init_map();
-		std::vector<ConfigServer>  _servers;    
+		static parseMap 			init_map();
+		std::vector<ConfigServer> 	_servers;   
 };
 
 std::ostream	&operator<<(std::ostream &out, const Config &config);
