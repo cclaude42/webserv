@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 15:17:39 by cclaude           #+#    #+#             */
-/*   Updated: 2020/11/04 16:27:44 by cclaude          ###   ########.fr       */
+/*   Updated: 2020/11/07 18:48:52 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,152 +14,196 @@
 
 // Member functions
 
-std::string		ResponseHeader::getHeader(void)
+std::string		ResponseHeader::getHeader(std::string content, std::string filename, int code)
 {
-	std::string	header = "";
+	std::string	header;
 
-	header += "HTTP/1.1 " + std::to_string(200) + " " + "OK" + "\r\n";
-	header += "Allow: " + _allow + "\r\n";
-	header += "Content-Language: " + _contentLanguage + "\r\n";
-	header += "Content-Length: " + _contentLength + "\r\n";
-	header += "Content-Location: " + _contentLocation + "\r\n";
-	header += "Content-Type: " + _contentType + "\r\n";
-	header += "Date: " + _date + "\r\n";
-	header += "Last-Modified: " + _lastModified + "\r\n";
-	header += "Location: " + _location + "\r\n";
-	header += "Retry-After: " + _retryAfter + "\r\n";
-	header += "Server: " + _server + "\r\n";
-	header += "Trasnfer-Encoding: " + _transferEncoding + "\r\n";
-	header += "WWW-Authenticate: " + _wwwAuthenticate + "\r\n";
-	header += "\r\n";
+	setValues(content, filename, code);
+
+	header = "HTTP/1.1 " + std::to_string(code) + " " + getStatusMessage(code) + "\r\n";
+	header += writeHeader();
+
+	resetValues();
 
 	return (header);
 }
 
+std::string		ResponseHeader::writeHeader(void)
+{
+	std::string	header = "";
+
+	if (_allow != "")
+		header += "Allow: " + _allow + "\r\n";
+	if (_contentLanguage != "")
+		header += "Content-Language: " + _contentLanguage + "\r\n";
+	if (_contentLength != "")
+		header += "Content-Length: " + _contentLength + "\r\n";
+	if (_contentLocation != "")
+		header += "Content-Location: " + _contentLocation + "\r\n";
+	if (_contentType != "")
+		header += "Content-Type: " + _contentType + "\r\n";
+	if (_date != "")
+		header += "Date: " + _date + "\r\n";
+	if (_lastModified != "")
+		header += "Last-Modified: " + _lastModified + "\r\n";
+	if (_location != "")
+		header += "Location: " + _location + "\r\n";
+	if (_retryAfter != "")
+		header += "Retry-After: " + _retryAfter + "\r\n";
+	if (_server != "")
+		header += "Server: " + _server + "\r\n";
+	if (_transferEncoding != "")
+		header += "Transfer-Encoding: " + _transferEncoding + "\r\n";
+	if (_wwwAuthenticate != "")
+		header += "WWW-Authenticate: " + _wwwAuthenticate + "\r\n";
+	header += "\r\n";
+
+	// std::cout << "[" << header << "]" << std::endl;
+
+	return (header);
+}
+
+std::string		ResponseHeader::getStatusMessage(int code)
+{
+	if (code == 200)
+		return ("OK");
+	else
+		return ("Unkown code");
+}
+
+void			ResponseHeader::setValues(std::string content, std::string filename, int code)
+{
+	(void)code;
+	setAllow("GET HEAD POST");
+	setContentLanguage("en-US");
+	setContentLength(content.size());
+	setContentLocation(filename);
+	setContentType(filename);
+	setDate();
+	setLastModified(filename);
+	setLocation(code, "NONE");
+	setRetryAfter(code, 3);
+	setServer();
+	setTransferEncoding();
+	setWwwAuthenticate(code);
+}
+
+void			ResponseHeader::resetValues(void)
+{
+	_allow = "";
+	_contentLanguage = "";
+	_contentLength = "";
+	_contentLocation = "";
+	_contentType = "";
+	_date = "";
+	_lastModified = "";
+	_location = "";
+	_retryAfter = "";
+	_server = "";
+	_transferEncoding = "";
+	_wwwAuthenticate = "";
+}
+
 // Setter functions
 
-void			ResponseHeader::setAllow(std::string str)
+void			ResponseHeader::setAllow(std::string cmd)
 {
-	_allow = str;
+	_allow = cmd;
 }
 
-void			ResponseHeader::setContentLanguage(std::string str)
+void			ResponseHeader::setContentLanguage(std::string lang)
 {
-	_contentLanguage = str;
+	_contentLanguage = lang;
 }
 
-void			ResponseHeader::setContentLength(std::string str)
+void			ResponseHeader::setContentLength(int size)
 {
-	_contentLength = str;
+	_contentLength = std::to_string(size);
 }
 
-void			ResponseHeader::setContentLocation(std::string str)
+void			ResponseHeader::setContentLocation(std::string path)
 {
-	_contentLocation = str;
+	_contentLocation = "/" + path;
 }
 
-void			ResponseHeader::setContentType(std::string str)
+void			ResponseHeader::setContentType(std::string type)
 {
-	_contentType = str;
+	type = type.substr(type.rfind(".") + 1, type.size() - type.rfind("."));
+	if (type == "html")
+		_contentType = "text/html";
+	else if (type == "css")
+		_contentType = "text/css";
+	else if (type == "js")
+		_contentType = "text/javascript";
+	else if (type == "jpeg" || type == "jpg")
+		_contentType = "image/jpeg";
+	else if (type == "png")
+		_contentType = "image/png";
+	else if (type == "bmp")
+		_contentType = "image/bmp";
+	else
+		_contentType = "text/plain";
 }
 
-void			ResponseHeader::setDate(std::string str)
+void			ResponseHeader::setDate(void)
 {
-	_date = str;
+	char			buffer[100];
+	struct timeval	tv;
+	struct tm		*tm;
+
+	gettimeofday(&tv, NULL);
+	tm = gmtime(&tv.tv_sec);
+	strftime(buffer, 100, "%a, %d %b %Y %H:%M:%S GMT", tm);
+	_date = std::string(buffer);
 }
 
-void			ResponseHeader::setLastModified(std::string str)
+void			ResponseHeader::setLastModified(std::string path)
 {
-	_lastModified = str;
+	char			buffer[100];
+	struct stat		stats;
+	struct tm		*tm;
+
+	if (stat(path.c_str(), &stats) == 0)
+	{
+		tm = gmtime(&stats.st_mtime);
+		strftime(buffer, 100, "%a, %d %b %Y %H:%M:%S GMT", tm);
+		_lastModified = std::string(buffer);
+	}
 }
 
-void			ResponseHeader::setLocation(std::string str)
+void			ResponseHeader::setLocation(int code, std::string redirect)
 {
-	_location = str;
+	if (code == 201 || code / 100 == 3)
+	{
+		_location = "/" + redirect;
+	}
 }
 
-void			ResponseHeader::setRetryAfter(std::string str)
+void			ResponseHeader::setRetryAfter(int code, int sec)
 {
-	_retryAfter = str;
+	if (code == 503 || code == 429 || code == 301)
+	{
+		_retryAfter = std::to_string(sec);
+	}
 }
 
-void			ResponseHeader::setServer(std::string str)
+void			ResponseHeader::setServer(void)
 {
-	_server = str;
+	_server = "Weebserv/1.0.0 (Unix)";
 }
 
-void			ResponseHeader::setTransferEncoding(std::string str)
+void			ResponseHeader::setTransferEncoding(void)
 {
-	_transferEncoding = str;
+	_transferEncoding = "identity";
 }
 
-void			ResponseHeader::setWwwAuthenticate(std::string str)
+void			ResponseHeader::setWwwAuthenticate(int code)
 {
-	_wwwAuthenticate = str;
+	if (code == 401)
+	{
+		_wwwAuthenticate = "Basic realm=\"Access requires authentification\" charset=\"UTF-8\"";
+	}
 }
-
-// Getter functions
-
-std::string		ResponseHeader::getAllow(void)
-{
-	return (_allow);
-}
-
-std::string		ResponseHeader::getContentLanguage(void)
-{
-	return (_contentLanguage);
-}
-
-std::string		ResponseHeader::getContentLength(void)
-{
-	return (_contentLength);
-}
-
-std::string		ResponseHeader::getContentLocation(void)
-{
-	return (_contentLocation);
-}
-
-std::string		ResponseHeader::getContentType(void)
-{
-	return (_contentType);
-}
-
-std::string		ResponseHeader::getDate(void)
-{
-	return (_date);
-}
-
-std::string		ResponseHeader::getLastModified(void)
-{
-	return (_lastModified);
-}
-
-std::string		ResponseHeader::getLocation(void)
-{
-	return (_location);
-}
-
-std::string		ResponseHeader::getRetryAfter(void)
-{
-	return (_retryAfter);
-}
-
-std::string		ResponseHeader::getServer(void)
-{
-	return (_server);
-}
-
-std::string		ResponseHeader::getTransferEncoding(void)
-{
-	return (_transferEncoding);
-}
-
-std::string		ResponseHeader::getWwwAuthenticate(void)
-{
-	return (_wwwAuthenticate);
-}
-
 
 // Overloaders
 
@@ -173,18 +217,7 @@ ResponseHeader & ResponseHeader::operator=(const ResponseHeader & src)
 
 ResponseHeader::ResponseHeader(void)
 {
-	_allow = "xxx";
-	_contentLanguage = "xxx";
-	_contentLength = "xxx";
-	_contentLocation = "xxx";
-	_contentType = "xxx";
-	_date = "xxx";
-	_lastModified = "xxx";
-	_location = "xxx";
-	_retryAfter = "xxx";
-	_server = "xxx";
-	_transferEncoding = "xxx";
-	_wwwAuthenticate = "xxx";
+	resetValues();
 }
 
 ResponseHeader::ResponseHeader(const ResponseHeader & src)

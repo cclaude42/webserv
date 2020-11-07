@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/31 13:44:42 by cclaude           #+#    #+#             */
-/*   Updated: 2020/11/05 12:25:29 by cclaude          ###   ########.fr       */
+/*   Updated: 2020/11/07 18:22:12 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,13 @@
 # include <time.h>
 # include <limits.h>
 
-// Network
+// System
 # include <sys/types.h>
 # include <sys/stat.h>
+# include <sys/time.h>
 # include <sys/socket.h>
+
+// Network
 # include <arpa/inet.h>
 # include <netinet/in.h>
 

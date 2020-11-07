@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:29:28 by cclaude           #+#    #+#             */
-/*   Updated: 2020/11/04 16:32:00 by cclaude          ###   ########.fr       */
+/*   Updated: 2020/11/07 15:49:12 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,13 @@
 void		Server::setup(void)
 {
 	_fd = socket(AF_INET, SOCK_STREAM, 0);
+	if (_fd == -1)
+		std::cout << "Could not create server." << std::endl;
 	this->setAddr();
-	bind(_fd, (struct sockaddr *)&_addr, sizeof(_addr));
-	listen(_fd, 10);
+	if (bind(_fd, (struct sockaddr *)&_addr, sizeof(_addr)) == -1)
+		std::cout << "Could not bind port." << std::endl;
+	if (listen(_fd, 10) == -1)
+		std::cout << "Could not listen." << std::endl;
 }
 
 void		Server::setAddr(void)
@@ -34,36 +38,43 @@ void		Server::accept(void)
 {
 	unsigned int	addrlen;
 
-	_socket = ::accept(_fd, (struct sockaddr *)&_addr, &addrlen);
+	_socket = ::accept(_fd, (struct sockaddr *)&_addr, (socklen_t *)&addrlen);
+	if (_socket == -1)
+		std::cout << "Could not create socket." << std::endl;
 }
 
 std::string	Server::recv(void)
 {
 	char		buffer[4096];
 	std::string	request = "";
-	int			read = 1;
+	int			read = 4095;
 
-	while (read)
+	while (read == 4095)
 	{
 		ft_memset(buffer, 0, 4096);
 		read = ::recv(_socket, buffer, 4095, 0);
+		if (read == -1)
+			std::cout << "Could not read request." << std::endl;
 		request += std::string(buffer);
 	}
-
-	std::cout << "Received something !" << std::endl;
 
 	return (request);
 }
 
 void		Server::send(std::string resp)
 {
-	// ::send(_fd, resp.c_str(), resp.size(), 0);
-	std::cout << resp;
+	if (::send(_socket, resp.c_str(), resp.size(), 0) == -1)
+		std::cout << "Could not send response." << std::endl;
 }
 
 void		Server::close(void)
 {
 	::close(_socket);
+}
+
+void		Server::end(void)
+{
+	::close(_fd);
 }
 
 // Overloaders

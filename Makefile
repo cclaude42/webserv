@@ -21,6 +21,7 @@ TOOLS = ntoh cstring
 SRC = $(addprefix srcs/, $(addsuffix .cpp, $(MAIN))) \
 	$(addprefix srcs/response/, $(addsuffix .cpp, $(RESPONSE))) \
 	$(addprefix srcs/server/, $(addsuffix .cpp, $(SERVER))) \
+	$(addprefix srcs/tools/, $(addsuffix .cpp, $(TOOLS))) \
 
 
 OBJ = $(SRC:cpp=o)
