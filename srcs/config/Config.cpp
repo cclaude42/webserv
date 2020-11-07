@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 14:30:01 by user42            #+#    #+#             */
-/*   Updated: 2020/11/07 17:05:25 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/07 17:38:09 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,10 +50,8 @@ int     Config::parse(char * const filename) {
 
 	file = ConfigReader::readFile(filename);
 	fileSize = file.size();
-	std::cout << "in Config::Parse " << file[0] << std::endl;
 	for (unsigned int i = 0 ; i < fileSize; i++) {
 		if (file[i] == "server") {
-			std::cout << "AA" << std::endl;
 			ConfigServer  server;
 			++i;
 			if (file[i] != "{")
@@ -62,7 +60,6 @@ int     Config::parse(char * const filename) {
 			if (!server.parse(i, file))
 				std::cerr << "Error: error in config file " << filename << std::endl;
 			else {
-				std::cout << server << std::endl;
 				this->_servers.push_back(server);
 			}
 		}
@@ -76,8 +73,8 @@ int     Config::parse(char * const filename) {
 
 std::ostream	&operator<<(std::ostream &out, const Config &config) {
 	for (size_t index = 0; index < config._servers.size(); index++) {
-		out << "server " << index << std::endl;
-		out << config._servers[0] << std::endl << std::endl;
+		out << "SERVER " << index << std::endl;
+		out << config._servers[index] << std::endl;
 	}
 	return out;
 }

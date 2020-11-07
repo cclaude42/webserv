@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 15:28:08 by user42            #+#    #+#             */
-/*   Updated: 2020/11/07 17:07:02 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/07 17:40:22 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,6 @@ int     ConfigServer::parse(unsigned int &index, fileVector &file) {
 		return 0;
 	directive = iter->first;
 	index++;
-	std::cout << "in ConfigServer::parse " << file[index] << std::endl;
 	for ( ; index < file.size() && file[index].compare("}") ; index++) {
 		if ((iter = Config::parsingMap.find(file[index])) == Config::parsingMap.end()) {
 			if (!directive.compare(""))
@@ -82,8 +81,6 @@ int     ConfigServer::parse(unsigned int &index, fileVector &file) {
 			args.push_back("/");
 			(this->*Config::parsingMap["root"])(args);
 		}
-		std::cout << "PARSE SERVER END" << std::endl;
-		++index;
 		return 1;
 	}
 	return 0;
@@ -93,14 +90,17 @@ void        ConfigServer::addListen(std::vector<std::string> args) {
 	t_listen    listen;
 	size_t      separator;
 	
-	std::cout << "in addListen" << std::endl;
-	for (unsigned int i = 0; i < args.size(); i++)
-		std::cout << args[i] << std::endl;
+	// std::cout << "in addListen" << std::endl;
 	if (args.size() != 1)
 		throw ConfigServer::ExceptionInvalidArguments();
-	if ((separator = args[0].find(":")) == std::string::npos)
+	if ((separator = args[0].find(":")) == std::string::npos) {
+		if (isDigits(args[0])) {
+			listen.host = "localhost";
+			listen.port = std::stoi(args[0]);
+			return ;
+		}
 		throw ConfigServer::ExceptionInvalidArguments();
-	
+	}
 	listen.host = args[0].substr(0, separator);
 	separator++;
 
@@ -109,19 +109,17 @@ void        ConfigServer::addListen(std::vector<std::string> args) {
 		throw ConfigServer::ExceptionInvalidArguments();
 	listen.port = std::stoi(strPort);
 	this->_listen.push_back(listen);
-	std::cout << "addListen END" << std::endl;
 }
 
 void        ConfigServer::addRoot(std::vector<std::string> args) {
-	std::cout << "in addRoot" << std::endl;
+	// std::cout << "in addRoot" << std::endl;
 	if (args.size() != 1 || this->_root != "")
 		throw ConfigServer::ExceptionInvalidArguments();
 	this->_root = args[0];
-	std::cout << "addRoot END" << std::endl;
 }
 
 void        ConfigServer::addServerName(std::vector<std::string> args) {
-	std::cout << "in addServerName" << std::endl;
+	// std::cout << "in addServerName" << std::endl;
 	if (args.size() == 0)
 		throw ConfigServer::ExceptionInvalidArguments();
 	for (unsigned int i = 0; i < args.size(); i++)
@@ -129,7 +127,7 @@ void        ConfigServer::addServerName(std::vector<std::string> args) {
 }
 
 void        ConfigServer::addErrorPage(std::vector<std::string> args) {
-	std::cout << "in addErrorPage" << std::endl;
+	// std::cout << "in addErrorPage" << std::endl;
 	bool	codeFound = false;
 	t_error_page	error_page;
 	size_t			len = args.size();
@@ -150,7 +148,7 @@ void        ConfigServer::addErrorPage(std::vector<std::string> args) {
 }
 
 void        ConfigServer::addClientBodyBufferSize(std::vector<std::string> args) {
-	std::cout << "in addBodySize" << std::endl;
+	// std::cout << "in addBodySize" << std::endl;
 	if (args.size() != 1 || !isDigits(args[0]))
 		throw ConfigServer::ExceptionInvalidArguments();
 	this->_client_body_buffer_size = std::stoi(args[0]);
