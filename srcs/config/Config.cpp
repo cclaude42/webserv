@@ -6,23 +6,24 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 14:30:01 by user42            #+#    #+#             */
-/*   Updated: 2020/11/07 17:38:09 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/08 02:00:57 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Config.hpp"
 
-parseMap Config::init_map() {
+parseMap Config::initServerMap() {
 		    parseMap     myMap;
 		    myMap["listen"] = &ConfigServer::addListen;
 		    myMap["root"] = &ConfigServer::addRoot;
 		    myMap["server_name"] = &ConfigServer::addServerName;
 		    myMap["error_page"] = &ConfigServer::addErrorPage;
 		    myMap["client_body_buffer_size"] = &ConfigServer::addClientBodyBufferSize;
+			myMap["cgi_param"] = &ConfigServer::addCgiParam;
 		    return myMap;
 }
 
- parseMap Config::parsingMap = Config::init_map();
+ parseMap Config::serverParsingMap = Config::initServerMap();
 
 Config::Config(void) {
 	return ;

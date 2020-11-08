@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 15:28:08 by user42            #+#    #+#             */
-/*   Updated: 2020/11/07 17:40:22 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/08 03:29:29 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,41 +50,56 @@ int     ConfigServer::parse(unsigned int &index, fileVector &file) {
 	std::string                 directive;
 
 	//	calling the function that corresponds to a directive with its args as parameters
-	if ((iter = Config::parsingMap.find(file[index])) == Config::parsingMap.end())
+	if ((iter = Config::serverParsingMap.find(file[index])) == Config::serverParsingMap.end())
 		return 0;
 	directive = iter->first;
 	index++;
 	for ( ; index < file.size() && file[index].compare("}") ; index++) {
-		if ((iter = Config::parsingMap.find(file[index])) == Config::parsingMap.end()) {
+		if ((iter = Config::serverParsingMap.find(file[index])) == Config::serverParsingMap.end()) {
 			if (!directive.compare(""))
-				return !file[index].compare("}") ? 1 : 0;
+				return file[index] == "}" ? 1 : 0;
 			args.push_back(file[index]);
 		}
+		// else if (file[index] == "location") {
+		// 	ConfigServer::Location	location(*this);
+			
+		// 	index++;
+		// 	if (!location.parse(index, file))
+		// 		return 0;
+		// 	this->_locations.push_back(location);
+		// }
 		else
 		{
-			(this->*Config::parsingMap[directive])(args);
+			(this->*Config::serverParsingMap[directive])(args);
 			args.clear();
 			directive = iter->first;
 		}
 	}
 
 	if (directive != "")
-		(this->*Config::parsingMap[directive])(args);
+		(this->*Config::serverParsingMap[directive])(args);
 	//  set up default values if they were not set by the config file
 	if (!file[index].compare("}")) {
 		if (this->_listen.size() == 0) {
 			args.push_back("localhost:80");
-			(this->*Config::parsingMap["listen"])(args);
+			(this->*Config::serverParsingMap["listen"])(args);
 		}
 		if (this->_root == "") {
 			args.clear();
 			args.push_back("/");
-			(this->*Config::parsingMap["root"])(args);
+			(this->*Config::serverParsingMap["root"])(args);
 		}
+		std::cout << this->_cgi_param["hello"] << std::endl;
 		return 1;
 	}
 	return 0;
 }
+
+// int			ConfigServer::Location::parse(unsigned int &index, fileVector &file) {
+	
+// }
+
+// ADDING MEMBER VALUES
 
 void        ConfigServer::addListen(std::vector<std::string> args) {
 	t_listen    listen;
@@ -154,6 +169,13 @@ void        ConfigServer::addClientBodyBufferSize(std::vector<std::string> args)
 	this->_client_body_buffer_size = std::stoi(args[0]);
 }
 
+void		ConfigServer::addCgiParam(std::vector<std::string> args) {
+	if (args.size() != 2)
+		throw ConfigServer::ExceptionInvalidArguments();
+	this->_cgi_param.insert({args[0], args[1]});
+}
+
+
 std::ostream	&operator<<(std::ostream &out, const ConfigServer &server) {
 	out << "Listen:" << std::endl;
 	for (size_t i = 0; i < server._listen.size(); i++) {
@@ -175,6 +197,12 @@ std::ostream	&operator<<(std::ostream &out, const ConfigServer &server) {
 		out << server._error_page[i].uri << std::endl;
 	}
 	out << "client_body_buffer_size: " << server._client_body_buffer_size << std::endl;
+	out << "cgi_param:" << std::endl;
+	for (auto i = server._cgi_param.begin(); i != server._cgi_param.end(); i++)
+		std::cout << "\t" << i->first << " = " << i->second << std::endl;
+	
+	if (server._cgi_param.find("hello") == server._cgi_param.end())
+		std::cout << "WTF" << std::endl;
 	return out;
 }
 

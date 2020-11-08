@@ -4,21 +4,7 @@ server {
     server_name francisServer blabla hello_world
     error_page 404 405 510 /data/errors/
     listen localhost:80
+    error_page 222 /errors/
     client_body_buffer_size 5000
-}
-server {
-    listen localhost:8000
-    root /
-    server_name francisServer blabla hello_world
-    error_page 404 405 510 /data/errors/
-    listen localhost:80
-    client_body_buffer_size 5000
-}
-server {
-    listen localhost:8000
-    root /
-    server_name francisServer blabla hello_world
-    error_page 404 405 510 /data/errors/
-    listen localhost:80
-    client_body_buffer_size 5000
+    cgi_param   hello world
 }
