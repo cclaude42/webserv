@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:18:58 by cclaude           #+#    #+#             */
-/*   Updated: 2020/11/04 16:14:41 by cclaude          ###   ########.fr       */
+/*   Updated: 2020/11/07 18:47:26 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,15 +16,26 @@
 
 void			Response::make(void)
 {
-	this->fillContent();
+	fillContent();
 	// Set header accordingly
-	_response = _header.getHeader() + _content;
+	_response = _header.getHeader(_content, _filename, _code) + _content;
 }
 
 void			Response::fillContent(void)
 {
-	_content = "yyy";
-	_content += "\r\n";
+	int		fd = open(_filename.c_str(), O_RDONLY);
+	char	buffer[4096];
+	int		ret = 4095;
+
+	_content = "";
+	while (ret == 4095)
+	{
+		ft_memset(buffer, 0, 4096);
+		ret = read(fd, buffer, 4095);
+		_content += std::string(buffer);
+	}
+
+	close(fd);
 }
 
 // Setter functions
@@ -53,7 +64,7 @@ Response & Response::operator=(const Response & src)
 
 Response::Response(void)
 {
-
+	_code = 200;
 }
 
 Response::Response(const Response & src)

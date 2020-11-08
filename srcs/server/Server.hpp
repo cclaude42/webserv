@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:29:28 by cclaude           #+#    #+#             */
-/*   Updated: 2020/11/05 12:13:47 by cclaude          ###   ########.fr       */
+/*   Updated: 2020/11/07 12:08:13 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ public:
 	std::string	recv(void);
 	void		send(std::string resp);
 	void		close(void);
+	void		end(void);
 
 private:
 	int					_fd;
