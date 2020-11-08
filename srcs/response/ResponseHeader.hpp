@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 15:17:39 by cclaude           #+#    #+#             */
-/*   Updated: 2020/11/04 16:06:46 by cclaude          ###   ########.fr       */
+/*   Updated: 2020/11/07 18:45:22 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,35 +24,25 @@ public:
 	ResponseHeader & operator=(const ResponseHeader & src);
 
 	// Setter functions
-	void			setAllow(std::string str);
-	void			setContentLanguage(std::string str);
-	void			setContentLength(std::string str);
-	void			setContentLocation(std::string str);
-	void			setContentType(std::string str);
-	void			setDate(std::string str);
-	void			setLastModified(std::string str);
-	void			setLocation(std::string str);
-	void			setRetryAfter(std::string str);
-	void			setServer(std::string str);
-	void			setTransferEncoding(std::string str);
-	void			setWwwAuthenticate(std::string str);
-
-	// Getter functions
-	std::string		getAllow(void);
-	std::string		getContentLanguage(void);
-	std::string		getContentLength(void);
-	std::string		getContentLocation(void);
-	std::string		getContentType(void);
-	std::string		getDate(void);
-	std::string		getLastModified(void);
-	std::string		getLocation(void);
-	std::string		getRetryAfter(void);
-	std::string		getServer(void);
-	std::string		getTransferEncoding(void);
-	std::string		getWwwAuthenticate(void);
+	void			setAllow(std::string cmd);
+	void			setContentLanguage(std::string lang);
+	void			setContentLength(int size);
+	void			setContentLocation(std::string path);
+	void			setContentType(std::string type);
+	void			setDate(void);
+	void			setLastModified(std::string path);
+	void			setLocation(int code, std::string redirect);
+	void			setRetryAfter(int code, int sec);
+	void			setServer(void);
+	void			setTransferEncoding(void);
+	void			setWwwAuthenticate(int code);
 
 	// Member functions
-	std::string		getHeader(void);
+	std::string		getHeader(std::string content, std::string filename, int code);
+	std::string		writeHeader(void);
+	void			setValues(std::string content, std::string filename, int code);
+	void			resetValues(void);
+	std::string		getStatusMessage(int code);
 
 private:
 	std::string		_allow;
