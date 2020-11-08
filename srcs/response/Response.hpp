@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:18:58 by cclaude           #+#    #+#             */
-/*   Updated: 2020/11/07 13:55:05 by cclaude          ###   ########.fr       */
+/*   Updated: 2020/11/08 12:06:57 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 
 # include "webserv.hpp"
 # include "ResponseHeader.hpp"
+
+class ResponseHeader;
 
 class Response {
 public:

@@ -1,9 +1,9 @@
-test*
-test.*
-a.out
-*.swp
-
 webserv
 srcs/*/*.o
-miniserv/miniserv
-miniserv/srcs/*.o
+
+libft/libft.a
+libft/*/*.o
+
+objs
+objs/*.o
+objs/*/*.o

@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/31 13:44:42 by cclaude           #+#    #+#             */
-/*   Updated: 2020/11/07 18:22:12 by cclaude          ###   ########.fr       */
+/*   Updated: 2020/11/08 12:58:53 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,12 @@
 // CPP Includes
 # include <iostream>
 # include <iomanip>
-# include <string>
-# include <vector>
 # include <sstream>
+# include <string>
+
+// CPP Containers
+# include <map>
+# include <vector>
 # include <algorithm>
 # include <iterator>
 
@@ -43,6 +46,11 @@
 # include <arpa/inet.h>
 # include <netinet/in.h>
 
+// libft
+extern "C" {
+#include "libft.h"
+}
+
 // Define two names ntoh functions
 # define ft_htonl ft_ntohl
 # define ft_htons ft_ntohs
@@ -63,7 +71,8 @@ unsigned int	ft_ntohl(unsigned int l);
 unsigned int	ft_htonl(unsigned int l);
 
 // TOOLS
-char			*ft_memset(char *mem, int c, unsigned int size);
-int				ft_strlen(char *str);
+std::string		readKey(char *line);
+std::string		readValue(char *line);
+std::string		strip(std::string& str, char c);
 
 #endif
