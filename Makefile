@@ -4,7 +4,7 @@ CC = clang++
 
 CFLAGS = -Wall -Wextra -Werror
 
-INCLUDES = -I includes/ -I srcs/config/ -I srcs/response/ -I srcs/server/
+INCLUDES = code 
 
 HEADER = webserv.hpp
 

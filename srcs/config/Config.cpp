@@ -6,11 +6,24 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 14:30:01 by user42            #+#    #+#             */
-/*   Updated: 2020/11/05 12:32:12 by cclaude          ###   ########.fr       */
+/*   Updated: 2020/11/08 02:00:57 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Config.hpp"
+
+parseMap Config::initServerMap() {
+		    parseMap     myMap;
+		    myMap["listen"] = &ConfigServer::addListen;
+		    myMap["root"] = &ConfigServer::addRoot;
+		    myMap["server_name"] = &ConfigServer::addServerName;
+		    myMap["error_page"] = &ConfigServer::addErrorPage;
+		    myMap["client_body_buffer_size"] = &ConfigServer::addClientBodyBufferSize;
+			myMap["cgi_param"] = &ConfigServer::addCgiParam;
+		    return myMap;
+}
+
+ parseMap Config::serverParsingMap = Config::initServerMap();
 
 Config::Config(void) {
 	return ;
@@ -33,22 +46,23 @@ Config	&Config::operator=(Config const &src) {
 }
 
 int     Config::parse(char * const filename) {
-	ConfigReader                 fileReader(filename);
-	std::vector<std::string>   file;
+	fileVector				   file;
 	unsigned int               fileSize;
 
-	fileReader.readFile();
-	fileReader.getFile();
-	fileReader.getFileOneLine(file);
+	file = ConfigReader::readFile(filename);
 	fileSize = file.size();
 	for (unsigned int i = 0 ; i < fileSize; i++) {
 		if (file[i] == "server") {
 			ConfigServer  server;
-
+			++i;
+			if (file[i] != "{")
+				std::cerr << "Error: expecter '{' after server directive" << std::endl;
+			++i;
 			if (!server.parse(i, file))
-				std::cerr << "Error: error in config file" << std::endl;
-			else
+				std::cerr << "Error: error in config file " << filename << std::endl;
+			else {
 				this->_servers.push_back(server);
+			}
 		}
 		else {
 			std::cerr << "Error: unknown directive " << file[i] << std::endl;
@@ -56,4 +70,12 @@ int     Config::parse(char * const filename) {
 		}
 	}
 	return 0;
+}
+
+std::ostream	&operator<<(std::ostream &out, const Config &config) {
+	for (size_t index = 0; index < config._servers.size(); index++) {
+		out << "SERVER " << index << std::endl;
+		out << config._servers[index] << std::endl;
+	}
+	return out;
 }
