@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/07 18:40:39 by user42            #+#    #+#             */
-/*   Updated: 2020/11/09 13:10:01 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/09 17:46:09 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ locationParseMap Location::initLocationMap() {
 			myMap["error_page"] = &Location::addErrorPage;
 			myMap["client_body_buffer_size"] = &Location::addClientBodyBufferSize;
 			myMap["cgi_param"] = &Location::addCgiParam;
+			myMap["cgi_pass"] = &Location::addCgiPass;
 			return myMap;
 }
 
@@ -161,9 +162,27 @@ void		Location::addCgiParam(std::vector<std::string> args) {
 	this->_cgi_param.insert({args[0], args[1]});
 }
 
-// void    	Location::addCgiPass(std::vector<std::string> args) {
+void    	Location::addCgiPass(std::vector<std::string> args) {
+	t_listen    address;
+	size_t      separator;
 	
-// }
+	// std::cout << "in addCgiPass" << std::endl;
+	if (args.size() != 1 || this->_cgi_pass.set == true)
+		throw ConfigServer::ExceptionInvalidArguments();
+	if ((separator = args[0].find(":")) == std::string::npos) {
+		throw ConfigServer::ExceptionInvalidArguments();
+	}
+	address.host = args[0].substr(0, separator);
+	separator++;
+	std::string	strPort = args[0].substr(separator);
+	if (isDigits(strPort) == false)
+		throw ConfigServer::ExceptionInvalidArguments();
+	address.port = std::stoi(strPort);
+	this->_cgi_pass.address.port = address.port;
+	this->_cgi_pass.address.host = address.host;
+	this->_cgi_pass.set = true;
+	// std::cout << "addCgiPass END" << std::endl;
+}
 
 const char		*Location::ExceptionInvalidArguments::what() const throw() {
 	return "Exception: invalid arguments in location block";
@@ -186,3 +205,27 @@ std::ostream	&operator<<(std::ostream &out, const Location &location) {
 	
 	return out;
 }
+
+std::string							Location::getRoot() const {
+	return this->_root;
+}
+
+std::vector<t_error_page>			Location::getErrorPage() const {
+	return this->_error_page;
+}
+
+int									Location::getClientBodyBufferSize() const {
+	return this->_client_body_buffer_size;
+}
+
+std::map<std::string, std::string>	Location::getCgiParam() const {
+	return this->_cgi_param;
+}
+
+t_cgi_pass							Location::getCgiPass() const {
+	return this->_cgi_pass;
+}
+std::map<std::string, Location>		Location::getLocation() const {
+	return this->_location;
+}
+

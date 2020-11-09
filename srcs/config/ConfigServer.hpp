@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 15:27:44 by user42            #+#    #+#             */
-/*   Updated: 2020/11/09 13:03:58 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/09 17:38:34 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,10 @@
 //  add_header [http methods]: list all of the allowed http methods for a certain route, separated by whitespace
 //      by default, all methods should be allowed
 
+
+// TODO:
+// -	ADD getters
+// -	
 bool isDigits(const std::string &str);
 
 # define parseMap std::map<std::string, void (ConfigServer::*)(fileVector)>
@@ -41,7 +45,25 @@ class ConfigServer {
 
 		ConfigServer	&operator=(ConfigServer const &src);
 		int		parse(unsigned int &i, std::vector<std::string> &file);
+        
+		class	ExceptionInvalidArguments: public std::exception {
+			virtual const char	*what() const throw();
+		};
 
+		// GETERS
+		std::vector<t_listen>				getListen() const;
+		std::string							getRoot() const;
+		std::vector<std::string>   			getServerName() const;
+		std::vector<t_error_page>			getErrorPage() const;
+		int									getClientBodyBufferSize() const;
+		std::map<std::string, std::string>	getCgiParam() const;
+		t_cgi_pass							getCgiPass() const;
+		std::map<std::string, Location>		getLocation() const;
+		
+		friend	std::ostream &operator<<(std::ostream &out, const ConfigServer &server);
+	private:
+
+		// PARSING FUNCTIONS
 		void    addListen(std::vector<std::string> args);
         void    addRoot(std::vector<std::string> args);
         void    addServerName(std::vector<std::string> args);
@@ -49,22 +71,10 @@ class ConfigServer {
         void    addClientBodyBufferSize(std::vector<std::string> args);
 		void	addCgiParam(std::vector<std::string> args);
 		void    addCgiPass(std::vector<std::string> args);
-		void	printParam() const {
-			if (this->_cgi_param.begin()  == this->_cgi_param.end())
-				std::cout << "EMPTY MAP" << std::endl;
-			for (auto i = this->_cgi_param.begin() ; i != this->_cgi_param.end() ; i++) {
-				std::cout << "\t" << i->first << " " << i->second << std::endl;
-			}
-		}
-        
-		class	ExceptionInvalidArguments: public std::exception {
-			virtual const char	*what() const throw();
-		};
-
-		friend	std::ostream &operator<<(std::ostream &out, const ConfigServer &server);
-	private:
 		static	parseMap					serverParsingMap;
 		static parseMap 					initServerMap();
+		
+		// MEMBERS
 		std::vector<t_listen>				_listen;
 		std::string							_root;
 		std::vector<std::string>   			_server_name;

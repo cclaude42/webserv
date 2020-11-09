@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 14:30:01 by user42            #+#    #+#             */
-/*   Updated: 2020/11/09 13:03:16 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/09 17:35:51 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,6 @@ int     Config::parse(char * const filename) {
 			else {
 				this->_servers.push_back(server);
 			}
-			std::cout << "PARAMS: " << std::endl;
-			server.printParam();
 		}
 		else {
 			std::cerr << "Error: unknown directive " << file[i] << std::endl;

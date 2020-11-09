@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 15:28:08 by user42            #+#    #+#             */
-/*   Updated: 2020/11/09 13:09:47 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/09 17:41:38 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,11 +132,7 @@ int     ConfigServer::parse(unsigned int &index, fileVector &file) {
 	return 0;
 }
 
-// int			ConfigServer::Location::parse(unsigned int &index, fileVector &file) {
-	
-// }
-
-// ADDING MEMBER VALUES
+//	PARSING FUNCTIONS
 
 void        ConfigServer::addListen(std::vector<std::string> args) {
 	t_listen    listen;
@@ -268,4 +264,29 @@ std::ostream	&operator<<(std::ostream &out, const ConfigServer &server) {
 const char		*ConfigServer::ExceptionInvalidArguments::what()
  const throw() {
 	return "Exception: invalid arguments in configuration file";
+}
+
+std::vector<t_listen>				ConfigServer::getListen() const {
+	return this->_listen;
+}
+std::string							ConfigServer::getRoot() const {
+	return this->_root;
+}
+std::vector<std::string>   			ConfigServer::getServerName() const {
+	return this->_server_name;
+}
+std::vector<t_error_page>			ConfigServer::getErrorPage() const {
+	return this->_error_page;
+}
+int									ConfigServer::getClientBodyBufferSize() const {
+	return this->_client_body_buffer_size;
+}
+std::map<std::string, std::string>	ConfigServer::getCgiParam() const {
+	return this->_cgi_param;
+}
+t_cgi_pass							ConfigServer::getCgiPass() const {
+	return this->_cgi_pass;
+}
+std::map<std::string, Location>		ConfigServer::getLocation() const {
+	return this->_location;
 }
