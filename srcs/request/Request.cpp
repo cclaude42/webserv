@@ -6,7 +6,7 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 16:27:33 by hbaudet           #+#    #+#             */
-/*   Updated: 2020/11/05 18:09:25 by hbaudet          ###   ########.fr       */
+/*   Updated: 2020/11/09 16:17:57 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,17 @@ Request::Request(const char *str) : _method (""), _version(""), _ret(200), _body
 {
 	if (PRINT)
 		std::cout << "C-String constructor called\n";
+
+	this->resetHeaders();
+	this->parse(str);
+	if (this->_ret != 200)
+		std::cout << "Parse error : " << this->_ret << '\n';
+}
+
+Request::Request(const std::string& str) : _method (""), _version(""), _ret(200), _body("")
+{
+	if (PRINT)
+		std::cout << "std:string constructor called\n";
 
 	this->resetHeaders();
 	this->parse(str);
@@ -104,6 +115,16 @@ void	Request::setHeader(const std::string& key, const std::string& value)
 void	Request::setBody(char **line, int i)
 {
 	while (line[i])
+	{
+		this->_body.append(line[i]);
+		this->_body.push_back('\n');
+		i++;
+	}
+}
+
+void	Request::setBody(std::vector<std::string> line, size_t i)
+{
+	while (i < line.size())
 	{
 		this->_body.append(line[i]);
 		this->_body.push_back('\n');

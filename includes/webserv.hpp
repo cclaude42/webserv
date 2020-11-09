@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/31 13:44:42 by cclaude           #+#    #+#             */
-/*   Updated: 2020/11/08 12:58:53 by cclaude          ###   ########.fr       */
+/*   Updated: 2020/11/09 16:23:05 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,17 +62,20 @@ extern "C" {
 # define BYTE_3 0x000000ff
 
 // HEADER
-void			make_header(char *header, const char *file);
+void						make_header(char *header, const char *file);
 
 // NTOH / HTON
-unsigned short	ft_ntohs(unsigned short s);
-unsigned short	ft_htons(unsigned short s);
-unsigned int	ft_ntohl(unsigned int l);
-unsigned int	ft_htonl(unsigned int l);
+unsigned short				ft_ntohs(unsigned short s);
+unsigned short				ft_htons(unsigned short s);
+unsigned int				ft_ntohl(unsigned int l);
+unsigned int				ft_htonl(unsigned int l);
 
 // TOOLS
-std::string		readKey(char *line);
-std::string		readValue(char *line);
-std::string		strip(std::string& str, char c);
+std::string					readKey(char *line);
+std::string					readKey(std::string& line);
+std::string					readValue(char *line);
+std::string					readValue(std::string& line);
+std::string					strip(std::string& str, char c);
+std::vector<std::string>	split(const std::string& str, char c);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 16:27:33 by hbaudet           #+#    #+#             */
-/*   Updated: 2020/11/08 12:58:34 by cclaude          ###   ########.fr       */
+/*   Updated: 2020/11/09 16:19:52 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ class Request
 
 			/*** PARSING ***/
 			void	readFirstLine(char *line);
+			void	readFirstLine(std::string& line);
 			void	checkMethod();
 
 			/*** AVAILABLE HTTP METHODS ***/
@@ -60,6 +61,7 @@ class Request
 		public:
 			Request();
 			Request(const char *str);
+			Request(const std::string& str);
 			Request(const Request&);
 			~Request();
 			Request&	operator=(const Request&);
@@ -72,13 +74,16 @@ class Request
 			const	std::string&						getBody() const;
 
 			/*** SETTERS **/
-//			void	setHeader(const std::string& key, const std::string& value); //not needed as of now
+		//	void	setHeader(const std::string& key, const std::string& value);
+													//not needed as of now
 			void	setBody(char **line, int i);
+			void	setBody(std::vector<std::string> line, size_t i);
 
 			/*** UTILS ****/
 			void	displayHeaders();
 			void	resetHeaders();
 			int		parse(const char *str);
+			int		parse(const std::string& str);
 };
 
 std::ostream&	operator<<(std::ostream& os, const Request& re);
