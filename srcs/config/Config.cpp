@@ -6,24 +6,11 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 14:30:01 by user42            #+#    #+#             */
-/*   Updated: 2020/11/08 02:00:57 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/09 13:03:16 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Config.hpp"
-
-parseMap Config::initServerMap() {
-		    parseMap     myMap;
-		    myMap["listen"] = &ConfigServer::addListen;
-		    myMap["root"] = &ConfigServer::addRoot;
-		    myMap["server_name"] = &ConfigServer::addServerName;
-		    myMap["error_page"] = &ConfigServer::addErrorPage;
-		    myMap["client_body_buffer_size"] = &ConfigServer::addClientBodyBufferSize;
-			myMap["cgi_param"] = &ConfigServer::addCgiParam;
-		    return myMap;
-}
-
- parseMap Config::serverParsingMap = Config::initServerMap();
 
 Config::Config(void) {
 	return ;
@@ -59,10 +46,12 @@ int     Config::parse(char * const filename) {
 				std::cerr << "Error: expecter '{' after server directive" << std::endl;
 			++i;
 			if (!server.parse(i, file))
-				std::cerr << "Error: error in config file " << filename << std::endl;
+				std::cerr << "Error: error in config file \"" << filename << "\"" <<  std::endl;
 			else {
 				this->_servers.push_back(server);
 			}
+			std::cout << "PARAMS: " << std::endl;
+			server.printParam();
 		}
 		else {
 			std::cerr << "Error: unknown directive " << file[i] << std::endl;

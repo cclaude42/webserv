@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 15:27:44 by user42            #+#    #+#             */
-/*   Updated: 2020/11/08 03:26:46 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/09 13:03:58 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,8 @@
 
 # define CONFIG_SERVER_HPP
 
-# include "Config.hpp"
-# include "ConfigReader.hpp"
-# include <map>
+# include "Location.hpp"
+
 //  listen struct with host and port: default host: localhost; default port:80
 //      host an either be an IP address or a domain name
 //  server_name, default = ""
@@ -29,15 +28,10 @@
 //      by default, all methods should be allowed
 
 bool isDigits(const std::string &str);
-typedef struct	s_listen {
-	std::string	host;
-	int			port;
-}				t_listen;
 
-typedef struct  s_error_page {
-	std::vector<int>    errorCodes; // all of the codes that will be redirected
-	std::string         uri;		// uri to which they are redirected
-}               t_error_page;
+# define parseMap std::map<std::string, void (ConfigServer::*)(fileVector)>
+
+class	Location;
 
 class ConfigServer {
 	public:
@@ -54,34 +48,31 @@ class ConfigServer {
         void    addErrorPage(std::vector<std::string> args);
         void    addClientBodyBufferSize(std::vector<std::string> args);
 		void	addCgiParam(std::vector<std::string> args);
+		void    addCgiPass(std::vector<std::string> args);
+		void	printParam() const {
+			if (this->_cgi_param.begin()  == this->_cgi_param.end())
+				std::cout << "EMPTY MAP" << std::endl;
+			for (auto i = this->_cgi_param.begin() ; i != this->_cgi_param.end() ; i++) {
+				std::cout << "\t" << i->first << " " << i->second << std::endl;
+			}
+		}
         
 		class	ExceptionInvalidArguments: public std::exception {
 			virtual const char	*what() const throw();
 		};
 
-
-		class Location {
-			public:
-				Location(ConfigServer &parent);
-				Location(Location const &src);
-				virtual ~Location(void);
-
-				Location   &operator=(Location const &src);
-				int			parse(unsigned int &i, fileVector &file);
-			private:
-				ConfigServer	&parent;
-				std::string		_root;
-				
-		};
 		friend	std::ostream &operator<<(std::ostream &out, const ConfigServer &server);
 	private:
+		static	parseMap					serverParsingMap;
+		static parseMap 					initServerMap();
 		std::vector<t_listen>				_listen;
 		std::string							_root;
 		std::vector<std::string>   			_server_name;
 		std::vector<t_error_page>			_error_page; // error page redirections
 		int									_client_body_buffer_size; // max size for the client body, defaults to 8 000
-		std::map<std::string, std::string>	_cgi_param = std::map<std::string, std::string>();
-		std::vector<Location>				_locations;
+		std::map<std::string, std::string>	_cgi_param;
+		t_cgi_pass							_cgi_pass;
+		std::map<std::string, Location>		_location;
 
 };
 

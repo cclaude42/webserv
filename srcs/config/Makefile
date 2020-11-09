@@ -5,6 +5,7 @@ FLAGS= -Wall -Wextra -Werror
 SRCS=	main.cpp\
 		Config.cpp\
 		ConfigReader.cpp\
+		Location.cpp\
 		ConfigServer.cpp
 
 NAME= configParser
