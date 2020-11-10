@@ -75,7 +75,9 @@ std::string					readKey(char *line);
 std::string					readKey(std::string& line);
 std::string					readValue(char *line);
 std::string					readValue(std::string& line);
-std::string					strip(std::string& str, char c);
+std::string&				strip(std::string& str, char c);
 std::vector<std::string>	split(const std::string& str, char c);
+std::string&				to_lower(std::string& str);
+std::string&				to_upper(std::string& str);
 
 #endif

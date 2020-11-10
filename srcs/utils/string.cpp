@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/31 18:58:08 by cclaude           #+#    #+#             */
-/*   Updated: 2020/11/09 16:24:59 by hbaudet          ###   ########.fr       */
+/*   Updated: 2020/11/10 18:37:52 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ std::string					readKey(std::string& line)
 	std::string	ret;
 
 	size_t	i = line.find_first_of(':');
-		ret.append(line, 0 , i);
+	ret.append(line, 0 , i);
+	// to_upper(ret);
 	return (ret);
 }
 
@@ -49,8 +50,9 @@ std::string					readValue(std::string& line)
 	std::string	ret;
 
 	i = line.find_first_of(':');
-	i = line.find_first_not_of(' ', i);
-	ret.append(line, i, std::string::npos);
+	i = line.find_first_not_of(' ', i + 1);
+	if (i != std::string::npos)
+		ret.append(line, i, std::string::npos);
 	return ret;
 }
 
@@ -65,9 +67,21 @@ std::vector<std::string>	split(const std::string& str, char c)
 	return tokens;
 }
 
-std::string					strip(std::string& str, char c)
+std::string&					strip(std::string& str, char c)
 {
 	while (str.back() == c)
 		str.pop_back();
+	return str;
+}
+
+std::string&					to_upper(std::string& str)
+{
+	std::transform(str.begin(), str.end(),str.begin(), ::toupper);
+	return str;
+}
+
+std::string&					to_lower(std::string& str)
+{
+	std::transform(str.begin(), str.end(),str.begin(), ::tolower);
 	return str;
 }

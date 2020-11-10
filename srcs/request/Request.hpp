@@ -6,7 +6,7 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 16:27:33 by hbaudet           #+#    #+#             */
-/*   Updated: 2020/11/09 16:19:52 by hbaudet          ###   ########.fr       */
+/*   Updated: 2020/11/10 17:09:24 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,11 +49,13 @@ class Request
 			std::map<std::string, std::string>	_headers;
 			int									_ret;
 			std::string							_body;
+			int									_port;
 
 			/*** PARSING ***/
 			void	readFirstLine(char *line);
 			void	readFirstLine(std::string& line);
 			void	checkMethod();
+			void	checkPort();
 
 			/*** AVAILABLE HTTP METHODS ***/
 			static	std::vector<std::string>	methods;
@@ -72,6 +74,7 @@ class Request
 			const	std::string&						getVersion() const;
 			int											getRet() const;
 			const	std::string&						getBody() const;
+			int											getPort() const;
 
 			/*** SETTERS **/
 		//	void	setHeader(const std::string& key, const std::string& value);
@@ -82,8 +85,8 @@ class Request
 			/*** UTILS ****/
 			void	displayHeaders();
 			void	resetHeaders();
-			int		parse(const char *str);
-			int		parse(const std::string& str);
+			int		parse(const char *str); //should go private and make
+			int		parse(const std::string& str); //only Ctor available ?
 };
 
 std::ostream&	operator<<(std::ostream& os, const Request& re);

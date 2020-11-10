@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/31 20:40:00 by cclaude           #+#    #+#             */
-/*   Updated: 2020/11/08 12:51:32 by cclaude          ###   ########.fr       */
+/*   Updated: 2020/11/10 18:04:22 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,10 @@ void	run(Server & serv)
 	serv.accept();
 	std::string request = serv.recv();
 
-	req.parse(request.c_str());
+	req.parse(request);
+
+	std::cout << "Headers :\n" << req << "\nEnd of Headers\n"; // if you see this, remove this line
+	std::cout << "Port : " << req.getPort() << '\n'; // if you see this, remove this line
 
 	resp.setFilename("root/index.html");
 	resp.make();

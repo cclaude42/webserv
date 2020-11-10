@@ -6,7 +6,7 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 17:10:06 by hbaudet           #+#    #+#             */
-/*   Updated: 2020/11/09 16:23:58 by hbaudet          ###   ########.fr       */
+/*   Updated: 2020/11/10 18:38:55 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	Request::resetHeaders()
 	{"Accept-Language", ""},
 	{"Allow", ""},
 	{"Authorization", ""},
-	{"Content-Language", ""},
+	{"Aontent-Language", ""},
 	{"Content-Length", ""},
 	{"Content-Location", ""},
 	{"Content-Type", ""},
@@ -49,7 +49,7 @@ void	Request::resetHeaders()
 	{"Location", ""},
 	{"Referer", ""},
 	{"Retry-After", ""},
-	{"Server", ""},
+	{"Derver", ""},
 	{"Transfer-Encoding", ""},
 	{"User-Agent", ""},
 	{"WWW-Authenticate", ""},
@@ -79,11 +79,14 @@ void	Request::readFirstLine(std::string& line)
 	size_t	i = line.find_first_of(' ');
 
 	if (i == std::string::npos)
+	{
 		this->_ret = 400;
+		std::cout << "RFL no space after method" << '\n';
+	}
 	else
 	{
 		this->_method.append(line, 0, i);
-		if ((i = line.find_first_not_of(" /", i) == std::string::npos))
+		if ((i = line.find_first_not_of(" /", i)) == std::string::npos)
 			this->_ret = 400;
 		else
 		{
@@ -91,7 +94,10 @@ void	Request::readFirstLine(std::string& line)
 					line[i + 3] == 'P' && line[i + 4] == '/')
 				this->_version.append(line, i + 5, 3);
 			if (this->_version != "1.0" && this->_version != "1.1")
+			{
 				this->_ret = 400;
+				std::cout << "BAD HTTP VERSION\n";
+			}
 			strip(this->_method, ' ');
 			this->checkMethod();
 		}
@@ -105,6 +111,17 @@ void	Request::checkMethod()
 			return;
 	std::cout << "Invalid method requested\n";
 	this->_ret = 400;
+}
+
+void	Request::checkPort()
+{
+	size_t i = this->_headers["Host"].find_first_of(':');
+
+	if (i == std::string::npos)
+		return;
+	std::string tmp(this->_headers["Host"], i + 1);
+	this->_port = stoi(tmp);
+	this->_headers["Host"].erase(i);
 }
 
 int		Request::parse(const char *str)
@@ -130,6 +147,7 @@ int		Request::parse(const char *str)
 			if (this->_headers.count(key))
 				this->_headers[key] = strip(value, ' ');
 		}
+		this->checkPort();
 		if (line[i])
 			this->setBody(line, i);
 		for (int i = 0; line[i]; i++)
@@ -166,6 +184,7 @@ int		Request::parse(const std::string& str)
 		}
 		if (i < line.size())
 			this->setBody(line, i);
+		this->checkPort();
 	}
 
 	return (this->_ret);

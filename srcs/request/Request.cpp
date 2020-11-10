@@ -6,7 +6,7 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 16:27:33 by hbaudet           #+#    #+#             */
-/*   Updated: 2020/11/09 16:17:57 by hbaudet          ###   ########.fr       */
+/*   Updated: 2020/11/10 17:07:24 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,16 @@ std::vector<std::string>	Request::methods  = {
 				"TRACE",
 				"PACH" };
 
-Request::Request() : _method(""), _version(""), _ret(200), _body("")
+Request::Request() :	_method(""), _version(""), _ret(200),
+						_body(""), _port(80)
 {
 	if (PRINT)
 		std::cout << "Constructor called\n";
 	this->resetHeaders();
 }
 
-Request::Request(const char *str) : _method (""), _version(""), _ret(200), _body("")
+Request::Request(const char *str) :	_method (""), _version(""),
+									_ret(200), _body(""), _port(80)
 {
 	if (PRINT)
 		std::cout << "C-String constructor called\n";
@@ -41,7 +43,8 @@ Request::Request(const char *str) : _method (""), _version(""), _ret(200), _body
 		std::cout << "Parse error : " << this->_ret << '\n';
 }
 
-Request::Request(const std::string& str) : _method (""), _version(""), _ret(200), _body("")
+Request::Request(const std::string& str) :	_method (""), _version(""),
+											_ret(200), _body(""), _port(80)
 {
 	if (PRINT)
 		std::cout << "std:string constructor called\n";
@@ -94,7 +97,7 @@ const std::string&	Request::getVersion() const
 	return this->_version;
 }
 
-int			Request::getRet() const
+int					Request::getRet() const
 {
 	return this->_ret;
 }
@@ -103,6 +106,12 @@ const std::string&	Request::getBody() const
 {
 	return this->_body;
 }
+
+int					Request::getPort() const
+{
+	return this->_port;
+}
+
 
 /*** SETTERS ***/
 /*
