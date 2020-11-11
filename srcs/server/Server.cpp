@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:29:28 by cclaude           #+#    #+#             */
-/*   Updated: 2020/11/08 12:52:01 by cclaude          ###   ########.fr       */
+/*   Updated: 2020/11/11 18:34:56 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,24 +14,24 @@
 
 // Member functions
 
-void		Server::setup(void)
+void		Server::setup(int port)
 {
 	_fd = socket(AF_INET, SOCK_STREAM, 0);
 	if (_fd == -1)
 		std::cout << "Could not create server." << std::endl;
-	this->setAddr();
+	this->setAddr(port);
 	if (bind(_fd, (struct sockaddr *)&_addr, sizeof(_addr)) == -1)
 		std::cout << "Could not bind port." << std::endl;
 	if (listen(_fd, 10) == -1)
 		std::cout << "Could not listen." << std::endl;
 }
 
-void		Server::setAddr(void)
+void		Server::setAddr(int port)
 {
 	ft_memset((char *)&_addr, 0, sizeof(_addr));
 	_addr.sin_family = AF_INET;
 	_addr.sin_addr.s_addr = ft_htonl(INADDR_ANY);
-	_addr.sin_port = ft_htons(8080);
+	_addr.sin_port = ft_htons(port);
 }
 
 void		Server::accept(void)

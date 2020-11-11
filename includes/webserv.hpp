@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/31 13:44:42 by cclaude           #+#    #+#             */
-/*   Updated: 2020/11/09 16:23:05 by hbaudet          ###   ########.fr       */
+/*   Updated: 2020/11/11 18:45:03 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,5 +79,6 @@ std::string&				strip(std::string& str, char c);
 std::vector<std::string>	split(const std::string& str, char c);
 std::string&				to_lower(std::string& str);
 std::string&				to_upper(std::string& str);
+std::string&				capitalize(std::string& str);
 
 #endif

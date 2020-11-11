@@ -6,7 +6,7 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 17:10:06 by hbaudet           #+#    #+#             */
-/*   Updated: 2020/11/10 18:38:55 by hbaudet          ###   ########.fr       */
+/*   Updated: 2020/11/11 18:50:31 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	Request::resetHeaders()
 	{"Derver", ""},
 	{"Transfer-Encoding", ""},
 	{"User-Agent", ""},
-	{"WWW-Authenticate", ""},
+	{"Www-Authenticate", ""},
 	};
 }
 
@@ -96,7 +96,7 @@ void	Request::readFirstLine(std::string& line)
 			if (this->_version != "1.0" && this->_version != "1.1")
 			{
 				this->_ret = 400;
-				std::cout << "BAD HTTP VERSION\n";
+				std::cout << "BAD HTTP VERSIONi (" << this->_version << ")\n";
 			}
 			strip(this->_method, ' ');
 			this->checkMethod();

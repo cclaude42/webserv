@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/31 18:58:08 by cclaude           #+#    #+#             */
-/*   Updated: 2020/11/10 18:37:52 by hbaudet          ###   ########.fr       */
+/*   Updated: 2020/11/11 18:46:16 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ std::string					readKey(char *line)
 
 	for (int i = 0; line[i] && line[i] != ':'; i++)
 		ret.push_back(line[i]);
+	capitalize(ret);
 	return (ret);
 }
 
@@ -27,7 +28,7 @@ std::string					readKey(std::string& line)
 
 	size_t	i = line.find_first_of(':');
 	ret.append(line, 0 , i);
-	// to_upper(ret);
+	capitalize(ret);
 	return (ret);
 }
 
@@ -83,5 +84,19 @@ std::string&					to_upper(std::string& str)
 std::string&					to_lower(std::string& str)
 {
 	std::transform(str.begin(), str.end(),str.begin(), ::tolower);
+	return str;
+}
+
+std::string&						capitalize(std::string& str)
+{
+	size_t	i = 0;
+
+	to_lower(str);
+	str[i] = std::toupper(str[i]);
+	while((i = str.find_first_of('-', i + 1)) != std::string::npos)
+	{
+		if (i + 1 < str.size())
+		str[i + 1] = std::toupper(str[i + 1]);
+	}
 	return str;
 }

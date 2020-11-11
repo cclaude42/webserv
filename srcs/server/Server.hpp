@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:29:28 by cclaude           #+#    #+#             */
-/*   Updated: 2020/11/07 12:08:13 by cclaude          ###   ########.fr       */
+/*   Updated: 2020/11/11 18:34:42 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@ public:
 
 	Server & operator=(const Server & src);
 
-	void		setup(void);
-	void		setAddr(void);
+	void		setup(int port = 8080);
+	void		setAddr(int port = 8080);
 	void		accept(void);
 	std::string	recv(void);
 	void		send(std::string resp);
