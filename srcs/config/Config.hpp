@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 14:29:38 by user42            #+#    #+#             */
-/*   Updated: 2020/11/08 23:11:09 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/12 22:39:09 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ class Config {
 
 		Config     			&operator=(Config const &src);
 		int         		parse(char * const filename);
-		// static	lParseMap	locationParsingMap;
 		
 		friend	std::ostream	&operator<<(std::ostream &out, const Config &config);
 	private:

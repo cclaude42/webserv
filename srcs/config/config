@@ -9,7 +9,7 @@ server {
     cgi_param   hello world
     cgi_pass    localhost:9000
     location blabla {
-        root hello
+        root /tmp
         error_page  404 /err/here
         location ss {
             root /path
@@ -22,3 +22,6 @@ server {
         root hola
     }
 }
+
+example.com/blabla
+/tmp

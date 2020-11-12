@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 14:30:01 by user42            #+#    #+#             */
-/*   Updated: 2020/11/09 17:35:51 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/12 22:38:58 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ Config::Config(void) {
 
 Config::Config(Config const &src) {
 	if (this != &src)
-		*this = src;
+		this->_servers = src._servers;
 	return ;
 }
 
@@ -28,7 +28,7 @@ Config::~Config(void) {
 
 Config	&Config::operator=(Config const &src) {
 	if (this != &src)
-		*this = src;
+		this->_servers = src._servers;
 	return (*this);
 }
 
