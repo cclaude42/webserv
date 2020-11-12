@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 14:34:43 by user42            #+#    #+#             */
-/*   Updated: 2020/11/07 16:27:19 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/12 20:26:03 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,19 +52,19 @@ fileVector				ConfigReader::split(std::string str, std::string charset) {
 }
 
 fileVector	ConfigReader::readFile(const char *filename) {
-	int							ret = BUFFER_SIZE;
-	char						buffer[BUFFER_SIZE + 1];
+	int							ret = BUFFERSIZE;
+	char						buffer[BUFFERSIZE + 1];
 	std::string					line = "";
 	int							fd;
 	fileVector					file;
 
-	for (int i = 0; i < BUFFER_SIZE + 1;  i++)
+	for (int i = 0; i < BUFFERSIZE + 1;  i++)
 		buffer[i] = '\0';
 	if ((fd = open(filename, O_RDONLY)) <= 0)
 		return file;
 
-	for (ret = BUFFER_SIZE; ret > 0;\
-	ret = read(fd, buffer,BUFFER_SIZE )) {
+	for (ret = BUFFERSIZE; ret > 0;\
+	ret = read(fd, buffer,BUFFERSIZE )) {
 		buffer[ret] = '\0';
 		line += buffer;
 	}

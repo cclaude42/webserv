@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 14:33:47 by user42            #+#    #+#             */
-/*   Updated: 2020/11/07 16:18:14 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/12 20:25:35 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@
 # include <stdio.h>
 # include <stdlib.h>
 
-# define BUFFER_SIZE 512
+# define BUFFERSIZE 512
 
 typedef std::vector<std::string> fileVector;
 

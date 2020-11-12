@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 14:30:01 by user42            #+#    #+#             */
-/*   Updated: 2020/11/08 02:00:57 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/12 21:27:21 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ Config	&Config::operator=(Config const &src) {
 	return (*this);
 }
 
-int     Config::parse(char * const filename) {
+int     Config::parse(const char * filename) {
 	fileVector				   file;
 	unsigned int               fileSize;
 

@@ -6,7 +6,7 @@ NAME = webserv
 
 CC = clang++
 
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -g
 
 ##################################################
 # INCLUDES
@@ -17,6 +17,8 @@ INCLUDES = -I includes -I libft/includes
 CLASSES = -I srcs/config -I srcs/request -I srcs/response -I srcs/server
 
 HEADER = webserv.hpp
+
+LIBFT = libft/libft.a
 
 ##################################################
 # FILES
@@ -30,7 +32,7 @@ REQUEST = Request RequestMembers
 
 RESPONSE = Response ResponseHeader
 
-SERVER = Server
+SERVER = Server Cluster
 
 TOOLS = ntoh string
 
@@ -66,7 +68,7 @@ OBJ_BUILD = $(addprefix $(OBJ_DIR)/, $(SRC:cpp=o))
 
 all: $(NAME)
 
-$(NAME): libft $(OBJ_DIR) $(OBJ_BUILD)
+$(NAME): $(LIBFT) $(OBJ_DIR) $(OBJ_BUILD)
 	@echo "\n"
 	@echo "\033[0;32mCompiling webserv..."
 	@$(CC) $(CFLAGS) $(INCLUDES) $(CLASSES) -o $(NAME) $(OBJ_BUILD) -L libft/ -lft
@@ -80,7 +82,7 @@ $(OBJ_DIR):
 	@mkdir -p $(OBJ_DIR)
 	@mkdir -p $(OBJ_SUBDIR)
 
-libft:
+$(LIBFT):
 	@make --no-print-directory -C libft/
 
 clean:
@@ -98,6 +100,6 @@ fclean: clean
 re: fclean all
 
 test: re clean
-	./webserv
+	./webserv webserv.conf
 
 .PHONY: libft clean fclean re test

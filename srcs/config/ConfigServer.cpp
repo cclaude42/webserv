@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 15:28:08 by user42            #+#    #+#             */
-/*   Updated: 2020/11/08 03:29:29 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/12 22:23:18 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,11 @@ _client_body_buffer_size(8000)
 
 ConfigServer::ConfigServer(ConfigServer const &src) {
 	if (this != &src) {
-		this->_listen = src._listen;		
-		this->_root = src._root;		
-		this->_server_name = src._server_name;		
-		this->_error_page = src._error_page;		
-		this->_client_body_buffer_size = src._client_body_buffer_size;		
+		this->_listen = src._listen;
+		this->_root = src._root;
+		this->_server_name = src._server_name;
+		this->_error_page = src._error_page;
+		this->_client_body_buffer_size = src._client_body_buffer_size;
 	}
 	return ;
 }
@@ -39,9 +39,14 @@ ConfigServer::~ConfigServer(void) {
 }
 
 ConfigServer	&ConfigServer::operator=(ConfigServer const &src) {
-	if (this != &src)
-		*this = src;
-	return *this;
+	_listen = src._listen;
+	_root = src._root;
+	_server_name = src._server_name;
+	_error_page = src._error_page;
+	_client_body_buffer_size = src._client_body_buffer_size;
+	_cgi_param = src._cgi_param;
+	// _locations = src._locations;
+	return (*this);
 }
 
 int     ConfigServer::parse(unsigned int &index, fileVector &file) {
@@ -62,7 +67,7 @@ int     ConfigServer::parse(unsigned int &index, fileVector &file) {
 		}
 		// else if (file[index] == "location") {
 		// 	ConfigServer::Location	location(*this);
-			
+
 		// 	index++;
 		// 	if (!location.parse(index, file))
 		// 		return 0;
@@ -96,7 +101,7 @@ int     ConfigServer::parse(unsigned int &index, fileVector &file) {
 }
 
 // int			ConfigServer::Location::parse(unsigned int &index, fileVector &file) {
-	
+
 // }
 
 // ADDING MEMBER VALUES
@@ -104,7 +109,7 @@ int     ConfigServer::parse(unsigned int &index, fileVector &file) {
 void        ConfigServer::addListen(std::vector<std::string> args) {
 	t_listen    listen;
 	size_t      separator;
-	
+
 	// std::cout << "in addListen" << std::endl;
 	if (args.size() != 1)
 		throw ConfigServer::ExceptionInvalidArguments();
@@ -146,7 +151,7 @@ void        ConfigServer::addErrorPage(std::vector<std::string> args) {
 	bool	codeFound = false;
 	t_error_page	error_page;
 	size_t			len = args.size();
-	
+
 	for (size_t i = 0; i < len; i++) {
 		if (isDigits(args[i])) {
 			error_page.errorCodes.push_back(std::stoi(args[i]));
@@ -157,7 +162,7 @@ void        ConfigServer::addErrorPage(std::vector<std::string> args) {
 		else if (i == len - 1)
 			error_page.uri = args[i];
 		else
-			throw ConfigServer::ExceptionInvalidArguments();		
+			throw ConfigServer::ExceptionInvalidArguments();
 	}
 	this->_error_page.push_back(error_page);
 }
@@ -200,7 +205,7 @@ std::ostream	&operator<<(std::ostream &out, const ConfigServer &server) {
 	out << "cgi_param:" << std::endl;
 	for (auto i = server._cgi_param.begin(); i != server._cgi_param.end(); i++)
 		std::cout << "\t" << i->first << " = " << i->second << std::endl;
-	
+
 	if (server._cgi_param.find("hello") == server._cgi_param.end())
 		std::cout << "WTF" << std::endl;
 	return out;
@@ -208,4 +213,34 @@ std::ostream	&operator<<(std::ostream &out, const ConfigServer &server) {
 
 const char		*ConfigServer::ExceptionInvalidArguments::what() const throw() {
 	return "Exception: invalid arguments in configuration file";
+}
+
+std::vector<t_listen>				ConfigServer::getListen(void)
+{
+	return (_listen);
+}
+
+std::string							ConfigServer::getRoot(void)
+{
+	return (_root);
+}
+
+std::vector<std::string>			ConfigServer::getServerName(void)
+{
+	return (_server_name);
+}
+
+std::vector<t_error_page>			ConfigServer::getErrorPage(void)
+{
+	return (_error_page);
+}
+
+int									ConfigServer::getClientBodyBufferSize(void)
+{
+	return (_client_body_buffer_size);
+}
+
+std::map<std::string, std::string>	ConfigServer::getCgiParam(void)
+{
+	return (_cgi_param);
 }

@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/31 20:40:00 by cclaude           #+#    #+#             */
-/*   Updated: 2020/11/08 12:51:32 by cclaude          ###   ########.fr       */
+/*   Updated: 2020/11/12 20:20:50 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,33 +14,23 @@
 #include "Server.hpp"
 #include "Request.hpp"
 #include "Response.hpp"
+#include "Cluster.hpp"
 
-void	run(Server & serv)
+int		main(int ac, char **av)
 {
-	Request		req;
-	Response	resp;
+	if (ac == 2)
+	{
+		Cluster		cluster;
 
-	serv.accept();
-	std::string request = serv.recv();
-
-	req.parse(request.c_str());
-
-	resp.setFilename("root/index.html");
-	resp.make();
-
-	serv.send(resp.getResponse());
-
-	serv.close();
-}
-
-int		main(void)
-{
-	Server		serv;
-
-	serv.setup();
-	while (1)
-		run(serv);
-	serv.end();
-
+		cluster.config(av[1]);
+		cluster.setup();
+		cluster.run();
+		cluster.clean();
+	}
+	else
+	{
+		std::cerr << "Invalid number of argument." << std::endl;
+		return (1);
+	}
 	return (0);
 }

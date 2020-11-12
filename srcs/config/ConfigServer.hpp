@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 15:27:44 by user42            #+#    #+#             */
-/*   Updated: 2020/11/08 03:26:46 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/12 22:21:04 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,14 @@ class ConfigServer {
         void    addErrorPage(std::vector<std::string> args);
         void    addClientBodyBufferSize(std::vector<std::string> args);
 		void	addCgiParam(std::vector<std::string> args);
-        
+
+		std::vector<t_listen>				getListen(void);
+		std::string							getRoot(void);
+		std::vector<std::string>			getServerName(void);
+		std::vector<t_error_page>			getErrorPage(void);
+		int									getClientBodyBufferSize(void);
+		std::map<std::string, std::string>	getCgiParam(void);
+
 		class	ExceptionInvalidArguments: public std::exception {
 			virtual const char	*what() const throw();
 		};
@@ -71,7 +78,7 @@ class ConfigServer {
 			private:
 				ConfigServer	&parent;
 				std::string		_root;
-				
+
 		};
 		friend	std::ostream &operator<<(std::ostream &out, const ConfigServer &server);
 	private:
@@ -81,7 +88,7 @@ class ConfigServer {
 		std::vector<t_error_page>			_error_page; // error page redirections
 		int									_client_body_buffer_size; // max size for the client body, defaults to 8 000
 		std::map<std::string, std::string>	_cgi_param = std::map<std::string, std::string>();
-		std::vector<Location>				_locations;
+		// std::vector<Location>				_locations;
 
 };
 

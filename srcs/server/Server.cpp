@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:29:28 by cclaude           #+#    #+#             */
-/*   Updated: 2020/11/08 12:52:01 by cclaude          ###   ########.fr       */
+/*   Updated: 2020/11/12 21:28:19 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,35 @@
 
 // Member functions
 
+// void		Server::run(void)
+// {
+// 	Request		req;
+// 	Response	resp;
+// 	std::string	request;
+//
+// 	this->accept();
+//
+// 	request = this->recv();
+// 	req.parse(request.c_str());
+//
+// 	resp.setFilename("root/index.html");
+// 	resp.make();
+//
+// 	this->send(resp.getResponse());
+//
+// 	this->close();
+// }
+
 void		Server::setup(void)
 {
 	_fd = socket(AF_INET, SOCK_STREAM, 0);
 	if (_fd == -1)
-		std::cout << "Could not create server." << std::endl;
+		std::cerr << "Could not create server." << std::endl;
 	this->setAddr();
 	if (bind(_fd, (struct sockaddr *)&_addr, sizeof(_addr)) == -1)
-		std::cout << "Could not bind port." << std::endl;
+		std::cerr << "Could not bind port." << std::endl;
 	if (listen(_fd, 10) == -1)
-		std::cout << "Could not listen." << std::endl;
+		std::cerr << "Could not listen." << std::endl;
 }
 
 void		Server::setAddr(void)
@@ -40,7 +59,7 @@ void		Server::accept(void)
 
 	_socket = ::accept(_fd, (struct sockaddr *)&_addr, (socklen_t *)&addrlen);
 	if (_socket == -1)
-		std::cout << "Could not create socket." << std::endl;
+		std::cerr << "Could not create socket." << std::endl;
 }
 
 std::string	Server::recv(void)
@@ -54,7 +73,7 @@ std::string	Server::recv(void)
 		ft_memset(buffer, 0, 4096);
 		read = ::recv(_socket, buffer, 4095, 0);
 		if (read == -1)
-			std::cout << "Could not read request." << std::endl;
+			std::cerr << "Could not read request." << std::endl;
 		request += std::string(buffer);
 	}
 
@@ -66,7 +85,7 @@ void		Server::send(std::string resp)
 	// std::cout << resp << std::endl;
 
 	if (::send(_socket, resp.c_str(), resp.size(), 0) == -1)
-		std::cout << "Could not send response." << std::endl;
+		std::cerr << "Could not send response." << std::endl;
 }
 
 void		Server::close(void)
@@ -74,7 +93,7 @@ void		Server::close(void)
 	::close(_socket);
 }
 
-void		Server::end(void)
+void		Server::clean(void)
 {
 	::close(_fd);
 }
@@ -83,7 +102,11 @@ void		Server::end(void)
 
 Server &	Server::operator=(const Server & src)
 {
-	(void)src;
+	_fd = src._fd;
+	_socket = src._socket;
+	_request = src._request;
+	_addr = src._addr;
+	_config = src._config;
 	return (*this);
 }
 
@@ -91,15 +114,21 @@ Server &	Server::operator=(const Server & src)
 
 Server::Server(void)
 {
+	// Wait, that's illegal !
+}
+
+Server::Server(const ConfigServer & config)
+{
 	_fd = -1;
 	_socket = -1;
 	_request = "NONE";
 	this->setAddr();
+	_config = config;
 }
 
 Server::Server(const Server & src)
 {
-	(void)src;
+	*this = src;
 }
 
 Server::~Server(void)
