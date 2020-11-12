@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 14:33:47 by user42            #+#    #+#             */
-/*   Updated: 2020/11/09 00:22:22 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/12 15:16:26 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <string>
 # include <vector>
 # include <map>
+# include <set>
 # include <sstream>
 # include <algorithm>
 # include <iterator>
@@ -32,7 +33,7 @@
 
 
 typedef struct	s_listen {
-	std::string	host;
+	unsigned int	host;
 	int			port;
 }				t_listen;
 

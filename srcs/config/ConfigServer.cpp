@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 15:28:08 by user42            #+#    #+#             */
-/*   Updated: 2020/11/09 17:41:38 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/12 15:22:46 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,26 @@
 
 bool isDigits(const std::string &str) {
 	return str.find_first_not_of("0123456789") == std::string::npos;
+}
+
+unsigned int	strToIp(std::string strIp) {
+	size_t  sep;
+	unsigned int   n;
+	unsigned char  m[4];
+	size_t  start = 0;
+	if (strIp == "localhost")
+		strIp = "127.0.0.1";
+	for (unsigned int i = 3 ; i != UINT32_MAX; i--) {
+		if ((sep = strIp.find_first_of(".", sep)) == strIp.npos && i != 0)
+			return 0;
+		std::string str = strIp.substr(start, sep);
+		n = std::stoi(str);
+		m[i] = static_cast<unsigned char>(n);
+		sep++;
+		start = sep;
+	}
+	unsigned final = *(reinterpret_cast<unsigned int *>(m));
+	return final;
 }
 
 parseMap ConfigServer::initServerMap() {
@@ -67,7 +87,6 @@ ConfigServer	&ConfigServer::operator=(ConfigServer const &src) {
 		this->_cgi_param = src._cgi_param;
 		this->_cgi_pass = src._cgi_pass;
 		this->_location = src._location;
-	
 	}
 	return *this;
 }
@@ -142,13 +161,13 @@ void        ConfigServer::addListen(std::vector<std::string> args) {
 		throw ConfigServer::ExceptionInvalidArguments();
 	if ((separator = args[0].find(":")) == std::string::npos) {
 		if (isDigits(args[0])) {
-			listen.host = "localhost";
+			listen.host = strToIp("localhost");
 			listen.port = std::stoi(args[0]);
 			return ;
 		}
 		throw ConfigServer::ExceptionInvalidArguments();
 	}
-	listen.host = args[0].substr(0, separator);
+	listen.host = strToIp(args[0].substr(0, separator));
 	separator++;
 
 	std::string	strPort = args[0].substr(separator);
@@ -217,7 +236,7 @@ void    	ConfigServer::addCgiPass(std::vector<std::string> args) {
 	if ((separator = args[0].find(":")) == std::string::npos) {
 		throw ConfigServer::ExceptionInvalidArguments();
 	}
-	address.host = args[0].substr(0, separator);
+	address.host = strToIp(args[0].substr(0, separator));
 	separator++;
 	std::string	strPort = args[0].substr(separator);
 	if (isDigits(strPort) == false)
@@ -255,7 +274,7 @@ std::ostream	&operator<<(std::ostream &out, const ConfigServer &server) {
 		out << "\t" << i->first << " = " << i->second << std::endl;
 	out << "cgi_pass:	" << server._cgi_pass.address.host << ":" << server._cgi_pass.address.port << std::endl;
 	for (auto i = server._location.begin(); i != server._location.end(); i++) {
-		out << "LOCATION " << i->first << std::endl;
+		out << "Location " << i->first << std::endl;
 		out << i->second << std::endl;
 	}
 	return out;

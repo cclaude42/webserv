@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 15:27:44 by user42            #+#    #+#             */
-/*   Updated: 2020/11/09 17:38:34 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/12 15:18:40 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@
 // -	ADD getters
 // -	
 bool isDigits(const std::string &str);
+unsigned int	strToIp(std::string strIp);
 
 # define parseMap std::map<std::string, void (ConfigServer::*)(fileVector)>
 
@@ -45,7 +46,7 @@ class ConfigServer {
 
 		ConfigServer	&operator=(ConfigServer const &src);
 		int		parse(unsigned int &i, std::vector<std::string> &file);
-        
+
 		class	ExceptionInvalidArguments: public std::exception {
 			virtual const char	*what() const throw();
 		};
@@ -59,7 +60,7 @@ class ConfigServer {
 		std::map<std::string, std::string>	getCgiParam() const;
 		t_cgi_pass							getCgiPass() const;
 		std::map<std::string, Location>		getLocation() const;
-		
+
 		friend	std::ostream &operator<<(std::ostream &out, const ConfigServer &server);
 	private:
 
@@ -73,16 +74,20 @@ class ConfigServer {
 		void    addCgiPass(std::vector<std::string> args);
 		static	parseMap					serverParsingMap;
 		static parseMap 					initServerMap();
-		
+
 		// MEMBERS
 		std::vector<t_listen>				_listen;
 		std::string							_root;
+
+
 		std::vector<std::string>   			_server_name;
 		std::vector<t_error_page>			_error_page; // error page redirections
 		int									_client_body_buffer_size; // max size for the client body, defaults to 8 000
-		std::map<std::string, std::string>	_cgi_param;
+		std::map<std::string, std::string>	_cgi_param; 
 		t_cgi_pass							_cgi_pass;
 		std::map<std::string, Location>		_location;
+		std::set<std::string>				_accepted_headers;
+		
 
 };
 
