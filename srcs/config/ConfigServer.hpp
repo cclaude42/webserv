@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ConfigServer.hpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
+/*   By: franciszer <franciszer@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 15:27:44 by user42            #+#    #+#             */
-/*   Updated: 2020/11/13 12:02:05 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/13 12:55:47 by franciszer       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ class ConfigServer {
 		std::vector<t_listen>				getListen() const;
 		std::string							getRoot() const;
 		std::vector<std::string>   			getServerName() const;
-		std::vector<t_error_page>			getErrorPage() const;
+		std::map<int, std::string>			getErrorPage() const;
 		int									getClientBodyBufferSize() const;
 		std::map<std::string, std::string>	getCgiParam() const;
 		t_cgi_pass							getCgiPass() const;
@@ -72,7 +72,7 @@ class ConfigServer {
 
 
 		std::vector<std::string>   			_server_name;
-		std::vector<t_error_page>			_error_page; // error page redirections
+		std::map<int, std::string>			_error_page; // error page redirections
 		int									_client_body_buffer_size; // max size for the client body, defaults to 8 000
 		std::map<std::string, std::string>	_cgi_param;
 		t_cgi_pass							_cgi_pass;

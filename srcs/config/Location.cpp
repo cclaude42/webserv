@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Location.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
+/*   By: franciszer <franciszer@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/07 18:40:39 by user42            #+#    #+#             */
-/*   Updated: 2020/11/13 11:48:42 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/13 13:48:41 by franciszer       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int     Location::parse(unsigned int &index, fileVector &file) {
 	locationParseMap::iterator          iter;
 	std::string                 directive = "";
 
-	std::cout << "IN LOCATION::PARSE" << std::endl;
+	// std::cout << "IN LOCATION::PARSE" << std::endl;
 	if (file[index++] != "{")
 		return 0;
 	// std::cout << "index: " << file[index] << std::endl;
@@ -113,20 +113,31 @@ int     Location::parse(unsigned int &index, fileVector &file) {
 	return 0;
 }
 
-std::ostream	&operator<<(std::ostream &out, const Location &location) {
-	out << "root: " << location._root << std::endl;
-	out << std::endl<< "error_page:" << std::endl;
-	for (size_t i = 0; i < location._error_page.size(); i++) {
-		out << "\t";
-		for (size_t j = 0; j < location._error_page[i].errorCodes.size(); j++) {
-			out << location._error_page[i].errorCodes[j] << " ";
-		}
-		out << location._error_page[i].uri << std::endl;
+std::ostream	&operator<<(std::ostream &out, const Location &server) {
+	out << "Listen:" << std::endl;
+	for (size_t i = 0; i < server._listen.size(); i++) {
+		out << "\thost: " << server._listen[i].host << " port: " << server._listen[i].port << std::endl;
 	}
-	out << "client_body_buffer_size: " << location._client_body_buffer_size << std::endl;
+	out << "root: " << server._root << std::endl;
+	out << "server_name: ";
+	for (size_t i = 0; i < server._server_name.size(); i++) {
+		out << server._server_name[i];
+		if (i != server._server_name.size() - 1)
+			out << " ";
+	}
+	out << std::endl<< "error_page:" << std::endl;
+	for (auto i = server._error_page.begin(); i != server._error_page.end(); i++) {
+		out << "\t" << i->first << " " << i->second << std::endl;
+	}
+	out << "client_body_buffer_size: " << server._client_body_buffer_size << std::endl;
 	out << "cgi_param:" << std::endl;
-	for (auto i = location._cgi_param.begin(); i != location._cgi_param.end(); i++)
+	for (auto i = server._cgi_param.begin(); i != server._cgi_param.end(); i++)
 		out << "\t" << i->first << " = " << i->second << std::endl;
-	
+	out << "cgi_pass:	" << server._cgi_pass.address.host << ":" << server._cgi_pass.address.port << std::endl;
+	for (auto i = server._location.begin(); i != server._location.end(); i++) {
+		out << std::endl << "location " << i->first << std::endl;
+		out << i->second << std::endl;
+	}
+	return out;
 	return out;
 }
