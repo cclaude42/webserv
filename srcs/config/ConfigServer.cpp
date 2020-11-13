@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ConfigServer.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: franciszer <franciszer@student.42.fr>      +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 15:28:08 by user42            #+#    #+#             */
-/*   Updated: 2020/11/13 14:00:21 by franciszer       ###   ########.fr       */
+/*   Updated: 2020/11/13 18:16:54 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,8 +137,8 @@ int     ConfigServer::parse(unsigned int &index, fileVector &file) {
 		(this->*ConfigServer::parsingMap[directive])(args);
 	//  set up default values if they were not set by the config file
 	if (!file[index].compare("}")) {
-		if (this->_listen.size() == 0) {
-			args.push_back("localhost:80");
+		if (this->_listen.empty()) {
+			args.push_back("0.0.0.0:80");
 			(this->*ConfigServer::parsingMap["listen"])(args);
 		}
 		if (this->_root == "") {
@@ -188,7 +188,7 @@ void        ConfigServer::addListen(std::vector<std::string> args) {
 		throw ConfigServer::ExceptionInvalidArguments();
 	if ((separator = args[0].find(":")) == std::string::npos) {
 		if (isDigits(args[0])) {
-			listen.host = strToIp("localhost");
+			listen.host = 0;
 			listen.port = std::stoi(args[0]);
 			this->_listen.push_back(listen);
 			return ;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Location.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: franciszer <franciszer@student.42.fr>      +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/07 18:40:39 by user42            #+#    #+#             */
-/*   Updated: 2020/11/13 13:48:41 by franciszer       ###   ########.fr       */
+/*   Updated: 2020/11/13 18:15:23 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,10 +89,8 @@ int     Location::parse(unsigned int &index, fileVector &file) {
 				if (file[index] == "}")
 					continue ;
 			}
-			else if (directive == "") {
-				std::cout << "HERE" << std::endl;
+			else if (directive == "")
 				return file[index] == "}" ? 1 : 0;
-			}
 			else
 				args.push_back(file[index]);
 		}
