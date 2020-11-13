@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 14:29:38 by user42            #+#    #+#             */
-/*   Updated: 2020/11/12 22:48:20 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/13 11:41:42 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,18 @@
 
 # define CONFIG_HPP
 
+
 # include "ConfigReader.hpp"
+
+# define parseMap std::map<std::string, void (ConfigServer::*)(fileVector)>
+# define locationParseMap std::map<std::string, void (Location::*)(fileVector)>
+
+bool isDigits(const std::string &str);
+unsigned int	strToIp(std::string strIp);
+
 # include "ConfigServer.hpp"
 
-
-# define lParseMap std::map<std::string, void (ConfigServer::Location::*)(fileVector)>
-
-class	ConfigServer;
+class ConfigServer;
 
 class Config {
 	public:

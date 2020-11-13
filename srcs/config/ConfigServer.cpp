@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 15:28:08 by user42            #+#    #+#             */
-/*   Updated: 2020/11/12 15:22:46 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/13 11:43:49 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ parseMap ConfigServer::initServerMap() {
 		    return myMap;
 }
 
-parseMap ConfigServer::serverParsingMap = ConfigServer::initServerMap();
+parseMap ConfigServer::parsingMap = ConfigServer::initServerMap();
 
 
 ConfigServer::ConfigServer(void):
@@ -98,13 +98,13 @@ int     ConfigServer::parse(unsigned int &index, fileVector &file) {
 
 	//	calling the function that corresponds to a directive with its args as parameters
 	for ( ; index < file.size() && file[index] != "}" ; index++) {
-		if ((iter = ConfigServer::serverParsingMap.find(file[index])) == ConfigServer::serverParsingMap.end()) {
+		if ((iter = ConfigServer::parsingMap.find(file[index])) == ConfigServer::parsingMap.end()) {
 			if (file[index] == "location") {
 				Location	location;
 				std::string	locationName;
 				
 				if (directive != "") {
-					(this->*ConfigServer::serverParsingMap[directive])(args);
+					(this->*ConfigServer::parsingMap[directive])(args);
 					args.clear();
 					directive = "";
 				}
@@ -115,6 +115,7 @@ int     ConfigServer::parse(unsigned int &index, fileVector &file) {
 				index++;
 				if (!location.parse(index, file))
 					return 0;
+				std::cout << "LOCATION::PARSE END" << std::endl;
 				this->_location[locationName] = location;
 				if (file[index] == "}")
 					continue ;
@@ -127,24 +128,24 @@ int     ConfigServer::parse(unsigned int &index, fileVector &file) {
 		else
 		{
 			if (directive != "") {
-				(this->*ConfigServer::serverParsingMap[directive])(args);
+				(this->*ConfigServer::parsingMap[directive])(args);
 				args.clear();
 			}
 			directive = iter->first;
 		}
 	}
 	if (directive != "")
-		(this->*ConfigServer::serverParsingMap[directive])(args);
+		(this->*ConfigServer::parsingMap[directive])(args);
 	//  set up default values if they were not set by the config file
 	if (!file[index].compare("}")) {
 		if (this->_listen.size() == 0) {
 			args.push_back("localhost:80");
-			(this->*ConfigServer::serverParsingMap["listen"])(args);
+			(this->*ConfigServer::parsingMap["listen"])(args);
 		}
 		if (this->_root == "") {
 			args.clear();
 			args.push_back("/");
-			(this->*ConfigServer::serverParsingMap["root"])(args);
+			(this->*ConfigServer::parsingMap["root"])(args);
 		}
 		return 1;
 	}

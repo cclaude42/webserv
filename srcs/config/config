@@ -22,6 +22,3 @@ server {
         root hola
     }
 }
-
-example.com/blabla
-/tmp

@@ -6,28 +6,23 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/07 18:40:39 by user42            #+#    #+#             */
-/*   Updated: 2020/11/12 22:37:23 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/13 11:48:42 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Location.hpp"
 
 Location::Location(void):
-_root(""),
-_client_body_buffer_size(8000)
+ConfigServer()
 {
 	return ;
 }
 
-Location::Location(Location const &src) {
+Location::Location(Location const &src):
+ConfigServer(src)
+{
 	if (this != &src) {
-		this->_root = src._root;		
-		this->_error_page = src._error_page;		
-		this->_client_body_buffer_size = src._client_body_buffer_size;
-		this->_cgi_param = src._cgi_param;
-		this->_cgi_pass = src._cgi_pass;
-		this->_location = src._location;
-		
+		return ;
 	}
 	return ;
 }
@@ -38,13 +33,14 @@ Location::~Location(void) {
 
 Location	&Location::operator=(Location const &src) {
 	if (this != &src) {
+		this->_listen = src._listen;		
 		this->_root = src._root;		
+		this->_server_name = src._server_name;		
 		this->_error_page = src._error_page;		
-		this->_client_body_buffer_size = src._client_body_buffer_size;	
+		this->_client_body_buffer_size = src._client_body_buffer_size;
 		this->_cgi_param = src._cgi_param;
 		this->_cgi_pass = src._cgi_pass;
 		this->_location = src._location;
-	
 	}
 	return *this;
 }
@@ -59,25 +55,26 @@ locationParseMap Location::initLocationMap() {
 			return myMap;
 }
 
-locationParseMap Location::locationParsingMap = Location::initLocationMap();
+locationParseMap Location::parsingMap = Location::initLocationMap();
 
 int     Location::parse(unsigned int &index, fileVector &file) {
 	fileVector                  args;
 	locationParseMap::iterator          iter;
-	std::string                 directive;
+	std::string                 directive = "";
 
-	// std::cout << "in Location::parse" << std::endl;
+	std::cout << "IN LOCATION::PARSE" << std::endl;
 	if (file[index++] != "{")
 		return 0;
+	// std::cout << "index: " << file[index] << std::endl;
 	//	calling the function that corresponds to a directive with its args as parameters
 	for ( ; index < file.size() && file[index] != "}" ; index++) {
-		if ((iter = Location::locationParsingMap.find(file[index])) == Location::locationParsingMap.end()) {
+		if ((iter = Location::parsingMap.find(file[index])) == Location::parsingMap.end()) {
 			if (file[index] == "location") {
 				Location	location;
 				std::string	locationName;
 				
 				if (directive != "") {
-					(this->*Location::locationParsingMap[directive])(args);
+					(this->*Location::parsingMap[directive])(args);
 					args.clear();
 					directive = "";
 				}
@@ -92,100 +89,28 @@ int     Location::parse(unsigned int &index, fileVector &file) {
 				if (file[index] == "}")
 					continue ;
 			}
-			else if (!directive.compare(""))
+			else if (directive == "") {
+				std::cout << "HERE" << std::endl;
 				return file[index] == "}" ? 1 : 0;
+			}
 			else
 				args.push_back(file[index]);
 		}
 		else
 		{
 			if (directive != "") {
-				(this->*Location::locationParsingMap[directive])(args);
+				(this->*Location::parsingMap[directive])(args);
 				args.clear();
 			}
 			directive = iter->first;
 		}
 	}
 	if (directive != "")
-		(this->*Location::locationParsingMap[directive])(args);
+		(this->*Location::parsingMap[directive])(args);
 	//  set up default values if they were not set by the config file
-	if (!file[index].compare("}")) {
-		if (this->_root == "") {
-			args.clear();
-			args.push_back("/");
-			(this->*Location::locationParsingMap["root"])(args);
-		}
+	if (!file[index].compare("}"))
 		return 1;
-	}
 	return 0;
-}
-
-void        Location::addRoot(std::vector<std::string> args) {
-	// std::cout << "in addroot" << std::endl;
-	if (args.size() != 1 || this->_root != "")
-		throw Location::ExceptionInvalidArguments();
-	// std::cout << "addRoot end" << std::endl;
-	this->_root = args[0];
-}
-
-void        Location::addErrorPage(std::vector<std::string> args) {
-	// std::cout << "in addErrorPage" << std::endl;
-	bool	codeFound = false;
-	t_error_page	error_page;
-	size_t			len = args.size();
-	
-	for (size_t i = 0; i < len; i++) {
-		if (isDigits(args[i])) {
-			error_page.errorCodes.push_back(std::stoi(args[i]));
-			codeFound = true;
-		}
-		else if (!codeFound)
-			throw Location::ExceptionInvalidArguments();
-		else if (i == len - 1)
-			error_page.uri = args[i];
-		else
-			throw Location::ExceptionInvalidArguments();		
-	}
-	this->_error_page.push_back(error_page);
-}
-
-void        Location::addClientBodyBufferSize(std::vector<std::string> args) {
-	// std::cout << "in addBodySize" << std::endl;
-	if (args.size() != 1 || !isDigits(args[0]))
-		throw Location::ExceptionInvalidArguments();
-	this->_client_body_buffer_size = std::stoi(args[0]);
-}
-
-void		Location::addCgiParam(std::vector<std::string> args) {
-	if (args.size() != 2)
-		throw Location::ExceptionInvalidArguments();
-	this->_cgi_param.insert({args[0], args[1]});
-}
-
-void    	Location::addCgiPass(std::vector<std::string> args) {
-	t_listen    address;
-	size_t      separator;
-	
-	// std::cout << "in addCgiPass" << std::endl;
-	if (args.size() != 1 || this->_cgi_pass.set == true)
-		throw ConfigServer::ExceptionInvalidArguments();
-	if ((separator = args[0].find(":")) == std::string::npos) {
-		throw ConfigServer::ExceptionInvalidArguments();
-	}
-	address.host = strToIp(args[0].substr(0, separator));
-	separator++; 
-	std::string	strPort = args[0].substr(separator);
-	if (isDigits(strPort) == false)
-		throw ConfigServer::ExceptionInvalidArguments();
-	address.port = std::stoi(strPort);
-	this->_cgi_pass.address.port = address.port;
-	this->_cgi_pass.address.host = address.host;
-	this->_cgi_pass.set = true;
-	// std::cout << "addCgiPass END" << std::endl;
-}
-
-const char		*Location::ExceptionInvalidArguments::what() const throw() {
-	return "Exception: invalid arguments in location block";
 }
 
 std::ostream	&operator<<(std::ostream &out, const Location &location) {
@@ -205,27 +130,3 @@ std::ostream	&operator<<(std::ostream &out, const Location &location) {
 	
 	return out;
 }
-
-std::string							Location::getRoot() const {
-	return this->_root;
-}
-
-std::vector<t_error_page>			Location::getErrorPage() const {
-	return this->_error_page;
-}
-
-int									Location::getClientBodyBufferSize() const {
-	return this->_client_body_buffer_size;
-}
-
-std::map<std::string, std::string>	Location::getCgiParam() const {
-	return this->_cgi_param;
-}
-
-t_cgi_pass							Location::getCgiPass() const {
-	return this->_cgi_pass;
-}
-std::map<std::string, Location>		Location::getLocation() const {
-	return this->_location;
-}
-
