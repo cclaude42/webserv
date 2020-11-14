@@ -2,10 +2,11 @@
 
 CPP= c++
 FLAGS= -Wall -Wextra -Werror
-SRCS=	main.cpp\
+SRCS=	ConfigReader.cpp\
 		Config.cpp\
-		ConfigReader.cpp\
-		ConfigServer.cpp
+		ConfigServer.cpp\
+		Location.cpp\
+		main.cpp
 
 NAME= configParser
 OBJS= ${SRCS:.cpp=.o}
@@ -52,4 +53,3 @@ fclean: clean
 re: fclean all
 
 .PHONY: all clean fclean re start
-

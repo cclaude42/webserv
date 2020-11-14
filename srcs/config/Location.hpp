@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/07 18:41:28 by user42            #+#    #+#             */
-/*   Updated: 2020/11/08 03:05:42 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/14 14:47:40 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,23 @@
 
 # define LOCATION_HPP
 
-# include <iostream>
-# include <iomanip>
-# include <string>
+# include "Config.hpp"
 
+class Location: public ConfigServer {
+	public:
+		Location(void);
+		Location(Location const &src);
+		virtual ~Location(void);
 
+		Location   &operator=(Location const &src);
+
+		friend	std::ostream &operator<<(std::ostream &out, const Location &location);
+
+		int		parse(unsigned int &i, std::vector<std::string> &file);
+
+	private:
+		static locationParseMap parsingMap;
+		static locationParseMap initLocationMap();
+};
 
 #endif

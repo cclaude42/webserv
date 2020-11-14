@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/12 16:53:41 by cclaude           #+#    #+#             */
-/*   Updated: 2020/11/12 21:34:00 by cclaude          ###   ########.fr       */
+/*   Updated: 2020/11/14 14:07:53 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ void	Cluster::config(std::string fileconf)
 
 	for ( std::vector<ConfigServer>::const_iterator conf = vect.cbegin() ; conf != vect.cend() ; conf++ )
 	{
-		std::cout << "In loop" << std::endl;
 		Server		serv(*conf);
 		_servers.push_back(serv);
 	}

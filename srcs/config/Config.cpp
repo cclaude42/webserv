@@ -6,24 +6,11 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 14:30:01 by user42            #+#    #+#             */
-/*   Updated: 2020/11/12 21:27:21 by cclaude          ###   ########.fr       */
+/*   Updated: 2020/11/14 14:55:24 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Config.hpp"
-
-parseMap Config::initServerMap() {
-		    parseMap     myMap;
-		    myMap["listen"] = &ConfigServer::addListen;
-		    myMap["root"] = &ConfigServer::addRoot;
-		    myMap["server_name"] = &ConfigServer::addServerName;
-		    myMap["error_page"] = &ConfigServer::addErrorPage;
-		    myMap["client_body_buffer_size"] = &ConfigServer::addClientBodyBufferSize;
-			myMap["cgi_param"] = &ConfigServer::addCgiParam;
-		    return myMap;
-}
-
- parseMap Config::serverParsingMap = Config::initServerMap();
 
 Config::Config(void) {
 	return ;
@@ -31,7 +18,7 @@ Config::Config(void) {
 
 Config::Config(Config const &src) {
 	if (this != &src)
-		*this = src;
+		this->_servers = src._servers;
 	return ;
 }
 
@@ -41,8 +28,12 @@ Config::~Config(void) {
 
 Config	&Config::operator=(Config const &src) {
 	if (this != &src)
-		*this = src;
+		this->_servers = src._servers;
 	return (*this);
+}
+
+std::vector<ConfigServer>		Config::getServers() const {
+	return this->_servers;
 }
 
 int     Config::parse(const char * filename) {
@@ -58,11 +49,11 @@ int     Config::parse(const char * filename) {
 			if (file[i] != "{")
 				std::cerr << "Error: expecter '{' after server directive" << std::endl;
 			++i;
-			if (!server.parse(i, file))
-				std::cerr << "Error: error in config file " << filename << std::endl;
-			else {
-				this->_servers.push_back(server);
+			if (!server.parse(i, file)) {
+				std::cerr << "Error: error in config file \"" << filename << "\"" <<  std::endl;
+				return 0;
 			}
+			this->_servers.push_back(server);
 		}
 		else {
 			std::cerr << "Error: unknown directive " << file[i] << std::endl;

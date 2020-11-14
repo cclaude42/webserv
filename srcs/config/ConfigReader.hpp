@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 14:33:47 by user42            #+#    #+#             */
-/*   Updated: 2020/11/12 20:25:35 by cclaude          ###   ########.fr       */
+/*   Updated: 2020/11/14 14:50:28 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 # include <iomanip>
 # include <string>
 # include <vector>
+# include <map>
+# include <set>
 # include <sstream>
 # include <algorithm>
 # include <iterator>
@@ -27,7 +29,23 @@
 # include <stdio.h>
 # include <stdlib.h>
 
-# define BUFFERSIZE 512
+# define READER_BUFFER_SIZE 512
+
+
+typedef struct	s_listen {
+	unsigned int	host;
+	int			port;
+}				t_listen;
+
+typedef struct  s_error_page {
+	std::vector<int>    errorCodes; // all of the codes that will be redirected
+	std::string         uri;		// uri to which they are redirected
+}               t_error_page;
+
+typedef struct	s_cgi_pass {
+	bool		set;
+	t_listen	address;
+}				t_cgi_pass;
 
 typedef std::vector<std::string> fileVector;
 

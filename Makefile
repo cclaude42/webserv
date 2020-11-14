@@ -26,7 +26,7 @@ LIBFT = libft/libft.a
 
 MAIN = webserv
 
-CONFIG = Config ConfigReader ConfigServer
+CONFIG = Config ConfigReader ConfigServer Location
 
 REQUEST = Request RequestMembers
 

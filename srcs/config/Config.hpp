@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 14:29:38 by user42            #+#    #+#             */
-/*   Updated: 2020/11/12 21:27:30 by cclaude          ###   ########.fr       */
+/*   Updated: 2020/11/14 14:55:29 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,33 +14,32 @@
 
 # define CONFIG_HPP
 
-# include "ConfigServer.hpp"
+
 # include "ConfigReader.hpp"
-# include <map>
-# include <vector>
 
 # define parseMap std::map<std::string, void (ConfigServer::*)(fileVector)>
-# define lParseMap std::map<std::string, void (ConfigServer::Location::*)(fileVector)>
-class	ConfigServer;
+# define locationParseMap std::map<std::string, void (Location::*)(fileVector)>
+
+bool isDigits(const std::string &str);
+unsigned int	strToIp(std::string strIp);
+
+# include "ConfigServer.hpp"
+
+# define DEFAULT_PATH "./files/default"
+
+class ConfigServer;
 
 class Config {
 	public:
-		Config(void);
+		Config();
 		Config(Config const &src);
 		virtual ~Config(void);
 
 		Config     			&operator=(Config const &src);
 		int         		parse(const char * filename);
-		static	parseMap	serverParsingMap;
-		// static	lParseMap	locationParsingMap;
-
+		std::vector<ConfigServer>			getServers() const;
 		friend	std::ostream	&operator<<(std::ostream &out, const Config &config);
-
-		// Cesar's getter
-		std::vector<ConfigServer> & getServers(void) { return _servers ; }
-
 	private:
-		static parseMap 			initServerMap();
 		std::vector<ConfigServer> 	_servers;
 };
 
