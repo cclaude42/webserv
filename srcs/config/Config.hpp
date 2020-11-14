@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 14:29:38 by user42            #+#    #+#             */
-/*   Updated: 2020/11/13 11:41:42 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/14 11:49:11 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,13 @@ unsigned int	strToIp(std::string strIp);
 
 # include "ConfigServer.hpp"
 
+# define DEFAULT_PATH "./files/default"
+
 class ConfigServer;
 
 class Config {
 	public:
-		Config(void);
+		Config();
 		Config(Config const &src);
 		virtual ~Config(void);
 

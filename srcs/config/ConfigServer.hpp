@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 15:27:44 by user42            #+#    #+#             */
-/*   Updated: 2020/11/14 10:48:22 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/14 11:50:10 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ class ConfigServer {
 
 		ConfigServer	&operator=(ConfigServer const &src);
 		virtual int		parse(unsigned int &i, std::vector<std::string> &file);
+		void			passMembers(ConfigServer &server) const;
 
 		class	ExceptionInvalidArguments: public std::exception {
 			virtual const char	*what() const throw();
@@ -56,7 +57,6 @@ class ConfigServer {
 	protected:
 
 
-		void	passMembers(ConfigServer &server) const;
 		// PARSING FUNCTIONS
 		void    addListen(std::vector<std::string> args);
 		void    addRoot(std::vector<std::string> args);
@@ -80,6 +80,8 @@ class ConfigServer {
 		std::map<std::string, Location>		_location;
 		std::set<std::string>				_allowed_methods;
 	private:
+		static ConfigServer			initDefaultServer(const char *filename);
+		static const ConfigServer	_defaultServer;
 		static	parseMap					parsingMap;
 		static parseMap 					initServerMap();
 		

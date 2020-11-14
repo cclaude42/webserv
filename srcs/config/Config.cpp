@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 14:30:01 by user42            #+#    #+#             */
-/*   Updated: 2020/11/12 22:48:11 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/14 11:50:39 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,11 +49,11 @@ int     Config::parse(char * const filename) {
 			if (file[i] != "{")
 				std::cerr << "Error: expecter '{' after server directive" << std::endl;
 			++i;
-			if (!server.parse(i, file))
+			if (!server.parse(i, file)) {
 				std::cerr << "Error: error in config file \"" << filename << "\"" <<  std::endl;
-			else {
-				this->_servers.push_back(server);
+				return 0;			
 			}
+			this->_servers.push_back(server);
 		}
 		else {
 			std::cerr << "Error: unknown directive " << file[i] << std::endl;

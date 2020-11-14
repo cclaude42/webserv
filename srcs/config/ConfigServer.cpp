@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 15:28:08 by user42            #+#    #+#             */
-/*   Updated: 2020/11/14 10:58:03 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/14 11:53:05 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,22 @@ parseMap ConfigServer::initServerMap() {
 }
 
 parseMap ConfigServer::parsingMap = ConfigServer::initServerMap();
+
+ConfigServer				ConfigServer::initDefaultServer(const char *filename) {
+	ConfigServer	server;
+	fileVector		file;
+	
+	file = ConfigReader::readFile(filename);
+	fileVector	begin = {"server", "{"};
+	file.insert(file.begin(), begin.begin(), begin.end());
+	file.insert(file.end(), "}");
+	unsigned int	index = 2;
+	if (!server.parse(index, file))
+		std::cerr << "invalid default file" << std::endl;
+	return server;
+}
+
+const ConfigServer ConfigServer::_defaultServer = ConfigServer::initDefaultServer(DEFAULT_PATH);
 
 
 ConfigServer::ConfigServer(void):
@@ -140,19 +156,20 @@ int     ConfigServer::parse(unsigned int &index, fileVector &file) {
 		(this->*ConfigServer::parsingMap[directive])(args);
 	//  set up default values if they were not set by the config file
 	if (!file[index].compare("}")) {
-		if (this->_listen.empty()) {
-			args.push_back("80");
-			(this->*ConfigServer::parsingMap["listen"])(args);
-		}
-		if (this->_root == "") {
-			args.clear();
-			args.push_back("/");
-			(this->*ConfigServer::parsingMap["root"])(args);
-		}
+		// if (this->_listen.empty()) {
+		// 	args.push_back("80");
+		// 	(this->*ConfigServer::parsingMap["listen"])(args);
+		// }
+		// if (this->_root == "") {
+		// 	args.clear();
+		// 	args.push_back("/");
+		// 	(this->*ConfigServer::parsingMap["root"])(args);
+		// }
+		ConfigServer::_defaultServer.passMembers(*this);
 		for (auto i = this->_location.begin() ; i != this->_location.end(); i++)
 			this->passMembers(i->second);
-		if (this->_client_body_buffer_size == 0)
-			this->_client_body_buffer_size = 8000;
+		// if (this->_client_body_buffer_size == 0)
+		// 	this->_client_body_buffer_size = 8000;
 		return 1;
 	}
 	return 0;
@@ -160,7 +177,8 @@ int     ConfigServer::parse(unsigned int &index, fileVector &file) {
 
 void	ConfigServer::passMembers(ConfigServer &server) const {
 	if (this != &server) {
-		server._listen = this->_listen;
+		if (server._listen.empty())
+			server._listen.insert(server._listen.begin(), this->_listen.begin(), this->_listen.end());
 		if (server._root == "")
 			server._root = this->_root;
 		server._server_name.insert(server._server_name.end(), this->_server_name.begin(), this->_server_name.end());
