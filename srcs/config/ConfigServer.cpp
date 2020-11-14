@@ -6,12 +6,14 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 15:28:08 by user42            #+#    #+#             */
-/*   Updated: 2020/11/14 11:53:05 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/14 13:10:00 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ConfigServer.hpp"
 
+
+// HELPFUL FUNCTIONS
 bool isDigits(const std::string &str) {
 	return str.find_first_not_of("0123456789") == std::string::npos;
 }
@@ -34,6 +36,8 @@ unsigned int	strToIp(std::string strIp) {
 	unsigned final = *(reinterpret_cast<unsigned int *>(m));
 	return final;
 }
+
+// INITIALIZING STATIC MEMBERS
 
 parseMap ConfigServer::initServerMap() {
 		    parseMap     myMap;
@@ -59,8 +63,10 @@ ConfigServer				ConfigServer::initDefaultServer(const char *filename) {
 	file.insert(file.begin(), begin.begin(), begin.end());
 	file.insert(file.end(), "}");
 	unsigned int	index = 2;
-	if (!server.parse(index, file))
+	if (!server.parse(index, file)) {
 		std::cerr << "invalid default file" << std::endl;
+		throw ConfigServer::ExceptionInvalidArguments();
+	}
 	return server;
 }
 
@@ -156,20 +162,9 @@ int     ConfigServer::parse(unsigned int &index, fileVector &file) {
 		(this->*ConfigServer::parsingMap[directive])(args);
 	//  set up default values if they were not set by the config file
 	if (!file[index].compare("}")) {
-		// if (this->_listen.empty()) {
-		// 	args.push_back("80");
-		// 	(this->*ConfigServer::parsingMap["listen"])(args);
-		// }
-		// if (this->_root == "") {
-		// 	args.clear();
-		// 	args.push_back("/");
-		// 	(this->*ConfigServer::parsingMap["root"])(args);
-		// }
 		ConfigServer::_defaultServer.passMembers(*this);
 		for (auto i = this->_location.begin() ; i != this->_location.end(); i++)
 			this->passMembers(i->second);
-		// if (this->_client_body_buffer_size == 0)
-		// 	this->_client_body_buffer_size = 8000;
 		return 1;
 	}
 	return 0;

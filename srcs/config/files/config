@@ -1,6 +1,5 @@
 server {
     error_page 707 helloworlderror
-    root path
     server_name francisServer blabla hello_world
     cgi_param   hello world
     cgi_pass    localhost:9000
