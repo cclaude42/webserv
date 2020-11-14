@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 14:33:47 by user42            #+#    #+#             */
-/*   Updated: 2020/11/12 15:16:26 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/14 14:50:42 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@
 # include <stdio.h>
 # include <stdlib.h>
 
-# define BUFFER_SIZE 512
+# define READER_BUFFER_SIZE 512
 
 
 typedef struct	s_listen {

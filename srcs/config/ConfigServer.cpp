@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 15:28:08 by user42            #+#    #+#             */
-/*   Updated: 2020/11/14 13:10:00 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/14 14:28:13 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,10 +102,10 @@ ConfigServer::~ConfigServer(void) {
 
 ConfigServer	&ConfigServer::operator=(ConfigServer const &src) {
 	if (this != &src) {
-		this->_listen = src._listen;		
-		this->_root = src._root;		
-		this->_server_name = src._server_name;		
-		this->_error_page = src._error_page;		
+		this->_listen = src._listen;
+		this->_root = src._root;
+		this->_server_name = src._server_name;
+		this->_error_page = src._error_page;
 		this->_client_body_buffer_size = src._client_body_buffer_size;
 		this->_cgi_param = src._cgi_param;
 		this->_cgi_pass = src._cgi_pass;
