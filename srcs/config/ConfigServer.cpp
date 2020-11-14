@@ -6,36 +6,11 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 15:28:08 by user42            #+#    #+#             */
-/*   Updated: 2020/11/14 14:28:13 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/14 19:14:03 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ConfigServer.hpp"
-
-
-// HELPFUL FUNCTIONS
-bool isDigits(const std::string &str) {
-	return str.find_first_not_of("0123456789") == std::string::npos;
-}
-
-unsigned int	strToIp(std::string strIp) {
-	size_t  sep;
-	unsigned int   n;
-	unsigned char  m[4];
-	size_t  start = 0;
-	if (strIp == "localhost")
-		strIp = "127.0.0.1";
-	for (unsigned int i = 3 ; i != UINT32_MAX; i--) {
-		sep = strIp.find_first_of(".", sep);
-		std::string str = strIp.substr(start, sep);
-		n = std::stoi(str);
-		m[i] = static_cast<unsigned char>(n);
-		sep++;
-		start = sep;
-	}
-	unsigned final = *(reinterpret_cast<unsigned int *>(m));
-	return final;
-}
 
 // INITIALIZING STATIC MEMBERS
 
@@ -72,6 +47,7 @@ ConfigServer				ConfigServer::initDefaultServer(const char *filename) {
 
 const ConfigServer ConfigServer::_defaultServer = ConfigServer::initDefaultServer(DEFAULT_PATH);
 
+// CONSTRUCTORS
 
 ConfigServer::ConfigServer(void):
 _root(""),
@@ -115,6 +91,7 @@ ConfigServer	&ConfigServer::operator=(ConfigServer const &src) {
 	return *this;
 }
 
+// PARSING CONFIG FILE
 int     ConfigServer::parse(unsigned int &index, fileVector &file) {
 	fileVector                  args;
 	parseMap::iterator          iter;
@@ -170,6 +147,7 @@ int     ConfigServer::parse(unsigned int &index, fileVector &file) {
 	return 0;
 }
 
+// PASS BLOCK MEMBERS TO CHILD BLOCK
 void	ConfigServer::passMembers(ConfigServer &server) const {
 	if (this != &server) {
 		if (server._listen.empty())
@@ -196,7 +174,7 @@ void	ConfigServer::passMembers(ConfigServer &server) const {
 		server.passMembers(i->second);
 }
 
-//	PARSING FUNCTIONS
+//	ADDMEMBER FUNCTIONS
 
 void        ConfigServer::addListen(std::vector<std::string> args) {
 	t_listen    listen;
@@ -340,11 +318,14 @@ std::ostream	&operator<<(std::ostream &out, const ConfigServer &server) {
 	return out;
 }
 
+// EXCEPTION HANDLING
 const char		*ConfigServer::ExceptionInvalidArguments::what()
  const throw() {
 	return "Exception: invalid arguments in configuration file";
 }
 
+
+// GETERS
 std::vector<t_listen>				ConfigServer::getListen() const {
 	return this->_listen;
 }
@@ -368,4 +349,21 @@ t_cgi_pass							ConfigServer::getCgiPass() const {
 }
 std::map<std::string, Location>		ConfigServer::getLocation() const {
 	return this->_location;
+}
+
+// WOP, NOT FUNCTIONAL YET
+ConfigServer						ConfigServer::getLocationForRequest(std::string const uri) {
+	std::string	tryLocation = uri;
+	std::string::size_type	tryLen = uri.length() - 1;
+	std::map<std::string, Location>::iterator	iter;
+
+	do {
+		iter = this->_location.find(tryLocation);
+		if (iter != this->_location.end()) {
+			return iter->second.getLocationForRequest(uri.substr(0, tryLen) + uri.substr(tryLen));
+		}
+		tryLen--;
+		tryLocation = uri.substr(0, tryLen);
+	} while (tryLen);
+	return (*this);
 }

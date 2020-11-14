@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 14:30:01 by user42            #+#    #+#             */
-/*   Updated: 2020/11/14 14:54:54 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/14 18:49:31 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,10 +63,68 @@ int     Config::parse(const char *filename) {
 	return 0;
 }
 
+bool			Config::getConfigForRequest(ConfigServer &ret, t_listen const address,\
+										std::string const uri, std::string const hostName) const {
+	ConfigServer	server;
+
+	if (!this->getServerForRequest(server, address, hostName))
+		return false;
+	ret = server.getLocationForRequest(uri);
+	return true;
+}
+
+bool		Config::getServerForRequest(ConfigServer &ret, t_listen const address, std::string const hostName) const {
+	std::vector<ConfigServer>	possibleServers;
+
+	for (auto serversIter = this->_servers.begin() ; serversIter != this->_servers.end(); serversIter++) {
+		for (auto listenIter = (*serversIter).getListen().begin(); listenIter != (*serversIter).getListen().end(); listenIter++) {
+			if (address.host == (*listenIter).host && address.port == (*listenIter).port) {
+				possibleServers.push_back((*serversIter));
+			}
+		}
+	}
+	if (possibleServers.empty())
+		return false;
+	for (auto serversIter = possibleServers.begin() ; serversIter != possibleServers.end(); serversIter++) {
+		for (auto servNameIter = serversIter->getServerName().begin() ; servNameIter != serversIter->getServerName().end(); servNameIter++) {
+			if (*servNameIter == hostName) {
+				ret = *serversIter;
+				return true;
+			}
+		}
+	}
+	ret = possibleServers[0];
+	return true;
+}
+
 std::ostream	&operator<<(std::ostream &out, const Config &config) {
 	for (size_t index = 0; index < config._servers.size(); index++) {
 		out << "SERVER " << index << std::endl;
 		out << config._servers[index] << std::endl;
 	}
 	return out;
+}
+
+// HELPFUL FUNCTIONS
+bool isDigits(const std::string &str) {
+	return str.find_first_not_of("0123456789") == std::string::npos;
+}
+
+unsigned int	strToIp(std::string strIp) {
+	size_t  sep;
+	unsigned int   n;
+	unsigned char  m[4];
+	size_t  start = 0;
+	if (strIp == "localhost")
+		strIp = "127.0.0.1";
+	for (unsigned int i = 3 ; i != UINT32_MAX; i--) {
+		sep = strIp.find_first_of(".", sep);
+		std::string str = strIp.substr(start, sep);
+		n = std::stoi(str);
+		m[i] = static_cast<unsigned char>(n);
+		sep++;
+		start = sep;
+	}
+	unsigned final = *(reinterpret_cast<unsigned int *>(m));
+	return final;
 }
