@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ConfigServer.hpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: franciszer <franciszer@student.42.fr>      +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 15:27:44 by user42            #+#    #+#             */
-/*   Updated: 2020/11/13 12:55:47 by franciszer       ###   ########.fr       */
+/*   Updated: 2020/11/14 10:48:22 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ class ConfigServer {
 		void    addClientBodyBufferSize(std::vector<std::string> args);
 		void	addCgiParam(std::vector<std::string> args);
 		void    addCgiPass(std::vector<std::string> args);
+		void	addAllowedMethods(std::vector<std::string> args);
 
 		// MEMBERS
 		std::vector<t_listen>				_listen;
@@ -77,7 +78,7 @@ class ConfigServer {
 		std::map<std::string, std::string>	_cgi_param;
 		t_cgi_pass							_cgi_pass;
 		std::map<std::string, Location>		_location;
-		std::set<std::string>				_accepted_headers;
+		std::set<std::string>				_allowed_methods;
 	private:
 		static	parseMap					parsingMap;
 		static parseMap 					initServerMap();

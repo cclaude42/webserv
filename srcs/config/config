@@ -6,14 +6,13 @@ server {
     client_body_buffer_size 5000
     cgi_param   hello world
     cgi_pass    localhost:9000
+    allow_methods GET POST DELETE
     location blabla {
         root /tmp
         error_page  404 /err/here
+        allow_methods POST LIVE
         location ss {
             root /path
-            location hello {
-                client_body_buffer_size 5000
-            }
         }
     }
 }

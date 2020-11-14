@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 15:28:08 by user42            #+#    #+#             */
-/*   Updated: 2020/11/13 18:16:54 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/14 10:58:03 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ parseMap ConfigServer::initServerMap() {
 		    myMap["client_body_buffer_size"] = &ConfigServer::addClientBodyBufferSize;
 			myMap["cgi_param"] = &ConfigServer::addCgiParam;
 			myMap["cgi_pass"] = &ConfigServer::addCgiPass;
+			myMap["allow_methods"] = &ConfigServer::addAllowedMethods;
 		    return myMap;
 }
 
@@ -68,6 +69,7 @@ ConfigServer::ConfigServer(ConfigServer const &src) {
 		this->_cgi_param = src._cgi_param;
 		this->_cgi_pass = src._cgi_pass;
 		this->_location = src._location;
+		this->_allowed_methods = src._allowed_methods;
 	}
 	return ;
 }
@@ -86,6 +88,7 @@ ConfigServer	&ConfigServer::operator=(ConfigServer const &src) {
 		this->_cgi_param = src._cgi_param;
 		this->_cgi_pass = src._cgi_pass;
 		this->_location = src._location;
+		this->_allowed_methods = src._allowed_methods;
 	}
 	return *this;
 }
@@ -138,7 +141,7 @@ int     ConfigServer::parse(unsigned int &index, fileVector &file) {
 	//  set up default values if they were not set by the config file
 	if (!file[index].compare("}")) {
 		if (this->_listen.empty()) {
-			args.push_back("0.0.0.0:80");
+			args.push_back("80");
 			(this->*ConfigServer::parsingMap["listen"])(args);
 		}
 		if (this->_root == "") {
@@ -173,6 +176,8 @@ void	ConfigServer::passMembers(ConfigServer &server) const {
 		}
 		if (!server._cgi_pass.set)
 			server._cgi_pass = this->_cgi_pass;
+		if (server._allowed_methods.empty())
+			server._allowed_methods = this->_allowed_methods;
 	}
 	for (auto i = server._location.begin(); i != server._location.end(); i++)
 		server.passMembers(i->second);
@@ -197,8 +202,7 @@ void        ConfigServer::addListen(std::vector<std::string> args) {
 	}
 	else
 	{
-		if ((listen.host = strToIp(args[0].substr(0, separator))) == 0)
-			throw ConfigServer::ExceptionInvalidArguments();
+		listen.host = strToIp(args[0].substr(0, separator));
 		separator++;
 		std::string	portStr = args[0].substr(separator);
 		if (isDigits(portStr)) {
@@ -282,6 +286,15 @@ void    	ConfigServer::addCgiPass(std::vector<std::string> args) {
 	// std::cout << "addCgiPass END" << std::endl;
 }
 
+void		ConfigServer::addAllowedMethods(std::vector<std::string> args) {
+	if (args.empty())
+		throw ConfigServer::ExceptionInvalidArguments();
+	this->_allowed_methods.clear();
+	for (auto i = args.begin(); i != args.end(); i++) {
+		this->_allowed_methods.insert(*i);
+	}
+}
+
 std::ostream	&operator<<(std::ostream &out, const ConfigServer &server) {
 	out << "Listen:" << std::endl;
 	for (size_t i = 0; i < server._listen.size(); i++) {
@@ -303,6 +316,10 @@ std::ostream	&operator<<(std::ostream &out, const ConfigServer &server) {
 	for (auto i = server._cgi_param.begin(); i != server._cgi_param.end(); i++)
 		out << "\t" << i->first << " = " << i->second << std::endl;
 	out << "cgi_pass:	" << server._cgi_pass.address.host << ":" << server._cgi_pass.address.port << std::endl;
+	out << "allowed methods: ";
+	for (auto i = server._allowed_methods.begin(); i != server._allowed_methods.end(); i++)
+		out << " " << *i;
+	out << std::endl;
 	for (auto i = server._location.begin(); i != server._location.end(); i++) {
 		out << std::endl << "LOCATION " << i->first << std::endl;
 		out << i->second << std::endl;

@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/07 18:40:39 by user42            #+#    #+#             */
-/*   Updated: 2020/11/13 18:15:23 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/14 10:58:29 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ Location	&Location::operator=(Location const &src) {
 		this->_cgi_param = src._cgi_param;
 		this->_cgi_pass = src._cgi_pass;
 		this->_location = src._location;
+		this->_allowed_methods = src._allowed_methods;
 	}
 	return *this;
 }
@@ -52,6 +53,7 @@ locationParseMap Location::initLocationMap() {
 			myMap["client_body_buffer_size"] = &Location::addClientBodyBufferSize;
 			myMap["cgi_param"] = &Location::addCgiParam;
 			myMap["cgi_pass"] = &Location::addCgiPass;
+			myMap["allow_methods"] = &Location::addAllowedMethods;
 			return myMap;
 }
 
@@ -132,10 +134,13 @@ std::ostream	&operator<<(std::ostream &out, const Location &server) {
 	for (auto i = server._cgi_param.begin(); i != server._cgi_param.end(); i++)
 		out << "\t" << i->first << " = " << i->second << std::endl;
 	out << "cgi_pass:	" << server._cgi_pass.address.host << ":" << server._cgi_pass.address.port << std::endl;
+	out << "allowed methods: ";
+	for (auto i = server._allowed_methods.begin(); i != server._allowed_methods.end(); i++)
+		out << " " << *i;
+	out << std::endl;
 	for (auto i = server._location.begin(); i != server._location.end(); i++) {
 		out << std::endl << "location " << i->first << std::endl;
 		out << i->second << std::endl;
 	}
-	return out;
 	return out;
 }
