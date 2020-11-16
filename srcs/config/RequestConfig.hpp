@@ -6,7 +6,7 @@
 /*   By: franciszer <franciszer@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 18:41:01 by franciszer        #+#    #+#             */
-/*   Updated: 2020/11/16 21:28:04 by franciszer       ###   ########.fr       */
+/*   Updated: 2020/11/16 22:04:02 by franciszer       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 
 class RequestConfig {
 	public:
+		RequestConfig(void);
 		RequestConfig(ConfigServer &config, std::string path, std::string locationName = "");
 		RequestConfig(RequestConfig const &src);
 		virtual ~RequestConfig(void);
@@ -35,7 +36,6 @@ class RequestConfig {
 		std::set<std::string>				getAllowedMethods() const;
 
 	private:
-		RequestConfig(void);
 		std::string							_path; // local path for request
 		std::map<int, std::string>			_error_page; // error page redirections
 		int									_client_body_buffer_size; // max size for the client body, defaults to 8 000
