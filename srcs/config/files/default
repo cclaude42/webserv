@@ -4,3 +4,4 @@ client_body_buffer_size 8000
 listen 80
 root /
 allow_methods GET HEAD POST PUT DELETE CONNECT OPTIONS TRACE PATCH
+index index.html

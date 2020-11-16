@@ -6,7 +6,7 @@
 /*   By: franciszer <franciszer@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 15:28:08 by user42            #+#    #+#             */
-/*   Updated: 2020/11/16 17:05:51 by franciszer       ###   ########.fr       */
+/*   Updated: 2020/11/16 21:58:25 by franciszer       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,8 +178,6 @@ void	ConfigServer::passMembers(ConfigServer &server) const {
 			server._cgi_pass = this->_cgi_pass;
 		if (server._allowed_methods.empty())
 			server._allowed_methods = this->_allowed_methods;
-		if (this->_autoindex)
-			server._autoindex = this->_autoindex;
 		server._index.insert(server._index.begin(), this->_index.begin(), this->_index.end());
 	}
 	for (auto i = server._location.begin(); i != server._location.end(); i++)
@@ -301,8 +299,7 @@ void		ConfigServer::addAllowedMethods(std::vector<std::string> args) {
 void	ConfigServer::addIndex(std::vector<std::string> args) {
 	if (args.empty())
 		throw ConfigServer::ExceptionInvalidArguments();
-	for (auto i = args.begin(); i != args.end(); i++)
-		this->_index.push_back(*i);
+	this->_index.insert(this->_index.end(), args.begin(), args.end());
 }
 
 void	ConfigServer::addAutoIndex(std::vector<std::string> args) {
@@ -312,7 +309,8 @@ void	ConfigServer::addAutoIndex(std::vector<std::string> args) {
 		this->_autoindex = true;
 	else if (args[0] == "off")
 		this->_autoindex = false;
-	throw ConfigServer::ExceptionInvalidArguments();
+	else
+		throw ConfigServer::ExceptionInvalidArguments();
 }
 
 void	ConfigServer::addAlias(std::vector<std::string> args) {
@@ -348,6 +346,12 @@ std::ostream	&operator<<(std::ostream &out, const ConfigServer &server) {
 	for (auto i = server._allowed_methods.begin(); i != server._allowed_methods.end(); i++)
 		out << " " << *i;
 	out << std::endl;
+	out << "autoindex " << (server._autoindex ? "on" : "off") << std::endl;
+	out << "index: ";
+	for (auto i = server._index.begin(); i != server._index.end(); i++)
+		out << *i << " ";
+	out << std::endl;
+	out << "alias: " << server._alias << std::endl;
 	for (auto i = server._location.begin(); i != server._location.end(); i++) {
 		out << std::endl << "LOCATION " << i->first << std::endl;
 		out << i->second << std::endl;
@@ -388,18 +392,36 @@ std::map<std::string, Location>		ConfigServer::getLocation() const {
 	return this->_location;
 }
 
+std::set<std::string>				ConfigServer::getAllowedMethods() const {
+	return this->_allowed_methods;
+}
+
+std::vector<std::string>			ConfigServer::getIndex() const {
+	return this->_index;
+}
+
+bool								ConfigServer::getAutoIndex() const {
+	return this->_autoindex;
+}
+
+std::string							ConfigServer::getAlias() const {
+	return this->_alias;
+}
+
 // WOP, NOT FUNCTIONAL YET
-ConfigServer						ConfigServer::getLocationForRequest(std::string const path) {
+ConfigServer						ConfigServer::getLocationForRequest(std::string const path, std::string &retLocationPath) {
 	std::string::size_type	tryLen = path.length();
 	std::map<std::string, Location>::iterator	iter;
+	std::string									tryLocation;
 
 	if (!this->_location.empty()) {	
 		do {
-			std::string	tryLocation = path.substr(0, tryLen);
+			tryLocation = path.substr(0, tryLen);
 			// std::cout << "tryLocation: " << tryLocation << std::endl;
 			iter = this->_location.find(tryLocation);
 			if (iter != this->_location.end()) {
-				return iter->second.getLocationForRequest(path);
+				retLocationPath = tryLocation;
+				return iter->second.getLocationForRequest(path, retLocationPath);
 			}
 			tryLen--;
 		} while (tryLen);

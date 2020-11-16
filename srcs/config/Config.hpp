@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Config.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
+/*   By: franciszer <franciszer@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 14:29:38 by user42            #+#    #+#             */
-/*   Updated: 2020/11/14 18:49:49 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/16 21:44:07 by franciszer       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,14 @@
 
 bool isDigits(const std::string &str);
 unsigned int	strToIp(std::string strIp);
+std::string		removeAdjacentSlashes(std::string &str);
 
 # include "ConfigServer.hpp"
 
 # define DEFAULT_PATH "./files/default"
 
 class ConfigServer;
+class RequestConfig;
 
 class Config {
 	public:
@@ -38,8 +40,8 @@ class Config {
 		Config     			&operator=(Config const &src);
 		int         		parse(const char *filename);
 		std::vector<ConfigServer>			getServers() const;
-		bool								getConfigForRequest(ConfigServer &ret, t_listen const address,\
-											std::string const uri, std::string const hostName) const;
+		RequestConfig						getConfigForRequest(t_listen const address,\
+												std::string const uri, std::string const hostName) const;
 		friend	std::ostream	&operator<<(std::ostream &out, const Config &config);
 	private:
 		bool								getServerForRequest(ConfigServer &ret, t_listen const address, std::string const hostName) const;

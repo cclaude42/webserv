@@ -6,7 +6,7 @@
 /*   By: franciszer <franciszer@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 15:27:44 by user42            #+#    #+#             */
-/*   Updated: 2020/11/16 16:57:13 by franciszer       ###   ########.fr       */
+/*   Updated: 2020/11/16 21:40:51 by franciszer       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,9 +52,13 @@ class ConfigServer {
 		std::map<std::string, std::string>	getCgiParam() const;
 		t_cgi_pass							getCgiPass() const;
 		std::map<std::string, Location>		getLocation() const;
+		std::set<std::string>				getAllowedMethods() const;
+		std::vector<std::string>			getIndex() const;
+		bool								getAutoIndex() const;
+		std::string							getAlias() const;
 
 		// RETURN CONFIG ACCORDING TO URI
-		ConfigServer						getLocationForRequest(std::string const path);
+		ConfigServer						getLocationForRequest(std::string const path, std::string &locationPath);
 
 		friend	std::ostream &operator<<(std::ostream &out, const ConfigServer &server);
 	protected:
@@ -85,7 +89,6 @@ class ConfigServer {
 		t_cgi_pass							_cgi_pass;
 		std::map<std::string, Location>		_location;
 		std::set<std::string>				_allowed_methods;
-		// NEED TO HAD ADDER FUNCTION, DEFAULT VALUES AND PASSING FOR THESE TWO
 		std::vector<std::string>			_index;
 		bool								_autoindex;
 		std::string							_alias;
@@ -99,5 +102,6 @@ class ConfigServer {
 };
 
 # include "Location.hpp"
+# include "RequestConfig.hpp"
 
 #endif

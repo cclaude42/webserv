@@ -5,10 +5,16 @@ server {
     cgi_param   hello world
     cgi_pass    localhost:9000
     location /blabla {
-        root /tmp
+        root /tmpBlabla/
         error_page  404 /err/here
         allow_methods POST LIVE
+        index blabla_index.html
+        autoindex on
+        alias /alias/
         }
+    location /hello {
+        root /world/
+    }
 }
 
 server {

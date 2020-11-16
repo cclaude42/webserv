@@ -6,7 +6,7 @@
 /*   By: franciszer <franciszer@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 14:30:01 by user42            #+#    #+#             */
-/*   Updated: 2020/11/16 16:42:11 by franciszer       ###   ########.fr       */
+/*   Updated: 2020/11/16 21:57:11 by franciszer       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,15 +63,17 @@ int     Config::parse(const char *filename) {
 	return 0;
 }
 
-bool			Config::getConfigForRequest(ConfigServer &ret, t_listen const address,\
-										std::string const uri, std::string const hostName) const {
+RequestConfig	Config::getConfigForRequest(t_listen const address,\
+					std::string const uri, std::string const hostName) const {
 	ConfigServer	server;
+	std::string		locationPath;
 
-	if (!this->getServerForRequest(server, address, hostName))
-		return false;
-	ret = server;
-	ret = server.getLocationForRequest(uri);
-	return true;
+	this->getServerForRequest(server, address, hostName);
+	server = server.getLocationForRequest(uri, locationPath);
+	
+	std::cout << "location: " << locationPath << "|" << std::endl;
+	RequestConfig config(server, uri, locationPath);
+	return config;
 }
 
 bool		Config::getServerForRequest(ConfigServer &ret, t_listen const address, std::string const hostName) const {
@@ -130,4 +132,22 @@ unsigned int	strToIp(std::string strIp) {
 	}
 	unsigned final = *(reinterpret_cast<unsigned int *>(m));
 	return final;
+}
+
+std::string	removeAdjacentSlashes(std::string &str) {
+	std::string	ret;
+	bool		lastIsSlash = false;
+
+	for (std::string::size_type i = 0; i < str.length(); i++) {
+		if (str[i] == '/') {
+			if (!lastIsSlash)
+				ret.push_back(str[i]);
+			lastIsSlash = true;
+		}
+		else {
+			lastIsSlash = false;
+			ret.push_back(str[i]);	
+		}
+	}
+	return ret;
 }
