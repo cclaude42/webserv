@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Config.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
+/*   By: franciszer <franciszer@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 14:30:01 by user42            #+#    #+#             */
-/*   Updated: 2020/11/14 18:49:31 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/14 21:10:01 by franciszer       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,10 @@ bool			Config::getConfigForRequest(ConfigServer &ret, t_listen const address,\
 
 	if (!this->getServerForRequest(server, address, hostName))
 		return false;
-	ret = server.getLocationForRequest(uri);
+	ret = server;
+	std::cout << ret << std::endl;
+	// ret = server.getLocationForRequest(uri);
+	std::cout << "uri: " << uri << std::endl;
 	return true;
 }
 
@@ -77,7 +80,8 @@ bool		Config::getServerForRequest(ConfigServer &ret, t_listen const address, std
 	std::vector<ConfigServer>	possibleServers;
 
 	for (auto serversIter = this->_servers.begin() ; serversIter != this->_servers.end(); serversIter++) {
-		for (auto listenIter = (*serversIter).getListen().begin(); listenIter != (*serversIter).getListen().end(); listenIter++) {
+		std::vector<t_listen>	listens = serversIter->getListen();
+		for (auto listenIter = listens.begin(); listenIter != listens.end(); listenIter++) {
 			if (address.host == (*listenIter).host && address.port == (*listenIter).port) {
 				possibleServers.push_back((*serversIter));
 			}
@@ -86,7 +90,8 @@ bool		Config::getServerForRequest(ConfigServer &ret, t_listen const address, std
 	if (possibleServers.empty())
 		return false;
 	for (auto serversIter = possibleServers.begin() ; serversIter != possibleServers.end(); serversIter++) {
-		for (auto servNameIter = serversIter->getServerName().begin() ; servNameIter != serversIter->getServerName().end(); servNameIter++) {
+		std::vector<std::string>	serverNames = serversIter->getServerName();
+		for (auto servNameIter = serverNames.begin() ; servNameIter != serverNames.end(); servNameIter++) {
 			if (*servNameIter == hostName) {
 				ret = *serversIter;
 				return true;
