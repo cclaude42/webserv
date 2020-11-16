@@ -6,7 +6,7 @@
 /*   By: franciszer <franciszer@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 14:30:01 by user42            #+#    #+#             */
-/*   Updated: 2020/11/14 21:10:01 by franciszer       ###   ########.fr       */
+/*   Updated: 2020/11/16 16:42:11 by franciszer       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,9 +70,7 @@ bool			Config::getConfigForRequest(ConfigServer &ret, t_listen const address,\
 	if (!this->getServerForRequest(server, address, hostName))
 		return false;
 	ret = server;
-	std::cout << ret << std::endl;
-	// ret = server.getLocationForRequest(uri);
-	std::cout << "uri: " << uri << std::endl;
+	ret = server.getLocationForRequest(uri);
 	return true;
 }
 

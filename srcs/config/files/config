@@ -4,14 +4,11 @@ server {
     server_name example
     cgi_param   hello world
     cgi_pass    localhost:9000
-    location blabla {
+    location /blabla {
         root /tmp
         error_page  404 /err/here
         allow_methods POST LIVE
-        location ss {
-            root /path
         }
-    }
 }
 
 server {

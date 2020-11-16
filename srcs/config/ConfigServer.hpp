@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ConfigServer.hpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
+/*   By: franciszer <franciszer@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 15:27:44 by user42            #+#    #+#             */
-/*   Updated: 2020/11/14 19:17:26 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/16 16:57:13 by franciszer       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ class ConfigServer {
 		std::map<std::string, Location>		getLocation() const;
 
 		// RETURN CONFIG ACCORDING TO URI
-		ConfigServer						getLocationForRequest(std::string const uri);
+		ConfigServer						getLocationForRequest(std::string const path);
 
 		friend	std::ostream &operator<<(std::ostream &out, const ConfigServer &server);
 	protected:
@@ -69,6 +69,9 @@ class ConfigServer {
 		void	addCgiParam(std::vector<std::string> args);
 		void    addCgiPass(std::vector<std::string> args);
 		void	addAllowedMethods(std::vector<std::string> args);
+		void	addIndex(std::vector<std::string> args);
+		void	addAutoIndex(std::vector<std::string> args);
+		void	addAlias(std::vector<std::string> args);
 
 		// MEMBERS
 		std::vector<t_listen>				_listen;
@@ -83,8 +86,9 @@ class ConfigServer {
 		std::map<std::string, Location>		_location;
 		std::set<std::string>				_allowed_methods;
 		// NEED TO HAD ADDER FUNCTION, DEFAULT VALUES AND PASSING FOR THESE TWO
-		std::string							_index;
-		bool								_autoindex;	
+		std::vector<std::string>			_index;
+		bool								_autoindex;
+		std::string							_alias;
 	private:
 		static ConfigServer			initDefaultServer(const char *filename);
 		static const ConfigServer	_defaultServer;

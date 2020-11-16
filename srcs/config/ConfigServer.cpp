@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ConfigServer.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
+/*   By: franciszer <franciszer@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 15:28:08 by user42            #+#    #+#             */
-/*   Updated: 2020/11/14 19:14:03 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/16 17:05:51 by franciszer       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ parseMap ConfigServer::initServerMap() {
 			myMap["cgi_param"] = &ConfigServer::addCgiParam;
 			myMap["cgi_pass"] = &ConfigServer::addCgiPass;
 			myMap["allow_methods"] = &ConfigServer::addAllowedMethods;
+			myMap["index"] = &ConfigServer::addIndex;
+			myMap["autoindex"] = &ConfigServer::addAutoIndex;
 		    return myMap;
 }
 
@@ -51,7 +53,8 @@ const ConfigServer ConfigServer::_defaultServer = ConfigServer::initDefaultServe
 
 ConfigServer::ConfigServer(void):
 _root(""),
-_client_body_buffer_size(0)
+_client_body_buffer_size(0),
+_autoindex(false)
 {
 	this->_cgi_pass.set = false;
 	return ;
@@ -68,6 +71,9 @@ ConfigServer::ConfigServer(ConfigServer const &src) {
 		this->_cgi_pass = src._cgi_pass;
 		this->_location = src._location;
 		this->_allowed_methods = src._allowed_methods;
+		this->_autoindex = src._autoindex;
+		this->_index = src._index;
+		this->_alias = src._alias;
 	}
 	return ;
 }
@@ -87,6 +93,9 @@ ConfigServer	&ConfigServer::operator=(ConfigServer const &src) {
 		this->_cgi_pass = src._cgi_pass;
 		this->_location = src._location;
 		this->_allowed_methods = src._allowed_methods;
+		this->_autoindex = src._autoindex;
+		this->_index = src._index;
+		this->_alias = src._alias;
 	}
 	return *this;
 }
@@ -169,6 +178,9 @@ void	ConfigServer::passMembers(ConfigServer &server) const {
 			server._cgi_pass = this->_cgi_pass;
 		if (server._allowed_methods.empty())
 			server._allowed_methods = this->_allowed_methods;
+		if (this->_autoindex)
+			server._autoindex = this->_autoindex;
+		server._index.insert(server._index.begin(), this->_index.begin(), this->_index.end());
 	}
 	for (auto i = server._location.begin(); i != server._location.end(); i++)
 		server.passMembers(i->second);
@@ -286,6 +298,31 @@ void		ConfigServer::addAllowedMethods(std::vector<std::string> args) {
 	}
 }
 
+void	ConfigServer::addIndex(std::vector<std::string> args) {
+	if (args.empty())
+		throw ConfigServer::ExceptionInvalidArguments();
+	for (auto i = args.begin(); i != args.end(); i++)
+		this->_index.push_back(*i);
+}
+
+void	ConfigServer::addAutoIndex(std::vector<std::string> args) {
+	if (args.size() != 1)
+		throw ConfigServer::ExceptionInvalidArguments();
+	if (args[0] == "on")
+		this->_autoindex = true;
+	else if (args[0] == "off")
+		this->_autoindex = false;
+	throw ConfigServer::ExceptionInvalidArguments();
+}
+
+void	ConfigServer::addAlias(std::vector<std::string> args) {
+	if (args.size() != 1)
+		throw ConfigServer::ExceptionInvalidArguments();
+	this->_alias = args[0];
+}
+
+
+// STREAM OPERATOR
 std::ostream	&operator<<(std::ostream &out, const ConfigServer &server) {
 	out << "Listen:" << std::endl;
 	for (size_t i = 0; i < server._listen.size(); i++) {
@@ -352,18 +389,20 @@ std::map<std::string, Location>		ConfigServer::getLocation() const {
 }
 
 // WOP, NOT FUNCTIONAL YET
-ConfigServer						ConfigServer::getLocationForRequest(std::string const uri) {
-	std::string	tryLocation = uri;
-	std::string::size_type	tryLen = uri.length() - 1;
+ConfigServer						ConfigServer::getLocationForRequest(std::string const path) {
+	std::string::size_type	tryLen = path.length();
 	std::map<std::string, Location>::iterator	iter;
 
-	do {
-		iter = this->_location.find(tryLocation);
-		if (iter != this->_location.end()) {
-			return iter->second.getLocationForRequest(uri.substr(0, tryLen) + uri.substr(tryLen));
-		}
-		tryLen--;
-		tryLocation = uri.substr(0, tryLen);
-	} while (tryLen);
+	if (!this->_location.empty()) {	
+		do {
+			std::string	tryLocation = path.substr(0, tryLen);
+			// std::cout << "tryLocation: " << tryLocation << std::endl;
+			iter = this->_location.find(tryLocation);
+			if (iter != this->_location.end()) {
+				return iter->second.getLocationForRequest(path);
+			}
+			tryLen--;
+		} while (tryLen);
+	}
 	return (*this);
 }

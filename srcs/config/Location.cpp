@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Location.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
+/*   By: franciszer <franciszer@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/07 18:40:39 by user42            #+#    #+#             */
-/*   Updated: 2020/11/14 10:58:29 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/16 17:02:35 by franciszer       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,9 @@ locationParseMap Location::initLocationMap() {
 			myMap["cgi_param"] = &Location::addCgiParam;
 			myMap["cgi_pass"] = &Location::addCgiPass;
 			myMap["allow_methods"] = &Location::addAllowedMethods;
+			myMap["index"] = &Location::addIndex;
+			myMap["autoindex"] = &Location::addAutoIndex;
+			myMap["alias"] = &Location::addAlias;
 			return myMap;
 }
 
