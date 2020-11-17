@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 15:17:39 by cclaude           #+#    #+#             */
-/*   Updated: 2020/11/07 18:48:52 by cclaude          ###   ########.fr       */
+/*   Updated: 2020/11/17 16:18:11 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,8 +74,9 @@ std::string		ResponseHeader::getStatusMessage(int code)
 void			ResponseHeader::setValues(std::string content, std::string filename, int code)
 {
 	(void)code;
-	setAllow("GET HEAD POST");
-	setContentLanguage("en-US");
+	if (code == 405)
+		setAllow("GET, HEAD, POST");
+	setContentLanguage(content);
 	setContentLength(content.size());
 	setContentLocation(filename);
 	setContentType(filename);
@@ -111,9 +112,10 @@ void			ResponseHeader::setAllow(std::string cmd)
 	_allow = cmd;
 }
 
-void			ResponseHeader::setContentLanguage(std::string lang)
+void			ResponseHeader::setContentLanguage(std::string content)
 {
-	_contentLanguage = lang;
+//	_contenLanguage = findLanguage(content); // Parse file in search for
+	_contentLangugage = "en-US";			// <html lang="fr"> 
 }
 
 void			ResponseHeader::setContentLength(int size)
@@ -123,7 +125,7 @@ void			ResponseHeader::setContentLength(int size)
 
 void			ResponseHeader::setContentLocation(std::string path)
 {
-	_contentLocation = "/" + path;
+	_contentLocation = path;
 }
 
 void			ResponseHeader::setContentType(std::string type)

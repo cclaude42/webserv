@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/31 13:44:42 by cclaude           #+#    #+#             */
-/*   Updated: 2020/11/11 18:45:03 by hbaudet          ###   ########.fr       */
+/*   Updated: 2020/11/16 19:26:34 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <iostream>
 # include <iomanip>
 # include <sstream>
+# include <fstream>
 # include <string>
 
 // CPP Containers
@@ -24,6 +25,10 @@
 # include <vector>
 # include <algorithm>
 # include <iterator>
+
+// Custom classes
+# include "Request.hpp"
+# include "ResponseHeader.hpp"
 
 // C Includes
 # include <unistd.h>
