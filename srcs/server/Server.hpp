@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:29:28 by cclaude           #+#    #+#             */
-/*   Updated: 2020/11/17 19:38:28 by cclaude          ###   ########.fr       */
+/*   Updated: 2020/11/17 20:59:36 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,10 @@
 # define SERVER_HPP
 
 # include "webserv.hpp"
-# include "ConfigServer.hpp"
-# include "Response.hpp"
-# include "Request.hpp"
 
-class Request;
+# include "ConfigReader.hpp"
+# include "Request.hpp"
+# include "Response.hpp"
 
 class Server {
 public:
@@ -50,6 +49,7 @@ private:
 	std::string			_tmp_root;
 
 	Server(void);
+
 };
 
 #endif

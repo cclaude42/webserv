@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ConfigServer.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: franciszer <franciszer@student.42.fr>      +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 15:28:08 by user42            #+#    #+#             */
-/*   Updated: 2020/11/14 14:47:05 by cclaude          ###   ########.fr       */
+/*   Updated: 2020/11/17 21:14:05 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ parseMap ConfigServer::parsingMap = ConfigServer::initServerMap();
 ConfigServer				ConfigServer::initDefaultServer(const char *filename) {
 	ConfigServer	server;
 	fileVector		file;
-  
+
 	file = ConfigReader::readFile(filename);
 	fileVector	begin = {"server", "{"};
 	file.insert(file.begin(), begin.begin(), begin.end());
@@ -62,10 +62,10 @@ _autoindex(false)
 
 ConfigServer::ConfigServer(ConfigServer const &src) {
 	if (this != &src) {
-		this->_listen = src._listen;		
-		this->_root = src._root;		
-		this->_server_name = src._server_name;		
-		this->_error_page = src._error_page;		
+		this->_listen = src._listen;
+		this->_root = src._root;
+		this->_server_name = src._server_name;
+		this->_error_page = src._error_page;
 		this->_client_body_buffer_size = src._client_body_buffer_size;
 		this->_cgi_param = src._cgi_param;
 		this->_cgi_pass = src._cgi_pass;
@@ -412,7 +412,7 @@ ConfigServer						ConfigServer::getLocationForRequest(std::string const path, st
 	std::map<std::string, Location>::iterator	iter;
 	std::string									tryLocation;
 
-	if (!this->_location.empty()) {	
+	if (!this->_location.empty()) {
 		do {
 			tryLocation = path.substr(0, tryLen);
 			// std::cout << "tryLocation: " << tryLocation << std::endl;

@@ -6,13 +6,13 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/31 18:58:08 by cclaude           #+#    #+#             */
-/*   Updated: 2020/11/11 18:46:16 by hbaudet          ###   ########.fr       */
+/*   Updated: 2020/11/17 21:10:58 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "webserv.hpp"
 
-std::string					readKey(char *line)
+std::string						readKey(char *line)
 {
 	std::string	ret;
 
@@ -22,7 +22,7 @@ std::string					readKey(char *line)
 	return (ret);
 }
 
-std::string					readKey(std::string& line)
+std::string						readKey(std::string& line)
 {
 	std::string	ret;
 
@@ -32,7 +32,7 @@ std::string					readKey(std::string& line)
 	return (ret);
 }
 
-std::string					readValue(char *line)
+std::string						readValue(char *line)
 {
 	int i;
 	std::string	ret;
@@ -45,7 +45,7 @@ std::string					readValue(char *line)
 	return ret;
 }
 
-std::string					readValue(std::string& line)
+std::string						readValue(std::string& line)
 {
 	size_t i;
 	std::string	ret;
@@ -57,12 +57,12 @@ std::string					readValue(std::string& line)
 	return ret;
 }
 
-std::vector<std::string>	split(const std::string& str, char c)
+std::vector<std::string>		split(const std::string& str, char c)
 {
 	std::vector<std::string> tokens;
 	std::string token;
 	std::istringstream tokenStream(str);
-	
+
 	while (std::getline(tokenStream, token, c))
 		tokens.push_back(token);
 	return tokens;
@@ -87,7 +87,7 @@ std::string&					to_lower(std::string& str)
 	return str;
 }
 
-std::string&						capitalize(std::string& str)
+std::string&					capitalize(std::string& str)
 {
 	size_t	i = 0;
 

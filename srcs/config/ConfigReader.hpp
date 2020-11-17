@@ -6,28 +6,14 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 14:33:47 by user42            #+#    #+#             */
-/*   Updated: 2020/11/14 14:50:28 by cclaude          ###   ########.fr       */
+/*   Updated: 2020/11/17 21:09:39 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CONFIG_READER_HPP
-
 # define CONFIG_READER_HPP
 
-# include <iostream>
-# include <iomanip>
-# include <string>
-# include <vector>
-# include <map>
-# include <set>
-# include <sstream>
-# include <algorithm>
-# include <iterator>
-# include <sys/stat.h>
-# include <fcntl.h>
-# include <unistd.h>
-# include <stdio.h>
-# include <stdlib.h>
+# include "webserv.hpp"
 
 # define READER_BUFFER_SIZE 512
 

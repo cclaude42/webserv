@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 15:17:39 by cclaude           #+#    #+#             */
-/*   Updated: 2020/11/17 16:18:11 by hbaudet          ###   ########.fr       */
+/*   Updated: 2020/11/17 20:10:07 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,8 +74,7 @@ std::string		ResponseHeader::getStatusMessage(int code)
 void			ResponseHeader::setValues(std::string content, std::string filename, int code)
 {
 	(void)code;
-	if (code == 405)
-		setAllow("GET, HEAD, POST");
+	setAllow(code);
 	setContentLanguage(content);
 	setContentLength(content.size());
 	setContentLocation(filename);
@@ -107,15 +106,18 @@ void			ResponseHeader::resetValues(void)
 
 // Setter functions
 
-void			ResponseHeader::setAllow(std::string cmd)
+void			ResponseHeader::setAllow(int code)
 {
-	_allow = cmd;
+	if (code == 405)
+		_allow = "GET, HEAD, POST";
+	else
+		_allow = "";
 }
 
 void			ResponseHeader::setContentLanguage(std::string content)
 {
-//	_contenLanguage = findLanguage(content); // Parse file in search for
-	_contentLangugage = "en-US";			// <html lang="fr"> 
+	(void)content;
+	_contentLanguage = "en-US";
 }
 
 void			ResponseHeader::setContentLength(int size)

@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:18:58 by cclaude           #+#    #+#             */
-/*   Updated: 2020/11/12 20:15:48 by cclaude          ###   ########.fr       */
+/*   Updated: 2020/11/17 20:42:54 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,8 @@
 # define RESPONSE_HPP
 
 # include "webserv.hpp"
-# include "ResponseHeader.hpp"
 
-class ResponseHeader;
+# include "ResponseHeader.hpp"
 
 class Response {
 public:
@@ -37,11 +36,10 @@ public:
 	void			fillContent(void);
 
 private:
-	std::string		_response;
-	ResponseHeader	_header;
-	std::string		_content;
-	std::string		_filename;
-	int				_code;
+	std::string			_response;
+	std::string			_content;
+	std::string			_filename;
+	int					_code;
 };
 
 #endif

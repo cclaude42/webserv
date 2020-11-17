@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 15:17:39 by cclaude           #+#    #+#             */
-/*   Updated: 2020/11/07 18:45:22 by cclaude          ###   ########.fr       */
+/*   Updated: 2020/11/17 20:09:01 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ public:
 	ResponseHeader & operator=(const ResponseHeader & src);
 
 	// Setter functions
-	void			setAllow(std::string cmd);
+	void			setAllow(int code);
 	void			setContentLanguage(std::string lang);
 	void			setContentLength(int size);
 	void			setContentLocation(std::string path);

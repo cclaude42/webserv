@@ -6,11 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:18:58 by cclaude           #+#    #+#             */
-<<<<<<< cclaude
-/*   Updated: 2020/11/12 20:15:52 by cclaude          ###   ########.fr       */
-=======
-/*   Updated: 2020/11/16 19:19:15 by hbaudet          ###   ########.fr       */
->>>>>>> master
+/*   Updated: 2020/11/17 20:33:30 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +16,11 @@
 
 void			Response::make(void)
 {
+	ResponseHeader	head;
+
 	fillContent();
 	// Set header accordingly
-	_response = _header.getHeader(_content, _filename, _code) + _content;
+	_response = head.getHeader(_content, _filename, _code) + _content;
 }
 
 void			Response::fillContent(void)

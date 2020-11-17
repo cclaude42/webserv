@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/31 13:44:42 by cclaude           #+#    #+#             */
-/*   Updated: 2020/11/17 13:46:14 by cclaude          ###   ########.fr       */
+/*   Updated: 2020/11/17 21:11:16 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,40 +22,41 @@
 
 // CPP Containers
 # include <map>
+# include <set>
 # include <vector>
 # include <algorithm>
 # include <iterator>
 
-// Custom classes
-# include "Request.hpp"
-# include "ResponseHeader.hpp"
+
 
 // C Includes
 # include <unistd.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
-
-// Special
 # include <fcntl.h>
 # include <time.h>
 # include <limits.h>
 
-// System
+// C System
 # include <sys/types.h>
 # include <sys/stat.h>
 # include <sys/time.h>
+
+// C Network
 # include <sys/socket.h>
 # include <sys/select.h>
-
-// Network
 # include <arpa/inet.h>
 # include <netinet/in.h>
 
-// libft
+
+
+// C libft
 extern "C" {
 #include "libft.h"
 }
+
+
 
 // Define two names ntoh functions
 # define ft_htonl ft_ntohl
@@ -67,8 +68,7 @@ extern "C" {
 # define BYTE_2 0x0000ff00
 # define BYTE_3 0x000000ff
 
-// HEADER
-void						make_header(char *header, const char *file);
+
 
 // NTOH / HTON
 unsigned short				ft_ntohs(unsigned short s);
@@ -76,7 +76,7 @@ unsigned short				ft_htons(unsigned short s);
 unsigned int				ft_ntohl(unsigned int l);
 unsigned int				ft_htonl(unsigned int l);
 
-// TOOLS
+// STRINGS
 std::string					readKey(char *line);
 std::string					readKey(std::string& line);
 std::string					readValue(char *line);
@@ -86,5 +86,6 @@ std::vector<std::string>	split(const std::string& str, char c);
 std::string&				to_lower(std::string& str);
 std::string&				to_upper(std::string& str);
 std::string&				capitalize(std::string& str);
+
 
 #endif

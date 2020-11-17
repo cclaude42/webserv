@@ -6,13 +6,14 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/07 18:41:28 by user42            #+#    #+#             */
-/*   Updated: 2020/11/14 14:47:40 by cclaude          ###   ########.fr       */
+/*   Updated: 2020/11/17 21:10:05 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LOCATION_HPP
-
 # define LOCATION_HPP
+
+# include "webserv.hpp"
 
 # include "Config.hpp"
 

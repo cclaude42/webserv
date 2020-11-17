@@ -6,13 +6,14 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 15:27:44 by user42            #+#    #+#             */
-/*   Updated: 2020/11/14 14:46:53 by cclaude          ###   ########.fr       */
+/*   Updated: 2020/11/17 21:09:56 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CONFIG_SERVER_HPP
-
 # define CONFIG_SERVER_HPP
+
+# include "webserv.hpp"
 
 //  listen struct with host and port: default host: localhost; default port:80
 //      host an either be an IP address or a domain name
