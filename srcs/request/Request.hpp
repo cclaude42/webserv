@@ -6,7 +6,7 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 16:27:33 by hbaudet           #+#    #+#             */
-/*   Updated: 2020/11/08 12:58:34 by cclaude          ###   ########.fr       */
+/*   Updated: 2020/11/16 18:21:09 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,17 +49,22 @@ class Request
 			std::map<std::string, std::string>	_headers;
 			int									_ret;
 			std::string							_body;
+			int									_port;
+			std::string							_path;
 
 			/*** PARSING ***/
-			void	readFirstLine(char *line);
-			void	checkMethod();
+			int		readFirstLine(std::string& line);
+			int		readPath(std::string& line, size_t i);
+			int		readVersion(std::string& line, size_t i);
+			int		checkMethod();
+			int		checkPort();
 
 			/*** AVAILABLE HTTP METHODS ***/
 			static	std::vector<std::string>	methods;
 
 		public:
 			Request();
-			Request(const char *str);
+			Request(const std::string& str);
 			Request(const Request&);
 			~Request();
 			Request&	operator=(const Request&);
@@ -70,15 +75,19 @@ class Request
 			const	std::string&						getVersion() const;
 			int											getRet() const;
 			const	std::string&						getBody() const;
+			int											getPort() const;
+			std::string									getPath() const;
 
 			/*** SETTERS **/
-//			void	setHeader(const std::string& key, const std::string& value); //not needed as of now
-			void	setBody(char **line, int i);
+		//	void	setHeader(const std::string& key, const std::string& value);
+													//not needed as of now
+			void	setBody(std::vector<std::string> line, size_t i);
 
 			/*** UTILS ****/
 			void	displayHeaders();
 			void	resetHeaders();
-			int		parse(const char *str);
+			void	stripAll();
+			int		parse(const std::string& str);
 };
 
 std::ostream&	operator<<(std::ostream& os, const Request& re);
