@@ -18,6 +18,8 @@
 # include "Response.hpp"
 # include "Request.hpp"
 
+class Request;
+
 class Server {
 public:
 	Server(const t_listen & listen);
@@ -48,7 +50,6 @@ private:
 	std::string			_tmp_root;
 
 	Server(void);
-
 };
 
 #endif

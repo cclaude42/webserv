@@ -17,6 +17,7 @@
 # include <iostream>
 # include <iomanip>
 # include <sstream>
+# include <fstream>
 # include <string>
 
 // CPP Containers
@@ -24,6 +25,10 @@
 # include <vector>
 # include <algorithm>
 # include <iterator>
+
+// Custom classes
+# include "Request.hpp"
+# include "ResponseHeader.hpp"
 
 // C Includes
 # include <unistd.h>
@@ -63,17 +68,23 @@ extern "C" {
 # define BYTE_3 0x000000ff
 
 // HEADER
-void			make_header(char *header, const char *file);
+void						make_header(char *header, const char *file);
 
 // NTOH / HTON
-unsigned short	ft_ntohs(unsigned short s);
-unsigned short	ft_htons(unsigned short s);
-unsigned int	ft_ntohl(unsigned int l);
-unsigned int	ft_htonl(unsigned int l);
+unsigned short				ft_ntohs(unsigned short s);
+unsigned short				ft_htons(unsigned short s);
+unsigned int				ft_ntohl(unsigned int l);
+unsigned int				ft_htonl(unsigned int l);
 
 // TOOLS
-std::string		readKey(char *line);
-std::string		readValue(char *line);
-std::string		strip(std::string& str, char c);
+std::string					readKey(char *line);
+std::string					readKey(std::string& line);
+std::string					readValue(char *line);
+std::string					readValue(std::string& line);
+std::string&				strip(std::string& str, char c);
+std::vector<std::string>	split(const std::string& str, char c);
+std::string&				to_lower(std::string& str);
+std::string&				to_upper(std::string& str);
+std::string&				capitalize(std::string& str);
 
 #endif

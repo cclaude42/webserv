@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   ConfigServer.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
+/*   By: franciszer <franciszer@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 15:28:08 by user42            #+#    #+#             */
 /*   Updated: 2020/11/14 14:47:05 by cclaude          ###   ########.fr       */
@@ -11,31 +11,6 @@
 /* ************************************************************************** */
 
 #include "ConfigServer.hpp"
-
-
-// HELPFUL FUNCTIONS
-bool isDigits(const std::string &str) {
-	return str.find_first_not_of("0123456789") == std::string::npos;
-}
-
-unsigned int	strToIp(std::string strIp) {
-	size_t  sep;
-	unsigned int   n;
-	unsigned char  m[4];
-	size_t  start = 0;
-	if (strIp == "localhost")
-		strIp = "127.0.0.1";
-	for (unsigned int i = 3 ; i != UINT32_MAX; i--) {
-		sep = strIp.find_first_of(".", sep);
-		std::string str = strIp.substr(start, sep);
-		n = std::stoi(str);
-		m[i] = static_cast<unsigned char>(n);
-		sep++;
-		start = sep;
-	}
-	unsigned final = *(reinterpret_cast<unsigned int *>(m));
-	return final;
-}
 
 // INITIALIZING STATIC MEMBERS
 
@@ -49,6 +24,8 @@ parseMap ConfigServer::initServerMap() {
 			myMap["cgi_param"] = &ConfigServer::addCgiParam;
 			myMap["cgi_pass"] = &ConfigServer::addCgiPass;
 			myMap["allow_methods"] = &ConfigServer::addAllowedMethods;
+			myMap["index"] = &ConfigServer::addIndex;
+			myMap["autoindex"] = &ConfigServer::addAutoIndex;
 		    return myMap;
 }
 
@@ -57,7 +34,7 @@ parseMap ConfigServer::parsingMap = ConfigServer::initServerMap();
 ConfigServer				ConfigServer::initDefaultServer(const char *filename) {
 	ConfigServer	server;
 	fileVector		file;
-
+  
 	file = ConfigReader::readFile(filename);
 	fileVector	begin = {"server", "{"};
 	file.insert(file.begin(), begin.begin(), begin.end());
@@ -72,10 +49,12 @@ ConfigServer				ConfigServer::initDefaultServer(const char *filename) {
 
 const ConfigServer ConfigServer::_defaultServer = ConfigServer::initDefaultServer(DEFAULT_PATH);
 
+// CONSTRUCTORS
 
 ConfigServer::ConfigServer(void):
 _root(""),
-_client_body_buffer_size(0)
+_client_body_buffer_size(0),
+_autoindex(false)
 {
 	this->_cgi_pass.set = false;
 	return ;
@@ -83,15 +62,18 @@ _client_body_buffer_size(0)
 
 ConfigServer::ConfigServer(ConfigServer const &src) {
 	if (this != &src) {
-		this->_listen = src._listen;
-		this->_root = src._root;
-		this->_server_name = src._server_name;
-		this->_error_page = src._error_page;
+		this->_listen = src._listen;		
+		this->_root = src._root;		
+		this->_server_name = src._server_name;		
+		this->_error_page = src._error_page;		
 		this->_client_body_buffer_size = src._client_body_buffer_size;
 		this->_cgi_param = src._cgi_param;
 		this->_cgi_pass = src._cgi_pass;
 		this->_location = src._location;
 		this->_allowed_methods = src._allowed_methods;
+		this->_autoindex = src._autoindex;
+		this->_index = src._index;
+		this->_alias = src._alias;
 	}
 	return ;
 }
@@ -111,10 +93,14 @@ ConfigServer	&ConfigServer::operator=(ConfigServer const &src) {
 		this->_cgi_pass = src._cgi_pass;
 		this->_location = src._location;
 		this->_allowed_methods = src._allowed_methods;
+		this->_autoindex = src._autoindex;
+		this->_index = src._index;
+		this->_alias = src._alias;
 	}
 	return *this;
 }
 
+// PARSING CONFIG FILE
 int     ConfigServer::parse(unsigned int &index, fileVector &file) {
 	fileVector                  args;
 	parseMap::iterator          iter;
@@ -126,7 +112,6 @@ int     ConfigServer::parse(unsigned int &index, fileVector &file) {
 			if (file[index] == "location") {
 				Location	location;
 				std::string	locationName;
-
 				if (directive != "") {
 					(this->*ConfigServer::parsingMap[directive])(args);
 					args.clear();
@@ -170,6 +155,7 @@ int     ConfigServer::parse(unsigned int &index, fileVector &file) {
 	return 0;
 }
 
+// PASS BLOCK MEMBERS TO CHILD BLOCK
 void	ConfigServer::passMembers(ConfigServer &server) const {
 	if (this != &server) {
 		if (server._listen.empty())
@@ -191,12 +177,13 @@ void	ConfigServer::passMembers(ConfigServer &server) const {
 			server._cgi_pass = this->_cgi_pass;
 		if (server._allowed_methods.empty())
 			server._allowed_methods = this->_allowed_methods;
+		server._index.insert(server._index.begin(), this->_index.begin(), this->_index.end());
 	}
 	for (auto i = server._location.begin(); i != server._location.end(); i++)
 		server.passMembers(i->second);
 }
 
-//	PARSING FUNCTIONS
+//	ADDMEMBER FUNCTIONS
 
 void        ConfigServer::addListen(std::vector<std::string> args) {
 	t_listen    listen;
@@ -308,6 +295,31 @@ void		ConfigServer::addAllowedMethods(std::vector<std::string> args) {
 	}
 }
 
+void	ConfigServer::addIndex(std::vector<std::string> args) {
+	if (args.empty())
+		throw ConfigServer::ExceptionInvalidArguments();
+	this->_index.insert(this->_index.end(), args.begin(), args.end());
+}
+
+void	ConfigServer::addAutoIndex(std::vector<std::string> args) {
+	if (args.size() != 1)
+		throw ConfigServer::ExceptionInvalidArguments();
+	if (args[0] == "on")
+		this->_autoindex = true;
+	else if (args[0] == "off")
+		this->_autoindex = false;
+	else
+		throw ConfigServer::ExceptionInvalidArguments();
+}
+
+void	ConfigServer::addAlias(std::vector<std::string> args) {
+	if (args.size() != 1)
+		throw ConfigServer::ExceptionInvalidArguments();
+	this->_alias = args[0];
+}
+
+
+// STREAM OPERATOR
 std::ostream	&operator<<(std::ostream &out, const ConfigServer &server) {
 	out << "Listen:" << std::endl;
 	for (size_t i = 0; i < server._listen.size(); i++) {
@@ -333,6 +345,12 @@ std::ostream	&operator<<(std::ostream &out, const ConfigServer &server) {
 	for (auto i = server._allowed_methods.begin(); i != server._allowed_methods.end(); i++)
 		out << " " << *i;
 	out << std::endl;
+	out << "autoindex " << (server._autoindex ? "on" : "off") << std::endl;
+	out << "index: ";
+	for (auto i = server._index.begin(); i != server._index.end(); i++)
+		out << *i << " ";
+	out << std::endl;
+	out << "alias: " << server._alias << std::endl;
 	for (auto i = server._location.begin(); i != server._location.end(); i++) {
 		out << std::endl << "LOCATION " << i->first << std::endl;
 		out << i->second << std::endl;
@@ -340,11 +358,13 @@ std::ostream	&operator<<(std::ostream &out, const ConfigServer &server) {
 	return out;
 }
 
+// EXCEPTION HANDLING
 const char		*ConfigServer::ExceptionInvalidArguments::what()
  const throw() {
 	return "Exception: invalid arguments in configuration file";
 }
 
+// GETERS
 std::vector<t_listen>				ConfigServer::getListen() const {
 	return this->_listen;
 }
@@ -368,4 +388,41 @@ t_cgi_pass							ConfigServer::getCgiPass() const {
 }
 std::map<std::string, Location>		ConfigServer::getLocation() const {
 	return this->_location;
+}
+
+std::set<std::string>				ConfigServer::getAllowedMethods() const {
+	return this->_allowed_methods;
+}
+
+std::vector<std::string>			ConfigServer::getIndex() const {
+	return this->_index;
+}
+
+bool								ConfigServer::getAutoIndex() const {
+	return this->_autoindex;
+}
+
+std::string							ConfigServer::getAlias() const {
+	return this->_alias;
+}
+
+// WOP, NOT FUNCTIONAL YET
+ConfigServer						ConfigServer::getLocationForRequest(std::string const path, std::string &retLocationPath) {
+	std::string::size_type	tryLen = path.length();
+	std::map<std::string, Location>::iterator	iter;
+	std::string									tryLocation;
+
+	if (!this->_location.empty()) {	
+		do {
+			tryLocation = path.substr(0, tryLen);
+			// std::cout << "tryLocation: " << tryLocation << std::endl;
+			iter = this->_location.find(tryLocation);
+			if (iter != this->_location.end()) {
+				retLocationPath = tryLocation;
+				return iter->second.getLocationForRequest(path, retLocationPath);
+			}
+			tryLen--;
+		} while (tryLen);
+	}
+	return (*this);
 }

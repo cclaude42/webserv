@@ -17,9 +17,17 @@ int main(int ac, char * const argv[])
     (void)ac;
     try {
         Config  config;
+        RequestConfig requestConfig;
 
-        config.parse(argv[1]);
-        std::cout << config;
+        t_listen    listen= {0, 80};
+        
+        config.parse(argv[1]); 
+        ConfigServer    server;
+        requestConfig = config.getConfigForRequest(listen, "/blabla/love", "example");
+        // std::cout << requestConfig << std::endl;
+        std::vector<t_listen> listens = config.getAllListens();
+        for (auto i = listens.begin(); i != listens.end(); i++)
+            std::cout << "host: " << i->host << " port: " << i->port << std::endl;
     }
     catch (std::exception &e) {
         std::cerr << e.what() << std::endl;

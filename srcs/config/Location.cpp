@@ -32,17 +32,7 @@ Location::~Location(void) {
 }
 
 Location	&Location::operator=(Location const &src) {
-	if (this != &src) {
-		this->_listen = src._listen;
-		this->_root = src._root;
-		this->_server_name = src._server_name;
-		this->_error_page = src._error_page;
-		this->_client_body_buffer_size = src._client_body_buffer_size;
-		this->_cgi_param = src._cgi_param;
-		this->_cgi_pass = src._cgi_pass;
-		this->_location = src._location;
-		this->_allowed_methods = src._allowed_methods;
-	}
+	ConfigServer::operator=(src);
 	return *this;
 }
 
@@ -54,6 +44,9 @@ locationParseMap Location::initLocationMap() {
 			myMap["cgi_param"] = &Location::addCgiParam;
 			myMap["cgi_pass"] = &Location::addCgiPass;
 			myMap["allow_methods"] = &Location::addAllowedMethods;
+			myMap["index"] = &Location::addIndex;
+			myMap["autoindex"] = &Location::addAutoIndex;
+			myMap["alias"] = &Location::addAlias;
 			return myMap;
 }
 
@@ -138,6 +131,12 @@ std::ostream	&operator<<(std::ostream &out, const Location &server) {
 	for (auto i = server._allowed_methods.begin(); i != server._allowed_methods.end(); i++)
 		out << " " << *i;
 	out << std::endl;
+	out << "autoindex " << (server._autoindex ? "on" : "off") << std::endl;
+	out << "index: ";
+	for (auto i = server._index.begin(); i != server._index.end(); i++)
+		out << *i << " ";
+	out << std::endl;
+	out << "alias: " << server._alias << std::endl;
 	for (auto i = server._location.begin(); i != server._location.end(); i++) {
 		out << std::endl << "location " << i->first << std::endl;
 		out << i->second << std::endl;

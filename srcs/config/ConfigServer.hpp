@@ -52,6 +52,13 @@ class ConfigServer {
 		std::map<std::string, std::string>	getCgiParam() const;
 		t_cgi_pass							getCgiPass() const;
 		std::map<std::string, Location>		getLocation() const;
+		std::set<std::string>				getAllowedMethods() const;
+		std::vector<std::string>			getIndex() const;
+		bool								getAutoIndex() const;
+		std::string							getAlias() const;
+
+		// RETURN CONFIG ACCORDING TO URI
+		ConfigServer						getLocationForRequest(std::string const path, std::string &locationPath);
 
 		friend	std::ostream &operator<<(std::ostream &out, const ConfigServer &server);
 	protected:
@@ -66,6 +73,9 @@ class ConfigServer {
 		void	addCgiParam(std::vector<std::string> args);
 		void    addCgiPass(std::vector<std::string> args);
 		void	addAllowedMethods(std::vector<std::string> args);
+		void	addIndex(std::vector<std::string> args);
+		void	addAutoIndex(std::vector<std::string> args);
+		void	addAlias(std::vector<std::string> args);
 
 		// MEMBERS
 		std::vector<t_listen>				_listen;
@@ -79,15 +89,18 @@ class ConfigServer {
 		t_cgi_pass							_cgi_pass;
 		std::map<std::string, Location>		_location;
 		std::set<std::string>				_allowed_methods;
+		std::vector<std::string>			_index;
+		bool								_autoindex;
+		std::string							_alias;
 	private:
 		static ConfigServer			initDefaultServer(const char *filename);
 		static const ConfigServer	_defaultServer;
 		static	parseMap					parsingMap;
 		static parseMap 					initServerMap();
 
-
 };
 
 # include "Location.hpp"
+# include "RequestConfig.hpp"
 
 #endif

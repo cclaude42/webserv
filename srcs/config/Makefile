@@ -6,6 +6,7 @@ SRCS=	ConfigReader.cpp\
 		Config.cpp\
 		ConfigServer.cpp\
 		Location.cpp\
+		RequestConfig.cpp\
 		main.cpp
 
 NAME= configParser

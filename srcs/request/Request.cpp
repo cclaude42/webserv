@@ -6,7 +6,7 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 16:27:33 by hbaudet           #+#    #+#             */
-/*   Updated: 2020/11/05 18:09:25 by hbaudet          ###   ########.fr       */
+/*   Updated: 2020/11/16 18:21:09 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,20 +20,21 @@ std::vector<std::string>	Request::methods  = {
 				"DELETE",
 				"CONNECT",
 				"OPTIONS",
-				"TRACE",
-				"PACH" };
+				"TRACE" };
 
-Request::Request() : _method(""), _version(""), _ret(200), _body("")
+Request::Request() :
+	_method(""), _version(""), _ret(200), _body(""), _port(80), _path("")
 {
 	if (PRINT)
 		std::cout << "Constructor called\n";
 	this->resetHeaders();
 }
 
-Request::Request(const char *str) : _method (""), _version(""), _ret(200), _body("")
+Request::Request(const std::string& str) :
+	_method (""), _version(""), _ret(200), _body(""), _port(80), _path("")
 {
 	if (PRINT)
-		std::cout << "C-String constructor called\n";
+		std::cout << "std:string constructor called\n";
 
 	this->resetHeaders();
 	this->parse(str);
@@ -62,6 +63,9 @@ Request&	Request::operator=(const Request& obj)
 	this->_method = obj.getMethod();
 	this->_version = obj.getVersion();
 	this->_ret = obj.getRet();
+	this->_body = obj.getBody();
+	this->_port = obj.getPort();
+	this->_path = obj.getPath();
 
 	return *this;
 }
@@ -83,7 +87,7 @@ const std::string&	Request::getVersion() const
 	return this->_version;
 }
 
-int			Request::getRet() const
+int					Request::getRet() const
 {
 	return this->_ret;
 }
@@ -91,6 +95,16 @@ int			Request::getRet() const
 const std::string&	Request::getBody() const
 {
 	return this->_body;
+}
+
+int					Request::getPort() const
+{
+	return this->_port;
+}
+
+std::string			Request::getPath() const
+{
+	return this->_path;
 }
 
 /*** SETTERS ***/
@@ -101,9 +115,9 @@ void	Request::setHeader(const std::string& key, const std::string& value)
 }
 */
 
-void	Request::setBody(char **line, int i)
+void	Request::setBody(std::vector<std::string> line, size_t i)
 {
-	while (line[i])
+	while (i < line.size())
 	{
 		this->_body.append(line[i]);
 		this->_body.push_back('\n');
