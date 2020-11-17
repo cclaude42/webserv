@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:29:28 by cclaude           #+#    #+#             */
-/*   Updated: 2020/11/12 21:28:19 by cclaude          ###   ########.fr       */
+/*   Updated: 2020/11/17 19:47:28 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,24 +14,24 @@
 
 // Member functions
 
-// void		Server::run(void)
-// {
-// 	Request		req;
-// 	Response	resp;
-// 	std::string	request;
-//
-// 	this->accept();
-//
-// 	request = this->recv();
-// 	req.parse(request.c_str());
-//
-// 	resp.setFilename("root/index.html");
-// 	resp.make();
-//
-// 	this->send(resp.getResponse());
-//
-// 	this->close();
-// }
+void		Server::run(void)
+{
+	Request		req;
+	Response	resp;
+	std::string	request;
+
+	this->accept();
+
+	request = this->recv();
+	req.parse(request.c_str());
+
+	resp.setFilename(_tmp_root);
+	resp.make();
+
+	this->send(resp.getResponse());
+
+	this->close();
+}
 
 void		Server::setup(void)
 {
@@ -40,7 +40,7 @@ void		Server::setup(void)
 		std::cerr << "Could not create server." << std::endl;
 	this->setAddr();
 	if (bind(_fd, (struct sockaddr *)&_addr, sizeof(_addr)) == -1)
-		std::cerr << "Could not bind port." << std::endl;
+		std::cerr << "Could not bind port " << _listen.port << "." << std::endl;
 	if (listen(_fd, 10) == -1)
 		std::cerr << "Could not listen." << std::endl;
 }
@@ -49,8 +49,8 @@ void		Server::setAddr(void)
 {
 	ft_memset((char *)&_addr, 0, sizeof(_addr));
 	_addr.sin_family = AF_INET;
-	_addr.sin_addr.s_addr = ft_htonl(INADDR_ANY);
-	_addr.sin_port = ft_htons(8080);
+	_addr.sin_addr.s_addr = ft_htonl(_listen.host);
+	_addr.sin_port = ft_htons(_listen.port);
 }
 
 void		Server::accept(void)
@@ -98,6 +98,21 @@ void		Server::clean(void)
 	::close(_fd);
 }
 
+// Getters
+
+long		Server::getFD(void)
+{
+	return (_fd);
+}
+
+// Setters
+
+// Temporary function, only for testing !
+void		Server::setTmpRoot(std::string root)
+{
+	_tmp_root = root;
+}
+
 // Overloaders
 
 Server &	Server::operator=(const Server & src)
@@ -106,7 +121,7 @@ Server &	Server::operator=(const Server & src)
 	_socket = src._socket;
 	_request = src._request;
 	_addr = src._addr;
-	_config = src._config;
+	_listen = src._listen;
 	return (*this);
 }
 
@@ -117,13 +132,14 @@ Server::Server(void)
 	// Wait, that's illegal !
 }
 
-Server::Server(const ConfigServer & config)
+Server::Server(const t_listen & listen)
 {
 	_fd = -1;
 	_socket = -1;
 	_request = "NONE";
 	this->setAddr();
-	_config = config;
+	_listen = listen;
+	_tmp_root = "root/index.html";
 }
 
 Server::Server(const Server & src)

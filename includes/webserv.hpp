@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/31 13:44:42 by cclaude           #+#    #+#             */
-/*   Updated: 2020/11/08 12:58:53 by cclaude          ###   ########.fr       */
+/*   Updated: 2020/11/17 13:46:14 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@
 # include <sys/stat.h>
 # include <sys/time.h>
 # include <sys/socket.h>
+# include <sys/select.h>
 
 // Network
 # include <arpa/inet.h>

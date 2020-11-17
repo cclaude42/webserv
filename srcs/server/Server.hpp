@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:29:28 by cclaude           #+#    #+#             */
-/*   Updated: 2020/11/12 21:20:44 by cclaude          ###   ########.fr       */
+/*   Updated: 2020/11/17 19:38:28 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,22 @@
 
 # include "webserv.hpp"
 # include "ConfigServer.hpp"
+# include "Response.hpp"
+# include "Request.hpp"
 
 class Server {
 public:
-	Server(const ConfigServer & config);
+	Server(const t_listen & listen);
 	Server(const Server & src);
 	~Server(void);
 
 	Server & operator=(const Server & src);
 
-	// void		run(void);
+	long		getFD(void);
+
+	void		setTmpRoot(std::string root);
+
+	void		run(void);
 	void		setup(void);
 	void		setAddr(void);
 	void		accept(void);
@@ -34,11 +40,12 @@ public:
 	void		clean(void);
 
 private:
-	int					_fd;
-	int					_socket;
+	long				_fd;
+	long				_socket;
 	std::string			_request;
 	struct sockaddr_in	_addr;
-	ConfigServer		_config;
+	t_listen			_listen;
+	std::string			_tmp_root;
 
 	Server(void);
 

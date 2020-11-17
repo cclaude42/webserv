@@ -99,7 +99,7 @@ fclean: clean
 
 re: fclean all
 
-test: re clean
+test: all
 	./webserv webserv.conf
 
 .PHONY: libft clean fclean re test

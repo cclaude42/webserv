@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/12 16:53:41 by cclaude           #+#    #+#             */
-/*   Updated: 2020/11/12 21:17:05 by cclaude          ###   ########.fr       */
+/*   Updated: 2020/11/17 19:06:28 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,6 @@
 # include "webserv.hpp"
 # include "Server.hpp"
 # include "Config.hpp"
-# include "Response.hpp"
-# include "Request.hpp"
 
 class Cluster {
 public:
@@ -32,8 +30,11 @@ public:
 	void	run(void);
 	void	clean(void);
 private:
-	Config						_config;
- 	std::vector<Server>			_servers;
+	Config					_config;
+	std::map<int, Server>	_map;
+	fd_set					_fd_set;
+	unsigned int			_fd_size;
+	long					_max_fd;
 };
 
 #endif
