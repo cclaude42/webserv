@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Location.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: franciszer <franciszer@student.42.fr>      +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/07 18:40:39 by user42            #+#    #+#             */
-/*   Updated: 2020/11/16 18:38:41 by franciszer       ###   ########.fr       */
+/*   Updated: 2020/11/17 10:49:42 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,12 +131,12 @@ std::ostream	&operator<<(std::ostream &out, const Location &server) {
 	for (auto i = server._allowed_methods.begin(); i != server._allowed_methods.end(); i++)
 		out << " " << *i;
 	out << std::endl;
-	std::cout << "autoindex " << (server._autoindex ? "on" : "off") << std::endl;
-	std::cout << "index: ";
+	out << "autoindex " << (server._autoindex ? "on" : "off") << std::endl;
+	out << "index: ";
 	for (auto i = server._index.begin(); i != server._index.end(); i++)
-		std::cout << *i << " ";
-	std::cout << std::endl;
-	std::cout << "alias: " << server._alias << std::endl;
+		out << *i << " ";
+	out << std::endl;
+	out << "alias: " << server._alias << std::endl;
 	for (auto i = server._location.begin(); i != server._location.end(); i++) {
 		out << std::endl << "location " << i->first << std::endl;
 		out << i->second << std::endl;

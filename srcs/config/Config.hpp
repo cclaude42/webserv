@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Config.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: franciszer <franciszer@student.42.fr>      +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 14:29:38 by user42            #+#    #+#             */
-/*   Updated: 2020/11/16 21:44:07 by franciszer       ###   ########.fr       */
+/*   Updated: 2020/11/17 14:21:24 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,9 @@ class Config {
 		RequestConfig						getConfigForRequest(t_listen const address,\
 												std::string const uri, std::string const hostName) const;
 		friend	std::ostream	&operator<<(std::ostream &out, const Config &config);
+		
+		// RETURN LIST OF ADDRESSES AND PORT WITH NO DUPLICATES
+		std::vector<t_listen>				getAllListens() const;
 	private:
 		bool								getServerForRequest(ConfigServer &ret, t_listen const address, std::string const hostName) const;
 	

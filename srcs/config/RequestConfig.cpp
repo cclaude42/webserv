@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RequestConfig.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: franciszer <franciszer@student.42.fr>      +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 18:58:53 by franciszer        #+#    #+#             */
-/*   Updated: 2020/11/16 21:59:07 by franciszer       ###   ########.fr       */
+/*   Updated: 2020/11/17 10:49:08 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ _autoindex(config.getAutoIndex())
 	std::string	alias = config.getAlias();
 	std::string	root = config.getRoot();
 	std::string	ret;
-	std::cout << "alias: " << alias << "|" << std::endl;
 	if (locationName != "" && alias != "") {
 		ret = root + alias + path.substr(locationName.length());
 	}

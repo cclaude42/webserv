@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Config.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: franciszer <franciszer@student.42.fr>      +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 14:30:01 by user42            #+#    #+#             */
-/*   Updated: 2020/11/16 21:57:11 by franciszer       ###   ########.fr       */
+/*   Updated: 2020/11/17 14:30:38 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,6 @@ RequestConfig	Config::getConfigForRequest(t_listen const address,\
 	this->getServerForRequest(server, address, hostName);
 	server = server.getLocationForRequest(uri, locationPath);
 	
-	std::cout << "location: " << locationPath << "|" << std::endl;
 	RequestConfig config(server, uri, locationPath);
 	return config;
 }
@@ -147,6 +146,23 @@ std::string	removeAdjacentSlashes(std::string &str) {
 		else {
 			lastIsSlash = false;
 			ret.push_back(str[i]);	
+		}
+	}
+	return ret;
+}
+
+std::vector<t_listen>				Config::getAllListens() const {
+	std::vector<t_listen>	ret;
+	
+	for (auto server = this->_servers.begin(); server != this->_servers.end(); server++) {
+		std::vector<t_listen>	listenVec = server->getListen();
+		for (auto listen = listenVec.begin(); listen != listenVec.end(); listen++) {
+			auto i = ret.begin();
+			for ( ; i != ret.end(); i++)
+				if (listen->host == i->host && listen->port == i->port)
+					break ;
+			if (i == ret.end())
+				ret.push_back(*listen);
 		}
 	}
 	return ret;

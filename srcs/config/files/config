@@ -18,6 +18,14 @@ server {
 }
 
 server {
+    listen 8000
     listen 80
     server_name example2
+}
+
+server {
+    listen 253.0.127.2:999
+    listen 666
+    listen 8000
+    listen 127.0.0.1:80
 }
