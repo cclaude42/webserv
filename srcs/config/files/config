@@ -1,0 +1,26 @@
+server {
+    listen 80
+    error_page 707 404 300 /helloworlderror
+    server_name example
+    cgi_param   hello world
+    cgi_pass    localhost:9000
+    location /blabla {
+        root /tmpBlabla/
+        error_page  404 /err/here
+        allow_methods POST LIVE
+        index blabla_index.html
+        autoindex on
+        alias /alias/
+        }
+    location /hello {
+        root /world/
+    }
+}
+
+server {
+    listen 80
+}
+
+example.com/blabla/hello
+
+path = /tmpBlabla/alias/hello

@@ -2,10 +2,12 @@
 
 CPP= c++
 FLAGS= -Wall -Wextra -Werror
-SRCS=	main.cpp\
+SRCS=	ConfigReader.cpp\
 		Config.cpp\
-		ConfigReader.cpp\
-		ConfigServer.cpp
+		ConfigServer.cpp\
+		Location.cpp\
+		RequestConfig.cpp\
+		main.cpp
 
 NAME= configParser
 OBJS= ${SRCS:.cpp=.o}

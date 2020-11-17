@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 14:29:38 by user42            #+#    #+#             */
-/*   Updated: 2020/11/08 03:29:00 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/17 16:25:30 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,29 +14,41 @@
 
 # define CONFIG_HPP
 
-# include "ConfigServer.hpp"
+
 # include "ConfigReader.hpp"
-# include <map>
-# include <vector>
 
 # define parseMap std::map<std::string, void (ConfigServer::*)(fileVector)>
-# define lParseMap std::map<std::string, void (ConfigServer::Location::*)(fileVector)>
-class	ConfigServer;
+# define locationParseMap std::map<std::string, void (Location::*)(fileVector)>
+
+bool isDigits(const std::string &str);
+unsigned int	strToIp(std::string strIp);
+std::string		removeAdjacentSlashes(std::string &str);
+
+# include "ConfigServer.hpp"
+
+# define DEFAULT_PATH "./files/default"
+
+class ConfigServer;
+class RequestConfig;
 
 class Config {
 	public:
-		Config(void);
+		Config();
 		Config(Config const &src);
 		virtual ~Config(void);
 
 		Config     			&operator=(Config const &src);
-		int         		parse(char * const filename);
-		static	parseMap	serverParsingMap;
-		// static	lParseMap	locationParsingMap;
-		
+		int         		parse(const char *filename);
+		std::vector<ConfigServer>			getServers() const;
+		RequestConfig						getConfigForRequest(t_listen const address,\
+												std::string const uri, std::string const hostName) const;
 		friend	std::ostream	&operator<<(std::ostream &out, const Config &config);
+
+		// RETURN LIST OF ADDRESSES AND PORT WITH NO DUPLICATES
+		std::vector<t_listen>				getAllListens() const;
 	private:
-		static parseMap 			initServerMap();
+		bool								getServerForRequest(ConfigServer &ret, t_listen const address, std::string const hostName) const;
+
 		std::vector<ConfigServer> 	_servers;
 };
 
