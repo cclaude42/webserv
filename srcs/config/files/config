@@ -1,6 +1,6 @@
 server {
     listen 80
-    error_page 707 /helloworlderror/
+    error_page 707 404 300 /helloworlderror
     server_name example
     cgi_param   hello world
     cgi_pass    localhost:9000
@@ -16,3 +16,11 @@ server {
         root /world/
     }
 }
+
+server {
+    listen 80
+}
+
+example.com/blabla/hello
+
+path = /tmpBlabla/alias/hello
