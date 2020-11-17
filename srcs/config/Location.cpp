@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/07 18:40:39 by user42            #+#    #+#             */
-/*   Updated: 2020/11/17 10:49:42 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/14 14:47:24 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ int     Location::parse(unsigned int &index, fileVector &file) {
 			if (file[index] == "location") {
 				Location	location;
 				std::string	locationName;
-				
+
 				if (directive != "") {
 					(this->*Location::parsingMap[directive])(args);
 					args.clear();

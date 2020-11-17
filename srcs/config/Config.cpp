@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 14:30:01 by user42            #+#    #+#             */
-/*   Updated: 2020/11/17 14:30:38 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/14 14:55:24 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ Config	&Config::operator=(Config const &src) {
 std::vector<ConfigServer>		Config::getServers() const {
 	return this->_servers;
 }
-	
+
 int     Config::parse(const char *filename) {
 	fileVector				   file;
 	unsigned int               fileSize;

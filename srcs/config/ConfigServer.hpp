@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 15:27:44 by user42            #+#    #+#             */
-/*   Updated: 2020/11/17 14:21:05 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/14 14:46:53 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,6 @@ class ConfigServer {
 		static const ConfigServer	_defaultServer;
 		static	parseMap					parsingMap;
 		static parseMap 					initServerMap();
-		
 
 };
 

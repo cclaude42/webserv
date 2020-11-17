@@ -6,7 +6,7 @@
 /*   By: franciszer <franciszer@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 15:28:08 by user42            #+#    #+#             */
-/*   Updated: 2020/11/16 21:58:25 by franciszer       ###   ########.fr       */
+/*   Updated: 2020/11/14 14:47:05 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ parseMap ConfigServer::parsingMap = ConfigServer::initServerMap();
 ConfigServer				ConfigServer::initDefaultServer(const char *filename) {
 	ConfigServer	server;
 	fileVector		file;
-	
+  
 	file = ConfigReader::readFile(filename);
 	fileVector	begin = {"server", "{"};
 	file.insert(file.begin(), begin.begin(), begin.end());
@@ -112,7 +112,6 @@ int     ConfigServer::parse(unsigned int &index, fileVector &file) {
 			if (file[index] == "location") {
 				Location	location;
 				std::string	locationName;
-				
 				if (directive != "") {
 					(this->*ConfigServer::parsingMap[directive])(args);
 					args.clear();
@@ -189,7 +188,7 @@ void	ConfigServer::passMembers(ConfigServer &server) const {
 void        ConfigServer::addListen(std::vector<std::string> args) {
 	t_listen    listen;
 	size_t      separator;
-	
+
 	if (args.size() != 1)
 		throw ConfigServer::ExceptionInvalidArguments();
 	if ((separator = args[0].find(":")) == std::string::npos) {
@@ -235,7 +234,7 @@ void        ConfigServer::addErrorPage(std::vector<std::string> args) {
 	std::vector<int>	codes;
 	std::string			uri = "";
 	size_t				len = args.size();
-	
+
 	for (size_t i = 0; i < len; i++) {
 		if (isDigits(args[i]))
 			codes.push_back(std::stoi(args[i]));
@@ -244,7 +243,7 @@ void        ConfigServer::addErrorPage(std::vector<std::string> args) {
 		else if (i == len - 1)
 			uri = args[i];
 		else
-			throw ConfigServer::ExceptionInvalidArguments();		
+			throw ConfigServer::ExceptionInvalidArguments();
 	}
 	if (uri == "")
 		throw ConfigServer::ExceptionInvalidArguments();
@@ -268,7 +267,7 @@ void		ConfigServer::addCgiParam(std::vector<std::string> args) {
 void    	ConfigServer::addCgiPass(std::vector<std::string> args) {
 	t_listen    address;
 	size_t      separator;
-	
+
 	// std::cout << "in addCgiPass" << std::endl;
 	if (args.size() != 1 || this->_cgi_pass.set == true)
 		throw ConfigServer::ExceptionInvalidArguments();
@@ -364,7 +363,6 @@ const char		*ConfigServer::ExceptionInvalidArguments::what()
  const throw() {
 	return "Exception: invalid arguments in configuration file";
 }
-
 
 // GETERS
 std::vector<t_listen>				ConfigServer::getListen() const {

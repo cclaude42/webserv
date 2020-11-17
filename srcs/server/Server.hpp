@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:29:28 by cclaude           #+#    #+#             */
-/*   Updated: 2020/11/16 19:48:42 by hbaudet          ###   ########.fr       */
+/*   Updated: 2020/11/17 19:38:28 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,47 +14,42 @@
 # define SERVER_HPP
 
 # include "webserv.hpp"
+# include "ConfigServer.hpp"
+# include "Response.hpp"
+# include "Request.hpp"
 
 class Request;
 
 class Server {
 public:
-
-	Server(void);
+	Server(const t_listen & listen);
 	Server(const Server & src);
 	~Server(void);
 
 	Server & operator=(const Server & src);
 
-	void			setup(int port = 8080);
-	void			setAddr(int port = 8080);
-	void			setRequest(Request& req);
-	const Request&	getRequest() const;
-	void			accept(void);
-	std::string		recv(void);
-	void			send(std::string resp);
-	std::string		answer(std::string method, Request& req);
-	void			close(void);
-	void			end(void);
+	long		getFD(void);
+
+	void		setTmpRoot(std::string root);
+
+	void		run(void);
+	void		setup(void);
+	void		setAddr(void);
+	void		accept(void);
+	std::string	recv(void);
+	void		send(std::string resp);
+	void		close(void);
+	void		clean(void);
 
 private:
-	
-	int					_fd;
-	int					_socket;
+	long				_fd;
+	long				_socket;
+	std::string			_request;
 	struct sockaddr_in	_addr;
-//	std::string			_request;
-	std::string			_rootPath;
-	std::string			readContent(std::string path);
+	t_listen			_listen;
+	std::string			_tmp_root;
 
-
-	//HTTP METHODS
-	std::string			get_head(Request& req);
-	std::string			post(Request& req);
-	std::string			put(Request& req);
-	std::string			ft_delete(Request& req);
-	std::string			connect(Request& req);
-	std::string			options(Request& req);
-	std::string			trace(Request& req);
+	Server(void);
 };
 
 #endif
