@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RequestConfig.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 18:58:53 by franciszer        #+#    #+#             */
-/*   Updated: 2020/11/17 10:49:08 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/20 17:32:03 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,21 @@ t_cgi_pass							RequestConfig::getCgiPass() const {
 
 std::set<std::string>				RequestConfig::getAllowedMethods() const {
 	return this->_allowed_methods;
+}
+
+//SETTERS
+
+void								RequestConfig::setPath(int code)
+{
+	//default value hardcoded because at the moment I can't get access to values from config file
+	this->_path = "/home/hannibal/Documents/Cursus42/webserv_v2/utils_tests/error/";
+	this->_path += std::to_string(code) + ".html";
+	// this->_path = this->_error_page[code];
+}
+
+void								RequestConfig::setPath(std::string path)
+{
+	this->_path = path;
 }
 
 std::ostream	&operator<<(std::ostream &out, RequestConfig &request) {

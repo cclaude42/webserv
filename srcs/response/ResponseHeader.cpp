@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ResponseHeader.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 15:17:39 by cclaude           #+#    #+#             */
-/*   Updated: 2020/11/17 20:10:07 by cclaude          ###   ########.fr       */
+/*   Updated: 2020/11/20 10:43:21 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ void			ResponseHeader::setValues(std::string content, std::string filename, int 
 	setContentType(filename);
 	setDate();
 	setLastModified(filename);
-	setLocation(code, "NONE");
+	setLocation(code, filename);
 	setRetryAfter(code, 3);
 	setServer();
 	setTransferEncoding();
@@ -179,7 +179,7 @@ void			ResponseHeader::setLocation(int code, std::string redirect)
 {
 	if (code == 201 || code / 100 == 3)
 	{
-		_location = "/" + redirect;
+		_location = redirect;
 	}
 }
 

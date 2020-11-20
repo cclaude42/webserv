@@ -18,6 +18,8 @@
 # include "ConfigReader.hpp"
 # include "Request.hpp"
 # include "Response.hpp"
+# include "Config.hpp"
+# include "RequestConfig.hpp"
 
 class Server {
 public:
@@ -31,7 +33,7 @@ public:
 
 	void		setTmpRoot(std::string root);
 
-	void		run(void);
+	void		run(Config& conf);
 	void		setup(void);
 	void		setAddr(void);
 	void		accept(void);
