@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:29:28 by cclaude           #+#    #+#             */
-/*   Updated: 2020/11/17 20:13:18 by cclaude          ###   ########.fr       */
+/*   Updated: 2020/11/18 13:16:14 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,22 @@
 
 // Member functions
 
-void		Server::run(void)
+void		Server::run(Config& conf)
 {
 	Request		req;
 	Response	resp;
+	RequestConfig reqConf;
 	std::string	request;
 
 	this->accept();
 
 	request = this->recv();
-	req.parse(request.c_str());
+	req.parse(request);
+
+	reqConf = conf.getConfigForRequest(this->_listen, req.getPath(), req.getHeaders().at("Host"));
 
 	resp.setFilename(_tmp_root);
-	resp.make();
+	resp.make(req, reqConf);
 
 	this->send(resp.getResponse());
 

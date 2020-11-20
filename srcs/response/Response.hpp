@@ -3,19 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   Response.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:18:58 by cclaude           #+#    #+#             */
-/*   Updated: 2020/11/17 20:42:54 by cclaude          ###   ########.fr       */
+/*   Updated: 2020/11/20 17:21:14 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef RESPONSE_HPP
 # define RESPONSE_HPP
 
+#include <set>
+
 # include "webserv.hpp"
 
 # include "ResponseHeader.hpp"
+# include "RequestConfig.hpp"
+# include "Request.hpp"
 
 class Response {
 public:
@@ -32,8 +36,10 @@ public:
 	std::string		getResponse(void);
 
 	// Member functions
-	void			make(void);
+	void			make(Request& req, RequestConfig& conf);
 	void			fillContent(void);
+
+
 
 private:
 	std::string			_response;
@@ -41,5 +47,11 @@ private:
 	std::string			_filename;
 	int					_code;
 };
+
+//HTP Methods
+std::string		get(Request& req, RequestConfig& conf);
+std::string		head(Request& req, RequestConfig& conf);
+std::string		post(Request& req, RequestConfig& conf);
+std::string		put(Request& req, RequestConfig& conf);
 
 #endif
