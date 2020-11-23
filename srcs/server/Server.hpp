@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:29:28 by cclaude           #+#    #+#             */
-/*   Updated: 2020/11/17 20:59:36 by cclaude          ###   ########.fr       */
+/*   Updated: 2020/11/19 14:40:35 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,7 @@ public:
 
 	long		getFD(void);
 
-	void		setTmpRoot(std::string root);
-
-	void		run(void);
+	void		run(Config & conf);
 	void		setup(void);
 	void		setAddr(void);
 	void		accept(void);
@@ -41,12 +39,10 @@ public:
 	void		clean(void);
 
 private:
+	t_listen			_listen;
 	long				_fd;
 	long				_socket;
-	std::string			_request;
 	struct sockaddr_in	_addr;
-	t_listen			_listen;
-	std::string			_tmp_root;
 
 	Server(void);
 

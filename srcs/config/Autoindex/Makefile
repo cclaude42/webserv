@@ -2,14 +2,10 @@
 
 CPP= c++
 FLAGS= -Wall -Wextra -Werror
-SRCS=	ConfigReader.cpp\
-		ConfigHelperFunctions.cpp\
-		Config.cpp\
-		ConfigServer.cpp\
-		RequestConfig.cpp\
-		main.cpp
+SRCS=	main.cpp\
+		AutoIndexGenerator.cpp
 
-NAME= configParser
+NAME= autoIndexGenerator
 OBJS= ${SRCS:.cpp=.o}
 INCLUDE_DIRS = -I .
 
@@ -30,7 +26,7 @@ NC=\033[0m
 all: ${NAME}
 
 ${NAME}: ${OBJS}
-	@printf "=>	"
+	@printf "${YELLOW}=>	"
 	${CPP} ${FLAGS} ${INCLUDE_DIRS} ${OBJS} -o ${NAME}
 	@echo "${GREEN}✓ ${NAME} compiled${NC}"
 

@@ -3,17 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   RequestConfig.hpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: francisz <francisz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/11/16 18:41:01 by francisz          #+#    #+#             */
-/*   Updated: 2020/11/17 21:10:16 by cclaude          ###   ########.fr       */
+/*   Created: 2020/11/16 18:41:01 by franciszer        #+#    #+#             */
+/*   Updated: 2020/11/17 17:13:31 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef REQUEST_CONFIG_HPP
-# define REQUEST_CONFIG_HPP
 
-# include "webserv.hpp"
+# define REQUEST_CONFIG_HPP
 
 # include "Config.hpp"
 
@@ -43,7 +42,7 @@ class RequestConfig {
 		std::map<std::string, std::string>	_cgi_param;
 		t_cgi_pass							_cgi_pass;
 		std::set<std::string>				_allowed_methods; // allowed http methods for request
-
+		
 		// THE NEXT TWO MEMBERS ONLY APPLY IF REQUEST IS A DIRECTORY, MEANING _PATH ENDS WITH A '/'
 		// IF USED, NEW REQUEST IS MADE TO FETCH THE FILES
 		std::vector<std::string>			_index; // THE SERVER WILL SEARCH FOR THESE FILE IN THE _path DIRECTORIES AND FETCH THE FIRST ONE FOUND

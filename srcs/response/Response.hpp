@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:18:58 by cclaude           #+#    #+#             */
-/*   Updated: 2020/11/17 20:42:54 by cclaude          ###   ########.fr       */
+/*   Updated: 2020/11/23 17:40:25 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,9 @@
 # include "webserv.hpp"
 
 # include "ResponseHeader.hpp"
+# include "Request.hpp"
+# include "RequestConfig.hpp"
+
 
 class Response {
 public:
@@ -25,20 +28,24 @@ public:
 
 	Response & operator=(const Response & src);
 
-	// Setter functions
-	void			setFilename(std::string filename);
-
 	// Getter functions
 	std::string		getResponse(void);
 
 	// Member functions
-	void			make(void);
-	void			fillContent(void);
+	void			call(Request & request, RequestConfig & requestConf);
+	void			fillContent(std::string);
+	void			getMethod(RequestConfig & requestConf);
+	void			headMethod(RequestConfig & requestConf);
+	void			postMethod(void);
+	void			putMethod(void);
+	void			deleteMethod(void);
+	void			connectMethod(void);
+	void			optionsMethod(void);
+	void			traceMethod(void);
 
 private:
 	std::string			_response;
 	std::string			_content;
-	std::string			_filename;
 	int					_code;
 };
 

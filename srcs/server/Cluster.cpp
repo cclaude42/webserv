@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/12 16:53:41 by cclaude           #+#    #+#             */
-/*   Updated: 2020/11/17 19:32:42 by cclaude          ###   ########.fr       */
+/*   Updated: 2020/11/23 17:42:57 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,27 +21,7 @@ void	Cluster::config(std::string fileconf)
 
 void	Cluster::setup(void)
 {
-	// std::vector<t_listen>	vect = _config.getListen();
-//
-	std::vector<t_listen>	vect;
-	t_listen				listen;
-
-	listen.host = INADDR_ANY;
-	listen.port = 8080;
-	vect.push_back(listen);
-
-	listen.host = INADDR_ANY;
-	listen.port = 8081;
-	vect.push_back(listen);
-
-	listen.host = INADDR_ANY;
-	listen.port = 8082;
-	vect.push_back(listen);
-
-	listen.host = INADDR_ANY;
-	listen.port = 8083;
-	vect.push_back(listen);
-//
+	std::vector<t_listen>	vect = _config.getAllListens();
 
 	_fd_size = vect.size();
 	ft_memset(&_fd_set, 0, sizeof(fd_set));
@@ -63,13 +43,6 @@ void	Cluster::setup(void)
 
 void	Cluster::run(void)
 {
-	// Testing with different pages
-	std::map<int, Server>::iterator mit = _map.begin();
-	(mit++)->second.setTmpRoot("root/index.html");
-	(mit++)->second.setTmpRoot("root/index1.html");
-	(mit++)->second.setTmpRoot("root/index2.html");
-	(mit++)->second.setTmpRoot("root/index3.html");
-	//
 	while (1)
 	{
 		fd_set		working_set;
@@ -85,13 +58,15 @@ void	Cluster::run(void)
 		if (ret > 0)
 			std::cout << "Received a connection !" << std::endl << std::endl;
 
-		for ( std::map<int, Server>::iterator it = _map.begin() ; it != _map.end() ; it++ )
+		for ( std::map<int, Server>::iterator it = _map.begin() ; it != _map.end() && ret ; it++ )
 		{
 			long	fd;
 
 			fd = it->first;
 			if (working_set.fds_bits[fd / 64] & (long)(1UL << fd % 64))
-				it->second.run();
+				it->second.run(_config);
+
+			ret--;
 		}
 	}
 }

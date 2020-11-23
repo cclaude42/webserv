@@ -19,8 +19,5 @@ server {
 
 server {
     listen 80
+    listen 999
 }
-
-example.com/blabla/hello
-
-path = /tmpBlabla/alias/hello
