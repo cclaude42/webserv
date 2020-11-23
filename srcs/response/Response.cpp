@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:18:58 by cclaude           #+#    #+#             */
-/*   Updated: 2020/11/19 15:54:15 by cclaude          ###   ########.fr       */
+/*   Updated: 2020/11/23 17:41:04 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,52 +16,54 @@
 
 void			Response::call(Request & request, RequestConfig & requestConf)
 {
+	if (request.getMethod() == "GET")
+		getMethod(requestConf);
+	else if (request.getMethod() == "HEAD")
+		headMethod(requestConf);
+}
+
+void			Response::getMethod(RequestConfig & requestConf)
+{
 	ResponseHeader	head;
 
-	if (request.getMethod() == "GET")
-	{
-		fillContent(requestConf.getPath());
-		_response = head.getHeader(_content, requestConf.getPath(), _code) + _content;
-	}
-	else if (request.getMethod() == "HEAD")
-	{
-		fillContent(requestConf.getPath());
-		_response = head.getHeader(_content, requestConf.getPath(), _code);
-	}
-	else if (request.getMethod() == "HEAD")
+	fillContent(requestConf.getPath());
+	_response = head.getHeader(_content, requestConf.getPath(), _code) + _content;
 }
 
-void			Response::get(void)
+void			Response::headMethod(RequestConfig & requestConf)
+{
+	ResponseHeader	head;
+
+	fillContent(requestConf.getPath());
+	_response = head.getHeader(_content, requestConf.getPath(), _code);
+}
+
+void			Response::postMethod(void)
 {
 
 }
 
-void			Response::head(void)
+void			Response::putMethod(void)
 {
 
 }
 
-void			Response::post(void)
+void			Response::deleteMethod(void)
 {
 
 }
 
-void			Response::get(void)
+void			Response::connectMethod(void)
 {
 
 }
 
-void			Response::get(void)
+void			Response::optionsMethod(void)
 {
 
 }
 
-void			Response::get(void)
-{
-
-}
-
-void			Response::get(void)
+void			Response::traceMethod(void)
 {
 
 }

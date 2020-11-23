@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:18:58 by cclaude           #+#    #+#             */
-/*   Updated: 2020/11/19 15:22:19 by cclaude          ###   ########.fr       */
+/*   Updated: 2020/11/23 17:40:25 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,16 @@ public:
 	// Member functions
 	void			call(Request & request, RequestConfig & requestConf);
 	void			fillContent(std::string);
+	void			getMethod(RequestConfig & requestConf);
+	void			headMethod(RequestConfig & requestConf);
+	void			postMethod(void);
+	void			putMethod(void);
+	void			deleteMethod(void);
+	void			connectMethod(void);
+	void			optionsMethod(void);
+	void			traceMethod(void);
 
 private:
-	Request &			_request;
-	RequestConfig &		_requestConf;
 	std::string			_response;
 	std::string			_content;
 	int					_code;

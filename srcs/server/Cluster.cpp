@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/12 16:53:41 by cclaude           #+#    #+#             */
-/*   Updated: 2020/11/19 14:42:28 by cclaude          ###   ########.fr       */
+/*   Updated: 2020/11/23 17:42:57 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	Cluster::config(std::string fileconf)
 
 void	Cluster::setup(void)
 {
-	std::vector<t_listen>	vect = _config.getListen();
+	std::vector<t_listen>	vect = _config.getAllListens();
 
 	_fd_size = vect.size();
 	ft_memset(&_fd_set, 0, sizeof(fd_set));
@@ -64,7 +64,7 @@ void	Cluster::run(void)
 
 			fd = it->first;
 			if (working_set.fds_bits[fd / 64] & (long)(1UL << fd % 64))
-				it->second.run(*this);
+				it->second.run(_config);
 
 			ret--;
 		}

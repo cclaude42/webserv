@@ -26,7 +26,7 @@ LIBFT = libft/libft.a
 
 MAIN = webserv
 
-CONFIG = Config ConfigReader ConfigServer Location RequestConfig
+CONFIG = Config ConfigHelperFunctions ConfigReader ConfigServer RequestConfig Autoindex/AutoIndexGenerator
 
 REQUEST = Request RequestMembers
 
@@ -58,7 +58,7 @@ OBJ = $(addprefix $(OBJ_DIR)/, $(addsuffix .o, $(MAIN))) \
 
 OBJ_DIR = objs
 
-OBJ_SUBDIR = $(addprefix $(OBJ_DIR)/, config request response server utils)
+OBJ_SUBDIR = $(addprefix $(OBJ_DIR)/, config config/Autoindex request response server utils)
 
 OBJ_BUILD = $(addprefix $(OBJ_DIR)/, $(SRC:cpp=o))
 
