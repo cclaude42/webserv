@@ -6,7 +6,7 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 17:10:06 by hbaudet           #+#    #+#             */
-/*   Updated: 2020/11/16 19:03:57 by hbaudet          ###   ########.fr       */
+/*   Updated: 2020/11/20 11:17:50 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,6 +141,7 @@ int		Request::parse(const std::string& str)
 	std::vector<std::string> line = split(str, '\n');
 	size_t			i;
 
+	// std::cout << "Request:\n" << str << "===================\n";
 
 	if (line.size() < 2)
 		this->_ret = 400;

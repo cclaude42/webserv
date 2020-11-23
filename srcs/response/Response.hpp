@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   Response.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:18:58 by cclaude           #+#    #+#             */
 /*   Updated: 2020/11/23 17:40:25 by cclaude          ###   ########.fr       */
@@ -12,6 +12,8 @@
 
 #ifndef RESPONSE_HPP
 # define RESPONSE_HPP
+
+#include <set>
 
 # include "webserv.hpp"
 
@@ -43,10 +45,18 @@ public:
 	void			optionsMethod(void);
 	void			traceMethod(void);
 
+
+
 private:
 	std::string			_response;
 	std::string			_content;
 	int					_code;
 };
+
+//HTP Methods
+std::string		get(Request& req, RequestConfig& conf);
+std::string		head(Request& req, RequestConfig& conf);
+std::string		post(Request& req, RequestConfig& conf);
+std::string		put(Request& req, RequestConfig& conf);
 
 #endif

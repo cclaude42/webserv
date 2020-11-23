@@ -30,7 +30,7 @@ CONFIG = Config ConfigHelperFunctions ConfigReader ConfigServer RequestConfig Au
 
 REQUEST = Request RequestMembers
 
-RESPONSE = Response ResponseHeader
+RESPONSE = Response ResponseHeader ResponseMethods
 
 SERVER = Server Cluster
 

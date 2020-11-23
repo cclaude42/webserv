@@ -6,7 +6,7 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 16:27:33 by hbaudet           #+#    #+#             */
-/*   Updated: 2020/11/17 21:10:21 by cclaude          ###   ########.fr       */
+/*   Updated: 2020/11/20 12:33:17 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,8 @@ class Request
 		//	void	setHeader(const std::string& key, const std::string& value);
 													//not needed as of now
 			void	setBody(std::vector<std::string> line, size_t i);
+			void	setBody(std::string bod);
+			void	setRet(int);
 
 			/*** UTILS ****/
 			void	displayHeaders();

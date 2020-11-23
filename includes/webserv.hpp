@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   webserv.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/31 13:44:42 by cclaude           #+#    #+#             */
-/*   Updated: 2020/11/17 21:11:16 by cclaude          ###   ########.fr       */
+/*   Updated: 2020/11/19 15:52:00 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@
 # include <vector>
 # include <algorithm>
 # include <iterator>
-
 
 
 // C Includes
@@ -77,9 +76,9 @@ unsigned int				ft_ntohl(unsigned int l);
 unsigned int				ft_htonl(unsigned int l);
 
 // STRINGS
-std::string					readKey(char *line);
+std::string					readKey(char *line); //Deprecated
 std::string					readKey(std::string& line);
-std::string					readValue(char *line);
+std::string					readValue(char *line); //Deprecated
 std::string					readValue(std::string& line);
 std::string&				strip(std::string& str, char c);
 std::vector<std::string>	split(const std::string& str, char c);

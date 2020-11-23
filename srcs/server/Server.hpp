@@ -18,6 +18,8 @@
 # include "ConfigReader.hpp"
 # include "Request.hpp"
 # include "Response.hpp"
+# include "Config.hpp"
+# include "RequestConfig.hpp"
 
 class Server {
 public:

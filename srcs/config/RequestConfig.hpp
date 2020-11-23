@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RequestConfig.hpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/11/16 18:41:01 by franciszer        #+#    #+#             */
-/*   Updated: 2020/11/17 17:13:31 by user42           ###   ########.fr       */
+/*   Created: 2020/11/16 18:41:01 by francisz          #+#    #+#             */
+/*   Updated: 2020/11/20 17:09:23 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,10 @@ class RequestConfig {
 		std::map<std::string, std::string>	getCgiParam() const;
 		t_cgi_pass							getCgiPass() const;
 		std::set<std::string>				getAllowedMethods() const;
+
+		//SETTERS
+		void								setPath(int code);
+		void								setPath(std::string);
 
 	private:
 		std::string							_path; // local path for request
