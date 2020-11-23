@@ -6,32 +6,22 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 14:33:47 by user42            #+#    #+#             */
-/*   Updated: 2020/11/17 21:09:39 by cclaude          ###   ########.fr       */
+/*   Updated: 2020/11/18 14:33:10 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CONFIG_READER_HPP
+
 # define CONFIG_READER_HPP
 
-# include "webserv.hpp"
+# include <iostream>
+# include <string>
+# include <vector>
+# include <sstream>
+# include <fcntl.h>
+# include <unistd.h>
 
-# define READER_BUFFER_SIZE 512
-
-
-typedef struct	s_listen {
-	unsigned int	host;
-	int			port;
-}				t_listen;
-
-typedef struct  s_error_page {
-	std::vector<int>    errorCodes; // all of the codes that will be redirected
-	std::string         uri;		// uri to which they are redirected
-}               t_error_page;
-
-typedef struct	s_cgi_pass {
-	bool		set;
-	t_listen	address;
-}				t_cgi_pass;
+# define READER_BUFFER_SIZE 1024
 
 typedef std::vector<std::string> fileVector;
 

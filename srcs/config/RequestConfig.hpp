@@ -11,9 +11,8 @@
 /* ************************************************************************** */
 
 #ifndef REQUEST_CONFIG_HPP
-# define REQUEST_CONFIG_HPP
 
-# include "webserv.hpp"
+# define REQUEST_CONFIG_HPP
 
 # include "Config.hpp"
 
@@ -47,7 +46,7 @@ class RequestConfig {
 		std::map<std::string, std::string>	_cgi_param;
 		t_cgi_pass							_cgi_pass;
 		std::set<std::string>				_allowed_methods; // allowed http methods for request
-
+		
 		// THE NEXT TWO MEMBERS ONLY APPLY IF REQUEST IS A DIRECTORY, MEANING _PATH ENDS WITH A '/'
 		// IF USED, NEW REQUEST IS MADE TO FETCH THE FILES
 		std::vector<std::string>			_index; // THE SERVER WILL SEARCH FOR THESE FILE IN THE _path DIRECTORIES AND FETCH THE FIRST ONE FOUND

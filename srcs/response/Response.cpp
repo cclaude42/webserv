@@ -77,7 +77,7 @@ static std::string	dispatch(Request& req, RequestConfig& conf)
 
 // Member functions
 
-void			Response::make(Request& req, RequestConfig& conf)
+void			Response::call(Request& req, RequestConfig& conf)
 {
 	ResponseHeader	head;
 
@@ -89,9 +89,63 @@ void			Response::make(Request& req, RequestConfig& conf)
 	// _response = head.getHeader(_content, _filename, _code) + _content;
 }
 
-void			Response::fillContent(void)
+// void			Response::call(Request & request, RequestConfig & requestConf)
+// {
+// 	if (request.getMethod() == "GET")
+// 		getMethod(requestConf);
+// 	else if (request.getMethod() == "HEAD")
+// 		headMethod(requestConf);
+// }
+
+void			Response::getMethod(RequestConfig & requestConf)
 {
-	int		fd = open(_filename.c_str(), O_RDONLY);
+	ResponseHeader	head;
+
+	fillContent(requestConf.getPath());
+	_response = head.getHeader(_content, requestConf.getPath(), _code) + _content;
+}
+
+void			Response::headMethod(RequestConfig & requestConf)
+{
+	ResponseHeader	head;
+
+	fillContent(requestConf.getPath());
+	_response = head.getHeader(_content, requestConf.getPath(), _code);
+}
+
+void			Response::postMethod(void)
+{
+
+}
+
+void			Response::putMethod(void)
+{
+
+}
+
+void			Response::deleteMethod(void)
+{
+
+}
+
+void			Response::connectMethod(void)
+{
+
+}
+
+void			Response::optionsMethod(void)
+{
+
+}
+
+void			Response::traceMethod(void)
+{
+
+}
+
+void			Response::fillContent(std::string path)
+{
+	int		fd = open(path.c_str(), O_RDONLY);
 	char	buffer[4096];
 	int		ret = 4095;
 
@@ -104,13 +158,6 @@ void			Response::fillContent(void)
 	}
 
 	close(fd);
-}
-
-// Setter functions
-
-void			Response::setFilename(std::string filename)
-{
-	_filename = filename;
 }
 
 // Getter functions

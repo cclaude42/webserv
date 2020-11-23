@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:29:28 by cclaude           #+#    #+#             */
-/*   Updated: 2020/11/18 13:16:14 by hbaudet          ###   ########.fr       */
+/*   Updated: 2020/11/19 15:17:44 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,24 +14,21 @@
 
 // Member functions
 
-void		Server::run(Config& conf)
+void		Server::run(Config & conf)
 {
-	Request		req;
-	Response	resp;
-	RequestConfig reqConf;
-	std::string	request;
+	Request			request;
+	RequestConfig	requestConf;
+	Response		response;
 
 	this->accept();
 
-	request = this->recv();
-	req.parse(request);
+	request.parse(this->recv());
 
-	reqConf = conf.getConfigForRequest(this->_listen, req.getPath(), req.getHeaders().at("Host"));
+	requestConf = conf.getConfigForRequest(this->_listen, request.getPath(), request.getHeaders().at("Host"));
 
-	resp.setFilename(_tmp_root);
-	resp.make(req, reqConf);
+	response.call(request, requestConf);
 
-	this->send(resp.getResponse());
+	this->send(response.getResponse());
 
 	this->close();
 }
@@ -85,20 +82,22 @@ std::string	Server::recv(void)
 
 void		Server::send(std::string resp)
 {
-	// std::cout << resp << std::endl;
-
 	if (::send(_socket, resp.c_str(), resp.size(), 0) == -1)
 		std::cerr << "Could not send response." << std::endl;
 }
 
 void		Server::close(void)
 {
-	::close(_socket);
+	if (_socket > 0)
+		::close(_socket);
+	_socket = -1;
 }
 
 void		Server::clean(void)
 {
-	::close(_fd);
+	if (_fd > 0)
+		::close(_fd);
+	_fd = -1;
 }
 
 // Getters
@@ -108,23 +107,14 @@ long		Server::getFD(void)
 	return (_fd);
 }
 
-// Setters
-
-// Temporary function, only for testing !
-void		Server::setTmpRoot(std::string root)
-{
-	_tmp_root = root;
-}
-
 // Overloaders
 
 Server &	Server::operator=(const Server & src)
 {
+	_listen = src._listen;
 	_fd = src._fd;
 	_socket = src._socket;
-	_request = src._request;
 	_addr = src._addr;
-	_listen = src._listen;
 	return (*this);
 }
 
@@ -137,12 +127,10 @@ Server::Server(void)
 
 Server::Server(const t_listen & listen)
 {
+	_listen = listen;
 	_fd = -1;
 	_socket = -1;
-	_request = "NONE";
 	this->setAddr();
-	_listen = listen;
-	_tmp_root = "root/index.html";
 }
 
 Server::Server(const Server & src)

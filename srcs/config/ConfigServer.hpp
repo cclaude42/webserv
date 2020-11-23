@@ -6,14 +6,13 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 15:27:44 by user42            #+#    #+#             */
-/*   Updated: 2020/11/17 21:09:56 by cclaude          ###   ########.fr       */
+/*   Updated: 2020/11/18 14:47:36 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CONFIG_SERVER_HPP
-# define CONFIG_SERVER_HPP
 
-# include "webserv.hpp"
+# define CONFIG_SERVER_HPP
 
 //  listen struct with host and port: default host: localhost; default port:80
 //      host an either be an IP address or a domain name
@@ -28,17 +27,15 @@
 
 # include "Config.hpp"
 
-class Location;
-
 class ConfigServer {
 	public:
 		ConfigServer(void);
 		ConfigServer(ConfigServer const &src);
 		virtual ~ConfigServer(void);
 
-		ConfigServer	&operator=(ConfigServer const &src);
-		virtual int		parse(unsigned int &i, std::vector<std::string> &file);
-		void			passMembers(ConfigServer &server) const;
+		ConfigServer						&operator=(ConfigServer const &src);
+		int									parseServer(unsigned int &i, std::vector<std::string> &file);
+		void								passMembers(ConfigServer &server) const;
 
 		class	ExceptionInvalidArguments: public std::exception {
 			virtual const char	*what() const throw();
@@ -52,7 +49,7 @@ class ConfigServer {
 		int									getClientBodyBufferSize() const;
 		std::map<std::string, std::string>	getCgiParam() const;
 		t_cgi_pass							getCgiPass() const;
-		std::map<std::string, Location>		getLocation() const;
+		std::map<std::string, ConfigServer> getLocation() const;
 		std::set<std::string>				getAllowedMethods() const;
 		std::vector<std::string>			getIndex() const;
 		bool								getAutoIndex() const;
@@ -62,21 +59,21 @@ class ConfigServer {
 		ConfigServer						getLocationForRequest(std::string const path, std::string &locationPath);
 
 		friend	std::ostream &operator<<(std::ostream &out, const ConfigServer &server);
-	protected:
-
-
-		// PARSING FUNCTIONS
-		void    addListen(std::vector<std::string> args);
-		void    addRoot(std::vector<std::string> args);
-		void    addServerName(std::vector<std::string> args);
-		void    addErrorPage(std::vector<std::string> args);
-		void    addClientBodyBufferSize(std::vector<std::string> args);
-		void	addCgiParam(std::vector<std::string> args);
-		void    addCgiPass(std::vector<std::string> args);
-		void	addAllowedMethods(std::vector<std::string> args);
-		void	addIndex(std::vector<std::string> args);
-		void	addAutoIndex(std::vector<std::string> args);
-		void	addAlias(std::vector<std::string> args);
+		
+	private:
+		int				parseLocation(unsigned int &i, std::vector<std::string> &file);
+		// ADD MEMBER FUNCTIONS
+		void    							addListen(std::vector<std::string> args);
+		void    							addRoot(std::vector<std::string> args);
+		void    							addServerName(std::vector<std::string> args);
+		void    							addErrorPage(std::vector<std::string> args);
+		void    							addClientBodyBufferSize(std::vector<std::string> args);
+		void								addCgiParam(std::vector<std::string> args);
+		void    							addCgiPass(std::vector<std::string> args);
+		void								addAllowedMethods(std::vector<std::string> args);
+		void								addIndex(std::vector<std::string> args);
+		void								addAutoIndex(std::vector<std::string> args);
+		void								addAlias(std::vector<std::string> args);
 
 		// MEMBERS
 		std::vector<t_listen>				_listen;
@@ -88,20 +85,19 @@ class ConfigServer {
 		int									_client_body_buffer_size; // max size for the client body, defaults to 8 000
 		std::map<std::string, std::string>	_cgi_param;
 		t_cgi_pass							_cgi_pass;
-		std::map<std::string, Location>		_location;
+		std::map<std::string, ConfigServer>_location;
 		std::set<std::string>				_allowed_methods;
 		std::vector<std::string>			_index;
 		bool								_autoindex;
 		std::string							_alias;
-	private:
-		static ConfigServer			initDefaultServer(const char *filename);
-		static const ConfigServer	_defaultServer;
-		static	parseMap					parsingMap;
-		static parseMap 					initServerMap();
+		static ConfigServer					_initDefaultServer(const char *filename);
+		static const ConfigServer			_defaultServer;
+		static	parseMap					serverParsingMap;
+		static	parseMap					locationParsingMap;
+		static parseMap 					_initServerMap();
+		static parseMap 					_initLocationMap();
+		
 
 };
-
-# include "Location.hpp"
-# include "RequestConfig.hpp"
 
 #endif
