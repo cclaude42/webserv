@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:18:58 by cclaude           #+#    #+#             */
-/*   Updated: 2020/11/17 20:33:30 by cclaude          ###   ########.fr       */
+/*   Updated: 2020/11/19 15:54:15 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,61 @@
 
 // Member functions
 
-void			Response::make(void)
+void			Response::call(Request & request, RequestConfig & requestConf)
 {
 	ResponseHeader	head;
 
-	fillContent();
-	// Set header accordingly
-	_response = head.getHeader(_content, _filename, _code) + _content;
+	if (request.getMethod() == "GET")
+	{
+		fillContent(requestConf.getPath());
+		_response = head.getHeader(_content, requestConf.getPath(), _code) + _content;
+	}
+	else if (request.getMethod() == "HEAD")
+	{
+		fillContent(requestConf.getPath());
+		_response = head.getHeader(_content, requestConf.getPath(), _code);
+	}
+	else if (request.getMethod() == "HEAD")
 }
 
-void			Response::fillContent(void)
+void			Response::get(void)
 {
-	int		fd = open(_filename.c_str(), O_RDONLY);
+
+}
+
+void			Response::head(void)
+{
+
+}
+
+void			Response::post(void)
+{
+
+}
+
+void			Response::get(void)
+{
+
+}
+
+void			Response::get(void)
+{
+
+}
+
+void			Response::get(void)
+{
+
+}
+
+void			Response::get(void)
+{
+
+}
+
+void			Response::fillContent(std::string path)
+{
+	int		fd = open(path.c_str(), O_RDONLY);
 	char	buffer[4096];
 	int		ret = 4095;
 
@@ -38,13 +81,6 @@ void			Response::fillContent(void)
 	}
 
 	close(fd);
-}
-
-// Setter functions
-
-void			Response::setFilename(std::string filename)
-{
-	_filename = filename;
 }
 
 // Getter functions
