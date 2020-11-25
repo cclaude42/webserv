@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ResponseHeader.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 15:17:39 by cclaude           #+#    #+#             */
-/*   Updated: 2020/11/20 10:43:21 by hbaudet          ###   ########.fr       */
+/*   Updated: 2020/11/25 15:43:19 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,17 @@
 
 // Member functions
 
-std::string		ResponseHeader::getHeader(std::string content, std::string filename, int code)
+std::string		ResponseHeader::getHeader(std::string content, std::string path, int code)
 {
 	std::string	header;
 
-	setValues(content, filename, code);
+	resetValues();
+	setValues(content, path, code);
 
 	header = "HTTP/1.1 " + std::to_string(code) + " " + getStatusMessage(code) + "\r\n";
 	header += writeHeader();
 
-	resetValues();
+	std::cout << "[" << header << "]" << std::endl;
 
 	return (header);
 }
@@ -58,8 +59,6 @@ std::string		ResponseHeader::writeHeader(void)
 		header += "WWW-Authenticate: " + _wwwAuthenticate + "\r\n";
 	header += "\r\n";
 
-	// std::cout << "[" << header << "]" << std::endl;
-
 	return (header);
 }
 
@@ -67,21 +66,26 @@ std::string		ResponseHeader::getStatusMessage(int code)
 {
 	if (code == 200)
 		return ("OK");
+	else if (cod == 204)
+		return ("No Content");
+	else if (code == 403)
+		return ("Forbidden");
+	else if (code == 404)
+		return ("Not Found");
 	else
-		return ("Unkown code");
+		return ("Unkown Code");
 }
 
-void			ResponseHeader::setValues(std::string content, std::string filename, int code)
+void			ResponseHeader::setValues(std::string content, std::string path, int code)
 {
-	(void)code;
 	setAllow(code);
 	setContentLanguage(content);
 	setContentLength(content.size());
-	setContentLocation(filename);
-	setContentType(filename);
+	setContentLocation(path, code);
+	setContentType(path, code);
 	setDate();
-	setLastModified(filename);
-	setLocation(code, filename);
+	setLastModified(path);
+	setLocation(code, path);
 	setRetryAfter(code, 3);
 	setServer();
 	setTransferEncoding();
@@ -125,12 +129,13 @@ void			ResponseHeader::setContentLength(int size)
 	_contentLength = std::to_string(size);
 }
 
-void			ResponseHeader::setContentLocation(std::string path)
+void			ResponseHeader::setContentLocation(std::string path, int code)
 {
-	_contentLocation = path;
+	if (code != 404)
+		_contentLocation = path;
 }
 
-void			ResponseHeader::setContentType(std::string type)
+void			ResponseHeader::setContentType(std::string type, int code)
 {
 	type = type.substr(type.rfind(".") + 1, type.size() - type.rfind("."));
 	if (type == "html")
