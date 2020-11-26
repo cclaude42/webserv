@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Cluster.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/12 16:53:41 by cclaude           #+#    #+#             */
-/*   Updated: 2020/11/23 17:42:57 by cclaude          ###   ########.fr       */
+/*   Updated: 2020/11/26 15:38:14 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ void	Cluster::setup(void)
 		Server		serv(*lstn);
 		long		fd;
 
+		std::cout << "Setting up " << lstn->host << ":" << lstn->port << "..." << std::endl;
 		serv.setup();
 		fd = serv.getFD();
 		_fd_set.fds_bits[fd / 64] |= (long)(1UL << fd % 64);

@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 15:17:39 by cclaude           #+#    #+#             */
-/*   Updated: 2020/11/25 15:43:19 by cclaude          ###   ########.fr       */
+/*   Updated: 2020/11/26 15:35:08 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ std::string		ResponseHeader::getStatusMessage(int code)
 {
 	if (code == 200)
 		return ("OK");
-	else if (cod == 204)
+	else if (code == 204)
 		return ("No Content");
 	else if (code == 403)
 		return ("Forbidden");
@@ -82,7 +82,7 @@ void			ResponseHeader::setValues(std::string content, std::string path, int code
 	setContentLanguage(content);
 	setContentLength(content.size());
 	setContentLocation(path, code);
-	setContentType(path, code);
+	setContentType(path);
 	setDate();
 	setLastModified(path);
 	setLocation(code, path);
@@ -135,8 +135,10 @@ void			ResponseHeader::setContentLocation(std::string path, int code)
 		_contentLocation = path;
 }
 
-void			ResponseHeader::setContentType(std::string type, int code)
+void			ResponseHeader::setContentType(std::string type)
 {
+	if (type == "")
+		return ;
 	type = type.substr(type.rfind(".") + 1, type.size() - type.rfind("."));
 	if (type == "html")
 		_contentType = "text/html";

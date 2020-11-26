@@ -30,7 +30,7 @@ CONFIG = Config ConfigHelperFunctions ConfigReader ConfigServer RequestConfig Au
 
 REQUEST = Request RequestMembers
 
-RESPONSE = Response ResponseHeader ResponseMethods
+RESPONSE = Response ResponseHeader
 
 SERVER = Server Cluster
 
@@ -95,11 +95,13 @@ clean:
 fclean: clean
 	@echo "\033[0;31mDeleting executable..."
 	@rm -f $(NAME)
+	@rm -f client
 	@echo "\033[0m"
 
 re: fclean all
 
 test: all
-	./webserv webserv.conf
+	@clang++ -o client client.cpp
+	./webserv test_files/conf/webserv.conf
 
 .PHONY: libft clean fclean re test

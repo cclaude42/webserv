@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 15:17:39 by cclaude           #+#    #+#             */
-/*   Updated: 2020/11/25 15:35:38 by cclaude          ###   ########.fr       */
+/*   Updated: 2020/11/26 15:35:01 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ public:
 	void			setContentLanguage(std::string content);
 	void			setContentLength(int size);
 	void			setContentLocation(std::string path, int code);
-	void			setContentType(std::string type, int code);
+	void			setContentType(std::string type);
 	void			setDate(void);
 	void			setLastModified(std::string path);
 	void			setLocation(int code, std::string redirect);

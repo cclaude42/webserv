@@ -6,7 +6,7 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 16:27:33 by hbaudet           #+#    #+#             */
-/*   Updated: 2020/11/20 12:32:57 by hbaudet          ###   ########.fr       */
+/*   Updated: 2020/11/26 15:32:55 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ std::vector<std::string>	Request::methods  = {
 				"TRACE" };
 
 Request::Request() :
-	_method(""), _version(""), _ret(200), _body(""), _port(80), _path("")
+	_method(""), _version(""), _ret(200), _body(""), _port(80), _path(""), _querry(""), _raw("")
 {
 	if (PRINT)
 		std::cout << "Constructor called\n";
@@ -31,7 +31,7 @@ Request::Request() :
 }
 
 Request::Request(const std::string& str) :
-	_method (""), _version(""), _ret(200), _body(""), _port(80), _path("")
+	_method (""), _version(""), _ret(200), _body(""), _port(80), _path(""), _querry(""), _raw("")
 {
 	if (PRINT)
 		std::cout << "std:string constructor called\n";
@@ -105,6 +105,16 @@ int					Request::getPort() const
 std::string			Request::getPath() const
 {
 	return this->_path;
+}
+
+std::string			Request::getQuerry() const
+{
+	return this->_querry;
+}
+
+std::string			Request::getRaw() const
+{
+	return this->_raw;
 }
 
 /*** SETTERS ***/

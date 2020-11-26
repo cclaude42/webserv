@@ -7,3 +7,6 @@ libft/*/*.o
 objs
 objs/*.o
 objs/*/*.o
+
+a.out
+client

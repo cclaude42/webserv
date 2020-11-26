@@ -6,14 +6,12 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:18:58 by cclaude           #+#    #+#             */
-/*   Updated: 2020/11/25 17:04:54 by cclaude          ###   ########.fr       */
+/*   Updated: 2020/11/26 15:30:33 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef RESPONSE_HPP
 # define RESPONSE_HPP
-
-#include <set>
 
 # include "webserv.hpp"
 

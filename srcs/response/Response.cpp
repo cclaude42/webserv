@@ -6,88 +6,13 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:18:58 by cclaude           #+#    #+#             */
-/*   Updated: 2020/11/25 17:04:45 by cclaude          ###   ########.fr       */
+/*   Updated: 2020/11/26 15:33:44 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Response.hpp"
 
-// Global map to call HTTP methods, could/should be part of Response ?
-
-// std::map<std::string, std::string (*)(Request& req, RequestConfig& conf)> g_map = {
-// 	{"GET", getMethod},
-// 	{"HEAD", headMethod},
-// 	{"POST", postMethod},
-// 	{"PUT", putMethod}
-// };
-
-// Tests validity, and calls the right method
-
-static std::string	dispatch(Request& req, RequestConfig& conf)
-{
-	std::string		ret = "";
-
-	std::cout << "in dispatch, req.getPath() : " << req.getPath() << '\n';
-	conf.setPath("/home/hannibal/Documents/Cursus42/webserv_v2/root" + req.getPath()); // to be deleted when path is set properly in RequestConfig
-
-	// std::fstream	test;
-	// std::fstream	test2;
-
-	// test.open("/home/hannibal/Documents/Cursus42/webserv_v2/exists.txt");
-	// if (test.good())
-	// 	std::cout << "test exists\n";
-	// test2.open("/home/hannibal/Documents/Cursus42/webserv_v2/new.txt");
-	// if (test2.good())
-	// 	std::cout << "test2 exists\n";
-	// else
-	// {
-	// 	test2.open("/home/hannibal/Documents/Cursus42/webserv_v2/new.txt", std::fstream::out | std::fstream::trunc);
-	// 	std::cout << "test2 does not exist\n";
-	// }
-
-	// test << "some random stuff for you";
-	// test2 << "this is something else\n";
-
-	// test.close();
-	// test2.close();
-
-	// std::cout << "end of file testing\n";
-
-
-	if (req.getRet() != 200)
-	{
-		//change path in RequestConfig to according error page
-		std::cout << "dispatch found an error\n";
-		ret += get(req, conf); //send error page
-	}
-	/* allowedMethods not fully implemented yet
-	else if (!(conf.getAllowedMethods().count(req.getMethod())))
-	{
-		std::cout << "Method not allowed\n";
-		//change path in RequestConfig to according error page
-		req.setRet(405);
-		//set Allow header accordingly
-		ret += get(req, conf);
-	}
-	*/
-	else
-		ret += g_map[req.getMethod()](req, conf);
-	return ret;
-}
-
 // Member functions
-
-// void			Response::call(Request& req, RequestConfig& conf)
-// {
-// 	ResponseHeader	head;
-//
-// 	fillContent(conf.getPath());
-// 	// Set header accordingly
-//
-// 	_response = dispatch(req, conf);
-//
-// 	// _response = head.getHeader(_content, _filename, _code) + _content;
-// }
 
 void			Response::call(Request & request, RequestConfig & requestConf)
 {
@@ -149,7 +74,7 @@ void			Response::deleteMethod(void)
 
 	if (fileExists(_path))
 	{
-		if (remove(_path) == 0)
+		if (remove(_path.c_str()) == 0)
 			_code = 204;
 		else
 			_code = 403;
@@ -194,7 +119,7 @@ int				Response::readContent(void)
 	if (file.is_open() == false)
 		return (403);
 
-	_content << file;
+	_content.assign(std::istreambuf_iterator<char>(file), std::istreambuf_iterator<char>());
 	file.close();
 
 	return (200);
@@ -223,7 +148,7 @@ int				Response::fileExists(std::string path)
 {
 	struct stat		stats;
 
-	if (stat(_path.c_str(), &stats) == 0)
+	if (stat(path.c_str(), &stats) == 0)
 		return (1);
 	return (0);
 }
