@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/12 16:53:41 by cclaude           #+#    #+#             */
-/*   Updated: 2020/11/26 15:38:14 by cclaude          ###   ########.fr       */
+/*   Updated: 2020/11/27 11:27:24 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,9 +65,10 @@ void	Cluster::run(void)
 
 			fd = it->first;
 			if (working_set.fds_bits[fd / 64] & (long)(1UL << fd % 64))
+			{
 				it->second.run(_config);
-
-			ret--;
+				ret--;
+			}
 		}
 	}
 }

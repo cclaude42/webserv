@@ -100,8 +100,8 @@ fclean: clean
 
 re: fclean all
 
-test: all
-	@clang++ -o client client.cpp
+test: re
+	clang++ -o client test_files/client.cpp
 	./webserv test_files/conf/webserv.conf
 
 .PHONY: libft clean fclean re test

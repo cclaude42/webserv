@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:18:58 by cclaude           #+#    #+#             */
-/*   Updated: 2020/11/26 15:33:44 by cclaude          ###   ########.fr       */
+/*   Updated: 2020/11/27 13:05:10 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void			Response::call(Request & request, RequestConfig & requestConf)
 	else if (request.getMethod() == "POST")
 		postMethod();
 	else if (request.getMethod() == "PUT")
-		putMethod();
+		putMethod(request.getBody());
 	else if (request.getMethod() == "DELETE")
 		deleteMethod();
 	else if (request.getMethod() == "CONNECT")
@@ -60,11 +60,11 @@ void			Response::postMethod(void)
 	// NEED CGI ?
 }
 
-void			Response::putMethod(void)
+void			Response::putMethod(std::string content)
 {
 	ResponseHeader	head;
 
-	_code = writeContent();
+	_code = writeContent(content);
 	_response = head.getHeader(_content, _path, _code);
 }
 
@@ -125,7 +125,7 @@ int				Response::readContent(void)
 	return (200);
 }
 
-int				Response::writeContent(void)
+int				Response::writeContent(std::string content)
 {
 	std::ofstream	file;
 	int				ret = 204;
@@ -138,7 +138,7 @@ int				Response::writeContent(void)
 	if (file.is_open() == false)
 		return (403);
 
-	file << _content;
+	file << content;
 	file.close();
 
 	return (ret);

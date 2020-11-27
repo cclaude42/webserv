@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 15:17:39 by cclaude           #+#    #+#             */
-/*   Updated: 2020/11/26 15:35:08 by cclaude          ###   ########.fr       */
+/*   Updated: 2020/11/27 13:06:22 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ std::string		ResponseHeader::getHeader(std::string content, std::string path, in
 	header = "HTTP/1.1 " + std::to_string(code) + " " + getStatusMessage(code) + "\r\n";
 	header += writeHeader();
 
-	std::cout << "[" << header << "]" << std::endl;
+	// std::cout << "[" << header << "]" << std::endl;
 
 	return (header);
 }
@@ -66,6 +66,8 @@ std::string		ResponseHeader::getStatusMessage(int code)
 {
 	if (code == 200)
 		return ("OK");
+	else if (code == 201)
+		return ("Created");
 	else if (code == 204)
 		return ("No Content");
 	else if (code == 403)
@@ -73,7 +75,7 @@ std::string		ResponseHeader::getStatusMessage(int code)
 	else if (code == 404)
 		return ("Not Found");
 	else
-		return ("Unkown Code");
+		return ("Unknown Code");
 }
 
 void			ResponseHeader::setValues(std::string content, std::string path, int code)

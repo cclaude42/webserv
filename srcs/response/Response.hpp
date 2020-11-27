@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:18:58 by cclaude           #+#    #+#             */
-/*   Updated: 2020/11/26 15:30:33 by cclaude          ###   ########.fr       */
+/*   Updated: 2020/11/27 12:39:54 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,14 +37,14 @@ public:
 	void			getMethod(void);
 	void			headMethod(void);
 	void			postMethod(void);
-	void			putMethod(void);
+	void			putMethod(std::string content);
 	void			deleteMethod(void);
 	void			connectMethod(void);
 	void			optionsMethod(void);
 	void			traceMethod(Request & request);
 
 	int				readContent(void);
-	int				writeContent(void);
+	int				writeContent(std::string content);
 	int				fileExists(std::string path);
 
 private:
