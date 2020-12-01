@@ -6,7 +6,7 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 17:10:06 by hbaudet           #+#    #+#             */
-/*   Updated: 2020/11/20 11:17:50 by hbaudet          ###   ########.fr       */
+/*   Updated: 2020/11/26 15:33:08 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,6 +143,7 @@ int		Request::parse(const std::string& str)
 
 	// std::cout << "Request:\n" << str << "===================\n";
 
+	this->_raw = str;
 	if (line.size() < 2)
 		this->_ret = 400;
 	else
@@ -164,6 +165,7 @@ int		Request::parse(const std::string& str)
 		this->checkPort();
 	}
 	this->stripAll();
+	this->_querry = findQuerry(this->_path);
 	return (this->_ret);
 }
 
@@ -178,4 +180,16 @@ void	Request::stripAll()
 	strip(this->_path, '\n');
 	strip(this->_path, '\r');
 	strip(this->_path, ' ');
+}
+
+std::string	Request::findQuerry(std::string path)
+{
+	size_t		i;
+	std::string	ret;
+
+	i = path.find_first_of('?');
+	if (i != std::string::npos)
+		ret.assign(path, i, std::string::npos);
+
+	return ret;
 }

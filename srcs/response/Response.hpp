@@ -3,17 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   Response.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:18:58 by cclaude           #+#    #+#             */
-/*   Updated: 2020/11/23 17:40:25 by cclaude          ###   ########.fr       */
+/*   Updated: 2020/11/27 12:39:54 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef RESPONSE_HPP
 # define RESPONSE_HPP
-
-#include <set>
 
 # include "webserv.hpp"
 
@@ -35,28 +33,25 @@ public:
 
 	// Member functions
 	void			call(Request & request, RequestConfig & requestConf);
-	void			fillContent(std::string);
-	void			getMethod(RequestConfig & requestConf);
-	void			headMethod(RequestConfig & requestConf);
+
+	void			getMethod(void);
+	void			headMethod(void);
 	void			postMethod(void);
-	void			putMethod(void);
+	void			putMethod(std::string content);
 	void			deleteMethod(void);
 	void			connectMethod(void);
 	void			optionsMethod(void);
-	void			traceMethod(void);
+	void			traceMethod(Request & request);
 
-
+	int				readContent(void);
+	int				writeContent(std::string content);
+	int				fileExists(std::string path);
 
 private:
 	std::string			_response;
 	std::string			_content;
+	std::string			_path;
 	int					_code;
 };
-
-//HTP Methods
-std::string		get(Request& req, RequestConfig& conf);
-std::string		head(Request& req, RequestConfig& conf);
-std::string		post(Request& req, RequestConfig& conf);
-std::string		put(Request& req, RequestConfig& conf);
 
 #endif

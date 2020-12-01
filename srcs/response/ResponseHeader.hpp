@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 15:17:39 by cclaude           #+#    #+#             */
-/*   Updated: 2020/11/17 20:09:01 by cclaude          ###   ########.fr       */
+/*   Updated: 2020/11/26 15:35:01 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,9 @@ public:
 
 	// Setter functions
 	void			setAllow(int code);
-	void			setContentLanguage(std::string lang);
+	void			setContentLanguage(std::string content);
 	void			setContentLength(int size);
-	void			setContentLocation(std::string path);
+	void			setContentLocation(std::string path, int code);
 	void			setContentType(std::string type);
 	void			setDate(void);
 	void			setLastModified(std::string path);
@@ -38,9 +38,9 @@ public:
 	void			setWwwAuthenticate(int code);
 
 	// Member functions
-	std::string		getHeader(std::string content, std::string filename, int code);
+	std::string		getHeader(std::string content, std::string path, int code);
 	std::string		writeHeader(void);
-	void			setValues(std::string content, std::string filename, int code);
+	void			setValues(std::string content, std::string path, int code);
 	void			resetValues(void);
 	std::string		getStatusMessage(int code);
 
