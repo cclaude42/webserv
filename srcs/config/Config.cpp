@@ -6,7 +6,7 @@
 /*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 14:30:01 by user42            #+#    #+#             */
-/*   Updated: 2021/01/12 13:23:51 by frthierr         ###   ########.fr       */
+/*   Updated: 2021/01/12 18:53:42 by frthierr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,7 @@ RequestConfig	Config::getConfigForRequest(t_listen const address,\
 	std::string		locationPath;
 
 	this->getServerForRequest(server, address, hostName);
-	server = server.getLocationForRequest(uri, locationPath);
-	
+	server = server.getLocationForRequest(uri, locationPath);	
 	RequestConfig config(server, uri, locationPath);
 	return config;
 }

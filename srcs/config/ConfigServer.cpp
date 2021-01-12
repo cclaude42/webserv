@@ -6,7 +6,7 @@
 /*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 15:28:08 by user42            #+#    #+#             */
-/*   Updated: 2021/01/12 18:33:11 by frthierr         ###   ########.fr       */
+/*   Updated: 2021/01/12 18:55:33 by frthierr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -487,10 +487,11 @@ ConfigServer						ConfigServer::getLocationForRequest(std::string const path, st
 	std::map<std::string, ConfigServer>::iterator	iter;
 	std::string									tryLocation;
 
+	if (!tryLen)
+		return *this;
 	if (!this->_location.empty()) {	
 		do {
 			tryLocation = path.substr(0, tryLen);
-			// std::cout << "tryLocation: " << tryLocation << std::endl;
 			iter = this->_location.find(tryLocation);
 			if (iter != this->_location.end()) {
 				retLocationPath = tryLocation;

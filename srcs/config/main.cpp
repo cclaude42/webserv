@@ -6,7 +6,7 @@
 /*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/06 15:46:21 by user42            #+#    #+#             */
-/*   Updated: 2021/01/12 12:37:18 by frthierr         ###   ########.fr       */
+/*   Updated: 2021/01/12 18:54:30 by frthierr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int main(int ac, char * const argv[])
         
         config.parse(argv[1]); 
         ConfigServer    server;
-        requestConfig = config.getConfigForRequest(listen, "/blabla/love", "example");
+        requestConfig = config.getConfigForRequest(listen, "", "example");
         std::cout << requestConfig << std::endl;
         // std::vector<t_listen> listens = config.getAllListens();
         // for (auto i = listens.begin(); i != listens.end(); i++)
