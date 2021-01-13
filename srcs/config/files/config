@@ -11,7 +11,7 @@ server {
         index blabla_index.html
         autoindex on
         alias /alias/
-        }
+    }
     location /hello {
         root /world/
     }
