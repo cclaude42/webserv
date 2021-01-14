@@ -6,7 +6,7 @@
 /*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 14:30:01 by user42            #+#    #+#             */
-/*   Updated: 2021/01/12 18:53:42 by frthierr         ###   ########.fr       */
+/*   Updated: 2021/01/13 18:24:24 by frthierr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ RequestConfig	Config::getConfigForRequest(t_listen const address,\
 	this->getServerForRequest(server, address, hostName);
 	server = server.getLocationForRequest(uri, locationPath);	
 	RequestConfig config(server, uri, locationPath);
+	config.setHostPort(address);
 	return config;
 }
 

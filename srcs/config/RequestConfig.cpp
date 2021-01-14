@@ -6,7 +6,7 @@
 /*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 13:20:34 by frthierr          #+#    #+#             */
-/*   Updated: 2021/01/12 15:11:49 by frthierr         ###   ########.fr       */
+/*   Updated: 2021/01/13 18:26:44 by frthierr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,11 @@ std::set<std::string>				RequestConfig::getAllowedMethods() const {
 	return this->_allowed_methods;
 }
 
+t_listen							RequestConfig::getHostPort() const {
+	return this->_hostPort;
+}
+
+
 //SETTERS
 
 void								RequestConfig::setPath(int code)
@@ -107,6 +112,10 @@ void								RequestConfig::setPath(int code)
 void								RequestConfig::setPath(std::string path)
 {
 	this->_path = path;
+}
+
+void								RequestConfig::setHostPort(const t_listen hostPort){
+	this->_hostPort= hostPort;
 }
 
 std::ostream	&operator<<(std::ostream &out, RequestConfig &request) {

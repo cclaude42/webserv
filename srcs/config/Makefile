@@ -11,7 +11,7 @@ SRCS=	ConfigReader.cpp\
 
 NAME= configParser
 OBJS= ${SRCS:.cpp=.o}
-INCLUDE_DIRS = -I .
+INCLUDE_DIRS = -I . -I /Users/frthierr/studlife/webserv/includes/ -I /Users/frthierr/studlife/webserv/srcs/request -I /Users/frthierr/studlife/webserv/libft/includes
 
 
 .cpp.o:
@@ -54,4 +54,3 @@ fclean: clean
 re: fclean all
 
 .PHONY: all clean fclean re start
-
