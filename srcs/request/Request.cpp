@@ -6,15 +6,14 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 16:27:33 by hbaudet           #+#    #+#             */
-/*   Updated: 2021/01/19 15:43:09 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/01/19 15:49:55 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Request.hpp"
 
-std::vector<std::string>	Request::methods = initMethods();
 
-std::vector<std::string>		initMethods()
+std::vector<std::string>		Request::initMethods()
 {
 	std::vector<std::string>	methods;
 
@@ -29,6 +28,8 @@ std::vector<std::string>		initMethods()
 	
 	return methods;
 }
+
+std::vector<std::string>	Request::methods = Request::initMethods();
 
 Request::Request() :
 	_method(""), _version(""), _ret(200), _body(""), _port(80), _path(""), _querry(""), _raw("")
