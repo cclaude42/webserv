@@ -22,7 +22,7 @@
 # include "RequestConfig.hpp"
 # include "webserv.hpp"
 
-# define DEFAULT_PATH "./files/default"
+# define DEFAULT_PATH "./test_files/conf/default"
 
 class Config {
 	public:

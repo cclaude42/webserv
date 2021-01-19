@@ -54,7 +54,7 @@ void	Cluster::run(void)
 		timeout.tv_sec  = 5;
 		timeout.tv_usec = 0;
 
-		std::cout << "Waiting on a connection..." << std::endl;
+		// std::cout << "Waiting on a connection..." << std::endl;
 		ret = select(_max_fd + 1, &working_set, NULL, NULL, &timeout);
 		if (ret > 0)
 			std::cout << "Received a connection !" << std::endl << std::endl;

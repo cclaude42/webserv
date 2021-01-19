@@ -52,6 +52,8 @@ ConfigServer				ConfigServer::_initDefaultServer(const char *filename) {
 	fileVector		file;
 	
 	file = ConfigReader::readFile(filename);
+	if (file.empty())
+		std::cerr << "Could not open default file at location " << DEFAULT_PATH << std::endl;
 	fileVector	begin;
 	begin.push_back("server");
 	begin.push_back("{");
