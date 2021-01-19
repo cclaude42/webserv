@@ -6,13 +6,13 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 17:10:06 by hbaudet           #+#    #+#             */
-/*   Updated: 2020/11/26 15:33:08 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/01/19 15:17:13 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Request.hpp"
 
-void	Request::displayHeaders()
+void	Request::displayHeaders() const
 {
 	std::cout << *this;
 }
@@ -51,7 +51,7 @@ void	Request::resetHeaders()
 	{"Location", ""},
 	{"Referer", ""},
 	{"Retry-After", ""},
-	{"Derver", ""},
+	{"Server", ""},
 	{"Transfer-Encoding", ""},
 	{"User-Agent", ""},
 	{"Www-Authenticate", ""},

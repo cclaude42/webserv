@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ConfigServer.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 15:28:08 by user42            #+#    #+#             */
-/*   Updated: 2020/11/18 14:50:49 by user42           ###   ########.fr       */
+/*   Updated: 2021/01/19 15:30:12 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,9 @@ ConfigServer				ConfigServer::_initDefaultServer(const char *filename) {
 	fileVector		file;
 	
 	file = ConfigReader::readFile(filename);
-	fileVector	begin = {"server", "{"};
+	fileVector	begin;
+	begin.push_back("server");
+	begin.push_back("{");
 	file.insert(file.begin(), begin.begin(), begin.end());
 	file.insert(file.end(), "}");
 	unsigned int	index = 2;
@@ -165,7 +167,7 @@ int     ConfigServer::parseServer(unsigned int &index, fileVector &file) {
 	//  set up default values if they were not set by the config file
 	if (!file[index].compare("}")) {
 		ConfigServer::_defaultServer.passMembers(*this);
-		for (auto i = this->_location.begin() ; i != this->_location.end(); i++)
+		for (std::map<std::string, ConfigServer>::iterator i = this->_location.begin() ; i != this->_location.end(); i++)
 			this->passMembers(i->second);
 		return 1;
 	}
@@ -180,13 +182,13 @@ void	ConfigServer::passMembers(ConfigServer &server) const {
 		if (server._root == "")
 			server._root = this->_root;
 		server._server_name.insert(server._server_name.end(), this->_server_name.begin(), this->_server_name.end());
-		for (auto i = this->_error_page.begin(); i != this->_error_page.end(); i++) {
+		for (std::map<int, std::string>::const_iterator i = this->_error_page.begin(); i != this->_error_page.end(); i++) {
 			if (server._error_page.find(i->first) == server._error_page.end())
 				server._error_page[i->first] = i->second;
 		}
 		if (server._client_body_buffer_size == 0)
 			server._client_body_buffer_size = this->_client_body_buffer_size;
-		for (auto i = this->_cgi_param.begin() ; i != this->_cgi_param.end(); i++) {
+		for (std::map<std::string, std::string>::const_iterator i = this->_cgi_param.begin() ; i != this->_cgi_param.end(); i++) {
 			if (server._cgi_param.find(i->first) == server._cgi_param.end())
 				server._cgi_param[i->first] = i->second;
 		}
@@ -196,7 +198,7 @@ void	ConfigServer::passMembers(ConfigServer &server) const {
 			server._allowed_methods = this->_allowed_methods;
 		server._index.insert(server._index.begin(), this->_index.begin(), this->_index.end());
 	}
-	for (auto i = server._location.begin(); i != server._location.end(); i++)
+	for (std::map<std::string, ConfigServer>::iterator i = server._location.begin(); i != server._location.end(); i++)
 		server.passMembers(i->second);
 }
 
@@ -265,7 +267,7 @@ void        ConfigServer::addListen(std::vector<std::string> args) {
 	if ((separator = args[0].find(":")) == std::string::npos) {
 		if (isDigits(args[0])) {
 			listen.host = 0;
-			listen.port = std::stoi(args[0]);
+			listen.port = ft_atoi(args[0].c_str());
 			this->_listen.push_back(listen);
 			return ;
 		}
@@ -277,7 +279,7 @@ void        ConfigServer::addListen(std::vector<std::string> args) {
 		separator++;
 		std::string	portStr = args[0].substr(separator);
 		if (isDigits(portStr)) {
-			listen.port = std::stoi(portStr);
+			listen.port = ft_atoi(portStr.c_str());
 			this->_listen.push_back(listen);
 			return ;
 		}
@@ -308,7 +310,7 @@ void        ConfigServer::addErrorPage(std::vector<std::string> args) {
 	
 	for (size_t i = 0; i < len; i++) {
 		if (isDigits(args[i]))
-			codes.push_back(std::stoi(args[i]));
+			codes.push_back(ft_atoi(args[i].c_str()));
 		else if (codes.empty())
 			throw ConfigServer::ExceptionInvalidArguments();
 		else if (i == len - 1)
@@ -318,7 +320,7 @@ void        ConfigServer::addErrorPage(std::vector<std::string> args) {
 	}
 	if (uri == "")
 		throw ConfigServer::ExceptionInvalidArguments();
-	for (auto i = codes.begin(); i != codes.end(); i++)
+	for (std::vector<int>::iterator i = codes.begin(); i != codes.end(); i++)
 		this->_error_page[*i] = uri;
 }
 
@@ -326,13 +328,14 @@ void        ConfigServer::addClientBodyBufferSize(std::vector<std::string> args)
 	// std::cout << "in addBodySize" << std::endl;
 	if (args.size() != 1 || !isDigits(args[0]))
 		throw ConfigServer::ExceptionInvalidArguments();
-	this->_client_body_buffer_size = std::stoi(args[0]);
+	this->_client_body_buffer_size = ft_atoi(args[0].c_str());
 }
 
 void		ConfigServer::addCgiParam(std::vector<std::string> args) {
 	if (args.size() != 2)
 		throw ConfigServer::ExceptionInvalidArguments();
-	this->_cgi_param.insert({args[0], args[1]});
+	
+	this->_cgi_param[args[0]] = args[1];
 }
 
 void    	ConfigServer::addCgiPass(std::vector<std::string> args) {
@@ -350,7 +353,7 @@ void    	ConfigServer::addCgiPass(std::vector<std::string> args) {
 	std::string	strPort = args[0].substr(separator);
 	if (isDigits(strPort) == false)
 		throw ConfigServer::ExceptionInvalidArguments();
-	address.port = std::stoi(strPort);
+	address.port = ft_atoi(strPort.c_str());
 	this->_cgi_pass.address.port = address.port;
 	this->_cgi_pass.address.host = address.host;
 	this->_cgi_pass.set = true;
@@ -361,7 +364,7 @@ void		ConfigServer::addAllowedMethods(std::vector<std::string> args) {
 	if (args.empty())
 		throw ConfigServer::ExceptionInvalidArguments();
 	this->_allowed_methods.clear();
-	for (auto i = args.begin(); i != args.end(); i++) {
+	for (fileVector::iterator i = args.begin(); i != args.end(); i++) {
 		this->_allowed_methods.insert(*i);
 	}
 }
@@ -404,25 +407,25 @@ std::ostream	&operator<<(std::ostream &out, const ConfigServer &server) {
 			out << " ";
 	}
 	out << std::endl<< "error_page:" << std::endl;
-	for (auto i = server._error_page.begin(); i != server._error_page.end(); i++) {
+	for (std::map<int, std::string>::const_iterator i = server._error_page.begin(); i != server._error_page.end(); i++) {
 		out << "\t" << i->first << " " << i->second << std::endl;
 	}
 	out << "client_body_buffer_size: " << server._client_body_buffer_size << std::endl;
 	out << "cgi_param:" << std::endl;
-	for (auto i = server._cgi_param.begin(); i != server._cgi_param.end(); i++)
+	for (std::map<std::string, std::string>::const_iterator i = server._cgi_param.begin(); i != server._cgi_param.end(); i++)
 		out << "\t" << i->first << " = " << i->second << std::endl;
 	out << "cgi_pass:	" << server._cgi_pass.address.host << ":" << server._cgi_pass.address.port << std::endl;
 	out << "allowed methods: ";
-	for (auto i = server._allowed_methods.begin(); i != server._allowed_methods.end(); i++)
+	for (std::set<std::string>::iterator i = server._allowed_methods.begin(); i != server._allowed_methods.end(); i++)
 		out << " " << *i;
 	out << std::endl;
 	out << "autoindex " << (server._autoindex ? "on" : "off") << std::endl;
 	out << "index: ";
-	for (auto i = server._index.begin(); i != server._index.end(); i++)
+	for (fileVector::const_iterator i = server._index.begin(); i != server._index.end(); i++)
 		out << *i << " ";
 	out << std::endl;
 	out << "alias: " << server._alias << std::endl;
-	for (auto i = server._location.begin(); i != server._location.end(); i++) {
+	for (std::map<std::string, ConfigServer>::const_iterator i = server._location.begin(); i != server._location.end(); i++) {
 		out << std::endl << "LOCATION " << i->first << std::endl;
 		out << i->second << std::endl;
 	}
@@ -484,10 +487,11 @@ ConfigServer						ConfigServer::getLocationForRequest(std::string const path, st
 	std::map<std::string, ConfigServer>::iterator	iter;
 	std::string									tryLocation;
 
+	if (!tryLen)
+		return *this;
 	if (!this->_location.empty()) {	
 		do {
 			tryLocation = path.substr(0, tryLen);
-			// std::cout << "tryLocation: " << tryLocation << std::endl;
 			iter = this->_location.find(tryLocation);
 			if (iter != this->_location.end()) {
 				retLocationPath = tryLocation;

@@ -6,7 +6,7 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/31 13:44:42 by cclaude           #+#    #+#             */
-/*   Updated: 2020/11/19 15:52:00 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/01/19 15:32:48 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <sstream>
 # include <fstream>
 # include <string>
+# include <limits>
 
 // CPP Containers
 # include <map>
@@ -85,6 +86,8 @@ std::vector<std::string>	split(const std::string& str, char c);
 std::string&				to_lower(std::string& str);
 std::string&				to_upper(std::string& str);
 std::string&				capitalize(std::string& str);
+std::string					to_string(size_t n);
+
 
 
 #endif
