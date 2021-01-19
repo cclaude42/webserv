@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Request.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 16:27:33 by hbaudet           #+#    #+#             */
-/*   Updated: 2021/01/19 12:35:53 by frthierr         ###   ########.fr       */
+/*   Updated: 2021/01/19 15:16:57 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,7 @@ class Request
 			void	resetHeaders();
 			void	stripAll();
 			int		parse(const std::string& str);
+			void	displayHeaders() const;
 };
 
 std::ostream&	operator<<(std::ostream& os, const Request& re);
