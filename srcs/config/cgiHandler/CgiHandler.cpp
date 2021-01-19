@@ -6,7 +6,7 @@
 /*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/13 15:07:29 by frthierr          #+#    #+#             */
-/*   Updated: 2021/01/14 18:05:22 by frthierr         ###   ########.fr       */
+/*   Updated: 2021/01/19 11:19:07 by frthierr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,8 +110,10 @@ pid_t	id;
 	// REPLACING STDIN AND STDOUT WITH PIPE
 	dup2(fds[0], STDIN_FILENO);
 	dup2(fds[1], STDOUT_FILENO);
-	if (!id) {
+	if (!id) {	
 		execve(scriptName.c_str(), NULL, env);
+		close(fds[0]);
+		close(fds[1]);
 		return 0;
 	}
 	else
@@ -128,6 +130,8 @@ pid_t	id;
 		dup2(saveStdin, STDIN_FILENO);
 		dup2(saveStdout, STDOUT_FILENO);
 		
+		close(fds[0]);
+		close(fds[1]);
 		//	RESET BACK TO NORMAL
 		std::cout << io << std::endl;
 		return 0;		

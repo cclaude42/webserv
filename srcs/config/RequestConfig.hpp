@@ -6,7 +6,7 @@
 /*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 18:41:01 by francisz          #+#    #+#             */
-/*   Updated: 2021/01/13 18:25:58 by frthierr         ###   ########.fr       */
+/*   Updated: 2021/01/19 11:02:46 by frthierr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,13 @@ class RequestConfig {
 		friend std::ostream	&operator<<(std::ostream &out, RequestConfig &request);
 
 		// GETERS
-		std::string							getPath() const;
-		std::map<int, std::string>			getErrorPage() const;
-		int									getClientBodyBufferSize() const;
-		std::map<std::string, std::string>	getCgiParam() const;
-		t_cgi_pass							getCgiPass() const;
-		std::set<std::string>				getAllowedMethods() const;
-		t_listen							getHostPort() const;
+		const std::string							&getPath() const;
+		const std::map<int, std::string>			&getErrorPage() const;
+		const int									&getClientBodyBufferSize() const;
+		const std::map<std::string, std::string>	&getCgiParam() const;
+		const t_cgi_pass							&getCgiPass() const;
+		const std::set<std::string>				&getAllowedMethods() const;
+		const t_listen							&getHostPort() const;
 
 		//SETTERS
 		void								setPath(int code);

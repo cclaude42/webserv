@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RequestMembers.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 17:10:06 by hbaudet           #+#    #+#             */
-/*   Updated: 2020/11/26 15:33:08 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/01/19 12:32:35 by frthierr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void	Request::resetHeaders()
 	{"Location", ""},
 	{"Referer", ""},
 	{"Retry-After", ""},
-	{"Derver", ""},
+	{"Server", ""},
 	{"Transfer-Encoding", ""},
 	{"User-Agent", ""},
 	{"Www-Authenticate", ""},

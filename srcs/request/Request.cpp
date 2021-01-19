@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Request.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 16:27:33 by hbaudet           #+#    #+#             */
-/*   Updated: 2020/11/26 15:32:55 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/01/19 12:01:43 by frthierr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ Request::Request(const std::string& str) :
 		std::cout << "std:string constructor called\n";
 
 	this->resetHeaders();
-	this->parse(str);
+	this->parse(str); 
 	if (this->_ret != 200)
 		std::cout << "Parse error : " << this->_ret << '\n';
 }
