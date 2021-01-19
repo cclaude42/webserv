@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Config.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
+/*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 14:29:38 by user42            #+#    #+#             */
-/*   Updated: 2020/11/18 14:48:49 by user42           ###   ########.fr       */
+/*   Updated: 2021/01/13 15:56:31 by frthierr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include "ConfigReader.hpp"
 # include "ConfigServer.hpp"
 # include "RequestConfig.hpp"
+# include "/Users/frthierr/studlife/webserv/includes/webserv.hpp"
 
 # define DEFAULT_PATH "./files/default"
 

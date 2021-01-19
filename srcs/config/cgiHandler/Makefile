@@ -1,17 +1,13 @@
 # ___COMPILATION___
 
 CPP= c++
-FLAGS= -Wall -Wextra -Werror
-SRCS=	ConfigReader.cpp\
-		ConfigHelperFunctions.cpp\
-		Config.cpp\
-		ConfigServer.cpp\
-		RequestConfig.cpp\
-		main.cpp
+FLAGS=
+SRCS=	main.cpp\
+		CgiHandler.cpp
 
-NAME= configParser
+NAME= cgiHandler
 OBJS= ${SRCS:.cpp=.o}
-INCLUDE_DIRS = -I . -I /Users/frthierr/studlife/webserv/includes/ -I /Users/frthierr/studlife/webserv/srcs/request -I /Users/frthierr/studlife/webserv/libft/includes
+INCLUDE_DIRS = -I /Users/frthierr/studlife/webserv/includes -I /Users/frthierr/studlife/webserv/libft/includes -I /Users/frthierr/studlife/webserv/srcs/request/ -I /Users/frthierr/studlife/webserv/srcs/config
 
 
 .cpp.o:
@@ -30,7 +26,7 @@ NC=\033[0m
 all: ${NAME}
 
 ${NAME}: ${OBJS}
-	@printf "=>	"
+	@printf "${YELLOW}=>	"
 	${CPP} ${FLAGS} ${INCLUDE_DIRS} ${OBJS} -o ${NAME}
 	@echo "${GREEN}✓ ${NAME} compiled${NC}"
 
@@ -54,3 +50,4 @@ fclean: clean
 re: fclean all
 
 .PHONY: all clean fclean re start
+

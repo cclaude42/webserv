@@ -1,6 +1,6 @@
 error_page 404 405 510 /data/errors/
 error_page 222 /errors/
-client_body_buffer_size 8000
+client_body_buffer_size 8009
 listen 80
 root /
 allow_methods GET HEAD POST PUT DELETE CONNECT OPTIONS TRACE PATCH

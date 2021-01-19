@@ -3,12 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   RequestConfig.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/11/16 18:58:53 by franciszer        #+#    #+#             */
-/*   Updated: 2020/11/20 17:32:03 by hbaudet          ###   ########.fr       */
+/*   Created: 2021/01/12 13:20:34 by frthierr          #+#    #+#             */
+/*   Updated: 2021/01/13 18:26:44 by frthierr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "RequestConfig.hpp"
 
@@ -93,6 +94,11 @@ std::set<std::string>				RequestConfig::getAllowedMethods() const {
 	return this->_allowed_methods;
 }
 
+t_listen							RequestConfig::getHostPort() const {
+	return this->_hostPort;
+}
+
+
 //SETTERS
 
 void								RequestConfig::setPath(int code)
@@ -108,23 +114,27 @@ void								RequestConfig::setPath(std::string path)
 	this->_path = path;
 }
 
+void								RequestConfig::setHostPort(const t_listen hostPort){
+	this->_hostPort= hostPort;
+}
+
 std::ostream	&operator<<(std::ostream &out, RequestConfig &request) {
 	out << "path: " << request._path << std::endl;
 	out << "error_page:" << std::endl;
-	for (auto i = request._error_page.begin(); i != request._error_page.end(); i++) {
+	for (std::map<int, std::string>::iterator i = request._error_page.begin(); i != request._error_page.end(); i++) {
 		out << "\t" << i->first << " " << i->second << std::endl;
 	}
 	out << "client_body_buffer_size: " << request._client_body_buffer_size << std::endl;
 	out << "cgi_param:" << std::endl;
-	for (auto i = request._cgi_param.begin() ; i != request._cgi_param.end(); i++)
+	for (std::map<std::string, std::string>::iterator i = request._cgi_param.begin() ; i != request._cgi_param.end(); i++)
 		out << "\t" << i->first << "=" << i->second << std::endl;
 	if (request._cgi_pass.set)
 		out << "cgi_pass: " << request._cgi_pass.address.host << ":" << request._cgi_pass.address.port << std::endl;
 	out << "allowed_methods:" << std::endl;
-	for (auto i = request._allowed_methods.begin(); i != request._allowed_methods.end(); i++)	
+	for (std::set<std::string>::iterator i = request._allowed_methods.begin(); i != request._allowed_methods.end(); i++)	
 		out << "\t" << *i << std::endl;
 	out << "index:" << std::endl;
-	for (auto i = request._index.begin(); i != request._index.end(); i++)
+	for (std::vector<std::string>::iterator i = request._index.begin(); i != request._index.end(); i++)
 		out << "\t" << *i << std::endl;
 	out << "autoindex: " << (request._autoindex ? "on" : "off") << std::endl;
 	return out;
