@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ConfigHelperFunctions.hpp                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/18 14:26:35 by user42            #+#    #+#             */
-/*   Updated: 2020/11/18 14:27:30 by user42           ###   ########.fr       */
+/*   Updated: 2021/01/19 15:27:43 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CONFIG_HELPER_FUNCTIONS_HPP
+
+# include "webserv.hpp"
 
 # define CONFIG_HELPER_FUNCTIONS_HPP
 

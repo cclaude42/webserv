@@ -3,30 +3,39 @@
 /*                                                        :::      ::::::::   */
 /*   Request.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 16:27:33 by hbaudet           #+#    #+#             */
-/*   Updated: 2021/01/19 12:01:43 by frthierr         ###   ########.fr       */
+/*   Updated: 2021/01/19 15:43:09 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Request.hpp"
 
-std::vector<std::string>	Request::methods  = {
-				"GET",
-				"HEAD",
-				"POST",
-				"PUT",
-				"DELETE",
-				"CONNECT",
-				"OPTIONS",
-				"TRACE" };
+std::vector<std::string>	Request::methods = initMethods();
+
+std::vector<std::string>		initMethods()
+{
+	std::vector<std::string>	methods;
+
+	methods.push_back("GET");
+	methods.push_back("HEAD");
+	methods.push_back("POST");
+	methods.push_back("PUT");
+	methods.push_back("DELETE");
+	methods.push_back("CONNECT");
+	methods.push_back("OPTIONS");
+	methods.push_back("TRACE" );
+	
+	return methods;
+}
 
 Request::Request() :
 	_method(""), _version(""), _ret(200), _body(""), _port(80), _path(""), _querry(""), _raw("")
 {
 	if (PRINT)
 		std::cout << "Constructor called\n";
+
 	this->resetHeaders();
 }
 
