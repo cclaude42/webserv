@@ -6,7 +6,7 @@
 /*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 13:20:34 by frthierr          #+#    #+#             */
-/*   Updated: 2021/01/13 18:26:44 by frthierr         ###   ########.fr       */
+/*   Updated: 2021/01/19 11:02:59 by frthierr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,31 +70,31 @@ RequestConfig	&RequestConfig::operator=(RequestConfig const &src) {
 }
 
 // GETER FUNCTIONS
-std::string							RequestConfig::getPath() const {
+const std::string							&RequestConfig::getPath() const {
 	return this->_path;
 }
 
-std::map<int, std::string>			RequestConfig::getErrorPage() const {
+const std::map<int, std::string>			&RequestConfig::getErrorPage() const {
 	return this->_error_page;
 }
 
-int									RequestConfig::getClientBodyBufferSize() const {
+const int									&RequestConfig::getClientBodyBufferSize() const {
 	return this->_client_body_buffer_size;
 }
 
-std::map<std::string, std::string>	RequestConfig::getCgiParam() const {
+const std::map<std::string, std::string>	&RequestConfig::getCgiParam() const {
 	return this->_cgi_param;
 }
 
-t_cgi_pass							RequestConfig::getCgiPass() const {
+const t_cgi_pass							&RequestConfig::getCgiPass() const {
 	return this->_cgi_pass;
 }
 
-std::set<std::string>				RequestConfig::getAllowedMethods() const {
+const std::set<std::string>				&RequestConfig::getAllowedMethods() const {
 	return this->_allowed_methods;
 }
 
-t_listen							RequestConfig::getHostPort() const {
+const t_listen							&RequestConfig::getHostPort() const {
 	return this->_hostPort;
 }
 

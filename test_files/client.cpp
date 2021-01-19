@@ -74,7 +74,7 @@ std::string		choose_target(void)
 
 	std::cout << std::endl << YELLOW << "Choose TARGET FILE :" << std::endl;
 	std::cout << "(a) Exists" << std::endl;
-	std::cout << "(b) Doesn't exists" << std::endl;
+	std::cout << "(b) Doesn't exist" << std::endl;
 	std::cout << "(c) Wrong permissions" << RESET << std::endl;
 	getline(std::cin, choice);
 

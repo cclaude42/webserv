@@ -5,3 +5,4 @@ listen 80
 root /
 allow_methods GET HEAD POST PUT DELETE CONNECT OPTIONS TRACE PATCH
 index index.html
+autoindex off
