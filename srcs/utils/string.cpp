@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   string.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/31 18:58:08 by cclaude           #+#    #+#             */
-/*   Updated: 2020/11/17 21:10:58 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/01/19 15:32:18 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,4 +99,13 @@ std::string&					capitalize(std::string& str)
 		str[i + 1] = std::toupper(str[i + 1]);
 	}
 	return str;
+}
+
+std::string	to_string(size_t n)
+{
+	std::stringstream tmp;
+
+	tmp << n;
+
+	return tmp.str();
 }

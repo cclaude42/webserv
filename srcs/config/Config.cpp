@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Config.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 14:30:01 by user42            #+#    #+#             */
-/*   Updated: 2021/01/13 18:24:24 by frthierr         ###   ########.fr       */
+/*   Updated: 2021/01/19 15:15:44 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ RequestConfig	Config::getConfigForRequest(t_listen const address,\
 bool		Config::getServerForRequest(ConfigServer &ret, t_listen const address, std::string const hostName) const {
 	std::vector<ConfigServer>	possibleServers;
 
-	for (std::vector<const ConfigServer>::iterator serversIter = this->_servers.begin() ; serversIter != this->_servers.end(); serversIter++) {
+	for (std::vector<ConfigServer>::const_iterator serversIter = this->_servers.begin() ; serversIter != this->_servers.end(); serversIter++) {
 		std::vector<t_listen>	listens = serversIter->getListen();
 		for (std::vector<t_listen>::iterator listenIter = listens.begin(); listenIter != listens.end(); listenIter++) {
 			if (address.host == (*listenIter).host && address.port == (*listenIter).port) {
@@ -112,7 +112,7 @@ std::ostream	&operator<<(std::ostream &out, const Config &config) {
 std::vector<t_listen>				Config::getAllListens() const {
 	std::vector<t_listen>	ret;
 	
-	for (std::vector<const ConfigServer>::iterator server = this->_servers.begin(); server != this->_servers.end(); server++) {
+	for (std::vector<ConfigServer>::const_iterator server = this->_servers.begin(); server != this->_servers.end(); server++) {
 		std::vector<t_listen>	listenVec = server->getListen();
 		for (std::vector<t_listen>::iterator listen = listenVec.begin(); listen != listenVec.end(); listen++) {
 			std::vector<t_listen>::iterator i = ret.begin();

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ConfigServer.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 15:28:08 by user42            #+#    #+#             */
-/*   Updated: 2021/01/12 18:55:33 by frthierr         ###   ########.fr       */
+/*   Updated: 2021/01/19 15:30:12 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -267,7 +267,7 @@ void        ConfigServer::addListen(std::vector<std::string> args) {
 	if ((separator = args[0].find(":")) == std::string::npos) {
 		if (isDigits(args[0])) {
 			listen.host = 0;
-			listen.port = std::stoi(args[0]);
+			listen.port = ft_atoi(args[0].c_str());
 			this->_listen.push_back(listen);
 			return ;
 		}
@@ -279,7 +279,7 @@ void        ConfigServer::addListen(std::vector<std::string> args) {
 		separator++;
 		std::string	portStr = args[0].substr(separator);
 		if (isDigits(portStr)) {
-			listen.port = std::stoi(portStr);
+			listen.port = ft_atoi(portStr.c_str());
 			this->_listen.push_back(listen);
 			return ;
 		}
@@ -310,7 +310,7 @@ void        ConfigServer::addErrorPage(std::vector<std::string> args) {
 	
 	for (size_t i = 0; i < len; i++) {
 		if (isDigits(args[i]))
-			codes.push_back(std::stoi(args[i]));
+			codes.push_back(ft_atoi(args[i].c_str()));
 		else if (codes.empty())
 			throw ConfigServer::ExceptionInvalidArguments();
 		else if (i == len - 1)
@@ -328,7 +328,7 @@ void        ConfigServer::addClientBodyBufferSize(std::vector<std::string> args)
 	// std::cout << "in addBodySize" << std::endl;
 	if (args.size() != 1 || !isDigits(args[0]))
 		throw ConfigServer::ExceptionInvalidArguments();
-	this->_client_body_buffer_size = std::stoi(args[0]);
+	this->_client_body_buffer_size = ft_atoi(args[0].c_str());
 }
 
 void		ConfigServer::addCgiParam(std::vector<std::string> args) {
@@ -353,7 +353,7 @@ void    	ConfigServer::addCgiPass(std::vector<std::string> args) {
 	std::string	strPort = args[0].substr(separator);
 	if (isDigits(strPort) == false)
 		throw ConfigServer::ExceptionInvalidArguments();
-	address.port = std::stoi(strPort);
+	address.port = ft_atoi(strPort.c_str());
 	this->_cgi_pass.address.port = address.port;
 	this->_cgi_pass.address.host = address.host;
 	this->_cgi_pass.set = true;

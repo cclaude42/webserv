@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ConfigHelperFunctions.cpp                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/18 14:28:07 by user42            #+#    #+#             */
-/*   Updated: 2020/11/18 14:28:25 by user42           ###   ########.fr       */
+/*   Updated: 2021/01/19 15:28:39 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,10 @@ unsigned int	strToIp(std::string strIp) {
 	size_t  start = 0;
 	if (strIp == "localhost")
 		strIp = "127.0.0.1";
-	for (unsigned int i = 3 ; i != UINT32_MAX; i--) {
+	for (unsigned int i = 3 ; i != std::numeric_limits<uint32_t>::max(); i--) {
 		sep = strIp.find_first_of(".", sep);
 		std::string str = strIp.substr(start, sep);
-		n = std::stoi(str);
+		n = ft_atoi(str.c_str());
 		m[i] = static_cast<unsigned char>(n);
 		sep++;
 		start = sep;
