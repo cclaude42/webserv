@@ -6,7 +6,7 @@
 /*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/13 15:07:29 by frthierr          #+#    #+#             */
-/*   Updated: 2021/01/19 14:36:32 by frthierr         ###   ########.fr       */
+/*   Updated: 2021/01/20 13:32:04 by frthierr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ char					**CgiHandler::_getEnvAsCstrArray() const {
 }
 
 std::string		CgiHandler::executeCgi(std::string scriptName) const {
-pid_t	id;
+	pid_t	id;
 	int		fds[2];
 	int		saveStdin;
 	int		saveStdout;

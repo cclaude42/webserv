@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Config.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 14:29:38 by user42            #+#    #+#             */
-/*   Updated: 2021/01/19 15:10:20 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/01/21 16:13:59 by frthierr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,18 +15,17 @@
 # define CONFIG_HPP
 
 
+# include "webserv.hpp"
 # include "ConfigDataStructures.hpp"
 # include "ConfigHelperFunctions.hpp"
 # include "ConfigReader.hpp"
 # include "ConfigServer.hpp"
 # include "RequestConfig.hpp"
-# include "webserv.hpp"
-
-# define DEFAULT_PATH "./test_files/conf/default"
 
 class Config {
 	public:
 		Config();
+		Config(std::string defaultServerPath);
 		Config(Config const &src);
 		virtual ~Config(void);
 

@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   Config.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 14:30:01 by user42            #+#    #+#             */
-/*   Updated: 2021/01/19 15:15:44 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/01/21 15:33:21 by frthierr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Config.hpp"
 
-Config::Config(void) {
+Config::Config(std::string	defaultServerPath) {
+	ConfigServer::_initDefaultServer(defaultServerPath.c_str());
 	return ;
 }
 
@@ -46,18 +47,20 @@ int     Config::parse(const char *filename) {
 		if (file[i] == "server") {
 			ConfigServer  server;
 			++i;
-			if (file[i] != "{")
+			if (file[i] != "{") {
 				std::cerr << "Error: expecter '{' after server directive" << std::endl;
+				return 1;
+			}
 			++i;
 			if (!server.parseServer(i, file)) {
 				std::cerr << "Error: error in config file \"" << filename << "\"" <<  std::endl;
-				return 0;			
+				return 1;			
 			}
 			this->_servers.push_back(server);
 		}
 		else {
 			std::cerr << "Error: unknown directive " << file[i] << std::endl;
-			return 0;
+			return 1;
 		}
 	}
 	return 0;

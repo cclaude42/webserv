@@ -3,16 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   ConfigServer.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 15:28:08 by user42            #+#    #+#             */
-/*   Updated: 2021/01/19 15:30:12 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/01/21 16:14:19 by frthierr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ConfigServer.hpp"
 
 // INITIALIZING STATIC MEMBERS
+
+ConfigServer	ConfigServer::_defaultServer = ConfigServer();
 
 parseMap ConfigServer::_initServerMap() {
 		    parseMap	myMap;
@@ -53,7 +55,7 @@ ConfigServer				ConfigServer::_initDefaultServer(const char *filename) {
 	
 	file = ConfigReader::readFile(filename);
 	if (file.empty())
-		std::cerr << "Could not open default file at location " << DEFAULT_PATH << std::endl;
+		std::cerr << "Could not open default file at location " << filename << std::endl;
 	fileVector	begin;
 	begin.push_back("server");
 	begin.push_back("{");
@@ -64,10 +66,9 @@ ConfigServer				ConfigServer::_initDefaultServer(const char *filename) {
 		std::cerr << "invalid default file" << std::endl;
 		throw ConfigServer::ExceptionInvalidArguments();
 	}
+	ConfigServer::_defaultServer = server;
 	return server;
 }
-
-const ConfigServer ConfigServer::_defaultServer = ConfigServer::_initDefaultServer(DEFAULT_PATH);
 
 // CONSTRUCTORS
 
@@ -124,7 +125,7 @@ ConfigServer	&ConfigServer::operator=(ConfigServer const &src) {
 int     ConfigServer::parseServer(unsigned int &index, fileVector &file) {
 	fileVector                  args;
 	parseMap::iterator          iter;
-	std::string                 directive = "";
+	std::string                 directive;
 
 	//	calling the function that corresponds to a directive with its args as parameters
 	for ( ; index < file.size() && file[index] != "}" ; index++) {
@@ -502,5 +503,6 @@ ConfigServer						ConfigServer::getLocationForRequest(std::string const path, st
 			tryLen--;
 		} while (tryLen);
 	}
+	std::cout << "TRY LOCATION: " << tryLocation << std::endl;
 	return (*this);
 }

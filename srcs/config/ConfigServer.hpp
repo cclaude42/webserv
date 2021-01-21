@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ConfigServer.hpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
+/*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 15:27:44 by user42            #+#    #+#             */
-/*   Updated: 2020/11/18 14:47:36 by user42           ###   ########.fr       */
+/*   Updated: 2021/01/21 16:05:47 by frthierr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ class ConfigServer {
 			virtual const char	*what() const throw();
 		};
 
+		static ConfigServer					_initDefaultServer(const char *filename);
+		
 		// GETERS
 		std::vector<t_listen>				getListen() const;
 		std::string							getRoot() const;
@@ -90,8 +92,7 @@ class ConfigServer {
 		std::vector<std::string>			_index;
 		bool								_autoindex;
 		std::string							_alias;
-		static ConfigServer					_initDefaultServer(const char *filename);
-		static const ConfigServer			_defaultServer;
+		static  ConfigServer				_defaultServer;
 		static	parseMap					serverParsingMap;
 		static	parseMap					locationParsingMap;
 		static parseMap 					_initServerMap();

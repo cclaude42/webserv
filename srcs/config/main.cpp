@@ -6,7 +6,7 @@
 /*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/06 15:46:21 by user42            #+#    #+#             */
-/*   Updated: 2021/01/13 15:19:23 by frthierr         ###   ########.fr       */
+/*   Updated: 2021/01/21 16:11:03 by frthierr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,12 @@ int main(int ac, char * const argv[])
 {
     (void)ac;
     try {
-        Config  config;
-        RequestConfig requestConfig;
+        Config  		config("./files/default");
+        RequestConfig 	requestConfig;
 
         t_listen    listen= {0, 80};
         
         config.parse(argv[1]); 
-        ConfigServer    server;
         requestConfig = config.getConfigForRequest(listen, "", "example");
         std::cout << requestConfig << std::endl;
         // std::vector<t_listen> listens = config.getAllListens();
