@@ -6,7 +6,7 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 17:10:06 by hbaudet           #+#    #+#             */
-/*   Updated: 2021/01/19 15:17:13 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/01/20 10:11:22 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,26 +36,26 @@ std::ostream&	operator<<(std::ostream& os, const Request& re)
 
 void	Request::resetHeaders()
 {
-	this->_headers = {
-	{"Accept-Charsets", ""},
-	{"Accept-Language", ""},
-	{"Allow", ""},
-	{"Authorization", ""},
-	{"Aontent-Language", ""},
-	{"Content-Length", ""},
-	{"Content-Location", ""},
-	{"Content-Type", ""},
-	{"Date", ""},
-	{"Host", ""},
-	{"Last-Modified", ""},
-	{"Location", ""},
-	{"Referer", ""},
-	{"Retry-After", ""},
-	{"Server", ""},
-	{"Transfer-Encoding", ""},
-	{"User-Agent", ""},
-	{"Www-Authenticate", ""},
-	};
+	this->_headers.clear();
+
+	this->_headers["Accept-Charsets"] = "";
+	this->_headers["Accept-Language"] = "";
+	this->_headers["Allow"] = "";
+	this->_headers["Authorization"] = "";
+	this->_headers["Aontent-Language"] = "";
+	this->_headers["Content-Length"] = "";
+	this->_headers["Content-Location"] = "";
+	this->_headers["Content-Type"] = "";
+	this->_headers["Date"] = "";
+	this->_headers["Host"] = "";
+	this->_headers["Last-Modified"] = "";
+	this->_headers["Location"] = "";
+	this->_headers["Referer"] = "";
+	this->_headers["Retry-After"] = "";
+	this->_headers["Server"] = "";
+	this->_headers["Transfer-Encoding"] = "";
+	this->_headers["User-Agent"] = "";
+	this->_headers["Www-Authenticate"] = "";
 }
 
 int		Request::readFirstLine(std::string& line)
@@ -129,7 +129,7 @@ int		Request::checkPort()
 	else
 	{
 		std::string tmp(this->_headers["Host"], i + 1);
-		this->_port = stoi(tmp);
+		this->_port = ft_atoi(tmp.c_str());
 	}
 	return (this->_port);
 }
@@ -155,8 +155,8 @@ int		Request::parse(const std::string& str)
 			value = readValue(line[i]);
 			if (line[i][0] == '\r')
 				break;
-			if (line[i].back() == '\r')
-				line[i].pop_back();
+			if (*(--(line[i].end())) == '\r') // c++98 equivalent of string.back(), sorry
+				line[i].erase(--(line[i].end())); // c++98 equivalent of string.pop_back(), sorry again
 			if (this->_headers.count(key))
 				this->_headers[key] = strip(value, ' ');
 		}
