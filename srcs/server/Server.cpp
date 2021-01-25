@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:29:28 by cclaude           #+#    #+#             */
-/*   Updated: 2020/11/19 15:17:44 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/01/25 16:00:17 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ void		Server::accept(void)
 	_socket = ::accept(_fd, (struct sockaddr *)&_addr, (socklen_t *)&addrlen);
 	if (_socket == -1)
 		std::cerr << "Could not create socket." << std::endl;
+	fcntl(_socket, F_SETFL, O_NONBLOCK);
 }
 
 std::string	Server::recv(void)
