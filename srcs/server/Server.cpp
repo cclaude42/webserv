@@ -60,6 +60,7 @@ void		Server::accept(void)
 	_socket = ::accept(_fd, (struct sockaddr *)&_addr, (socklen_t *)&addrlen);
 	if (_socket == -1)
 		std::cerr << "Could not create socket." << std::endl;
+	fcntl(_socket, F_SETFL, O_NONBLOCK);
 }
 
 std::string	Server::recv(void)
