@@ -156,7 +156,7 @@ int		main(void)
 	{
 		port = choose_port();
 
-		filename = "test_files/request/";
+		filename = "test_us/request/";
 
 		filename += choose_method();
 

@@ -96,12 +96,16 @@ fclean: clean
 	@echo "\033[0;31mDeleting executable..."
 	@rm -f $(NAME)
 	@rm -f client
+	@rm -f test_us/root/index_*
 	@echo "\033[0m"
 
 re: fclean all
 
 test: re
-	clang++ -o client test_files/client.cpp
-	./webserv test_files/conf/webserv.conf
+	@cp test_us/index/basic.html test_us/root/index_example.html
+	@cp test_us/index/basic.html test_us/root/index_permission.html
+	@chmod 000 test_us/root/index_permission.html
+	@clang++ -o client test_us/client.cpp
+	./webserv test_us/conf/webserv.conf
 
 .PHONY: libft clean fclean re test

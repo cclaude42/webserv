@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:18:58 by cclaude           #+#    #+#             */
-/*   Updated: 2020/11/27 13:05:10 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/01/25 19:54:52 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ int				Response::readContent(void)
 	if (fileExists(_path) == 0)
 		return (404);
 
-	file.open(_path, std::ifstream::in);
+	file.open(_path.c_str(), std::ifstream::in);
 	if (file.is_open() == false)
 		return (403);
 
@@ -133,7 +133,7 @@ int				Response::writeContent(std::string content)
 	if (fileExists(_path) == 0)
 		ret = 201;
 
-	file.open(_path, std::ofstream::out | std::ofstream::trunc);
+	file.open(_path.c_str(), std::ofstream::out | std::ofstream::trunc);
 
 	if (file.is_open() == false)
 		return (403);
