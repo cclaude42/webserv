@@ -6,7 +6,7 @@
 /*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 14:30:01 by user42            #+#    #+#             */
-/*   Updated: 2021/01/21 15:33:21 by frthierr         ###   ########.fr       */
+/*   Updated: 2021/01/27 13:33:23 by frthierr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,14 @@ Config::Config(Config const &src) {
 	return ;
 }
 
-Config::~Config(void) {
-	return ;
-}
-
 Config	&Config::operator=(Config const &src) {
 	if (this != &src)
 		this->_servers = src._servers;
 	return (*this);
+}
+
+Config::~Config(void) {
+	return ;
 }
 
 std::vector<ConfigServer>		Config::getServers() const {
@@ -72,7 +72,7 @@ RequestConfig	Config::getConfigForRequest(t_listen const address,\
 	std::string		locationPath;
 
 	this->getServerForRequest(server, address, hostName);
-	server = server.getLocationForRequest(uri, locationPath);	
+	server = server.getLocationForRequest(uri, locationPath);
 	RequestConfig config(server, uri, locationPath);
 	config.setHostPort(address);
 	return config;

@@ -1,7 +1,7 @@
 # ___COMPILATION___
 
 CPP= c++
-FLAGS= -Wall -Wextra -Werror
+FLAGS= -Wall -Wextra -Werror -fsanitize=address
 SRCS=	ConfigReader.cpp\
 		ConfigHelperFunctions.cpp\
 		Config.cpp\

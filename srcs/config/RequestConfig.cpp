@@ -6,7 +6,7 @@
 /*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 13:20:34 by frthierr          #+#    #+#             */
-/*   Updated: 2021/01/21 14:59:25 by frthierr         ###   ########.fr       */
+/*   Updated: 2021/01/27 15:01:48 by frthierr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ _autoindex(config.getAutoIndex())
 	std::string	alias = config.getAlias();
 	std::string	root = config.getRoot();
 	std::string	ret;
-	if (locationName != "" && alias != "") {
+	if (locationName != "" && locationName[0] != '*' && alias != "") {
 		ret = root + alias + path.substr(locationName.length());
 	}
 	else
@@ -86,7 +86,7 @@ const std::map<std::string, std::string>	&RequestConfig::getCgiParam() const {
 	return this->_cgi_param;
 }
 
-const t_cgi_pass							&RequestConfig::getCgiPass() const {
+const std::string							&RequestConfig::getCgiPass() const {
 	return this->_cgi_pass;
 }
 
@@ -128,8 +128,7 @@ std::ostream	&operator<<(std::ostream &out, RequestConfig &request) {
 	out << "cgi_param:" << std::endl;
 	for (std::map<std::string, std::string>::iterator i = request._cgi_param.begin() ; i != request._cgi_param.end(); i++)
 		out << "\t" << i->first << "=" << i->second << std::endl;
-	if (request._cgi_pass.set)
-		out << "cgi_pass: " << request._cgi_pass.address.host << ":" << request._cgi_pass.address.port << std::endl;
+	out << "cgi_pass: " << request._cgi_pass << std::endl;
 	out << "allowed_methods:" << std::endl;
 	for (std::set<std::string>::iterator i = request._allowed_methods.begin(); i != request._allowed_methods.end(); i++)	
 		out << "\t" << *i << std::endl;
