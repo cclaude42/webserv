@@ -6,7 +6,7 @@
 /*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 14:30:01 by user42            #+#    #+#             */
-/*   Updated: 2021/01/27 13:33:23 by frthierr         ###   ########.fr       */
+/*   Updated: 2021/01/28 09:56:34 by frthierr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,11 @@
 
 Config::Config(std::string	defaultServerPath) {
 	ConfigServer::_initDefaultServer(defaultServerPath.c_str());
+	return ;
+}
+
+
+Config::Config() {
 	return ;
 }
 
