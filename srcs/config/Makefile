@@ -1,7 +1,7 @@
 # ___COMPILATION___
 
 CPP= c++
-FLAGS= -Wall -Wextra -Werror
+FLAGS= -Wall -Wextra -Werror -fsanitize=address
 SRCS=	ConfigReader.cpp\
 		ConfigHelperFunctions.cpp\
 		Config.cpp\
@@ -29,10 +29,13 @@ NC=\033[0m
 
 all: ${NAME}
 
-${NAME}: ${OBJS}
+${NAME}: libft ${OBJS}
 	@printf "=>	"
-	${CPP} ${FLAGS} ${INCLUDE_DIRS} ${OBJS} -o ${NAME}
+	${CPP} ${FLAGS} ${INCLUDE_DIRS} ../../libft/libft.a ${OBJS} -o ${NAME} -L ../../libft/ -lft
 	@echo "${GREEN}✓ ${NAME} compiled${NC}"
+
+libft:
+	make -C ../../libft
 
 start: all
 	@./${NAME}
@@ -41,12 +44,14 @@ valgrind_start: all
 	@valgrind --leak-check=full --show-leak-kinds=definite ./${NAME}
 
 clean:
+	make clean -C ../../libft
 	@printf "${RED}X "
 	rm -rf ${OBJS}
 	@printf "${NC}"
 	@echo "${GREEN}✓ ${NAME} clean${NC}"
 
 fclean: clean
+	make fclean -C ../../libft
 	@printf "${RED}X "
 	rm -rf ${NAME}
 	@printf "${NC}"

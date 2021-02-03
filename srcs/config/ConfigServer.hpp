@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ConfigServer.hpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
+/*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 15:27:44 by user42            #+#    #+#             */
-/*   Updated: 2020/11/18 14:47:36 by user42           ###   ########.fr       */
+/*   Updated: 2021/01/27 14:52:41 by frthierr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ class ConfigServer {
 			virtual const char	*what() const throw();
 		};
 
+		static ConfigServer					_initDefaultServer(const char *filename);
+		
 		// GETERS
 		std::vector<t_listen>				getListen() const;
 		std::string							getRoot() const;
@@ -48,7 +50,7 @@ class ConfigServer {
 		std::map<int, std::string>			getErrorPage() const;
 		int									getClientBodyBufferSize() const;
 		std::map<std::string, std::string>	getCgiParam() const;
-		t_cgi_pass							getCgiPass() const;
+		std::string							getCgiPass() const;
 		std::map<std::string, ConfigServer> getLocation() const;
 		std::set<std::string>				getAllowedMethods() const;
 		std::vector<std::string>			getIndex() const;
@@ -84,14 +86,13 @@ class ConfigServer {
 		std::map<int, std::string>			_error_page; // error page redirections
 		int									_client_body_buffer_size; // max size for the client body, defaults to 8 000
 		std::map<std::string, std::string>	_cgi_param;
-		t_cgi_pass							_cgi_pass;
+		std::string							_cgi_pass;
 		std::map<std::string, ConfigServer>_location;
 		std::set<std::string>				_allowed_methods;
 		std::vector<std::string>			_index;
 		bool								_autoindex;
 		std::string							_alias;
-		static ConfigServer					_initDefaultServer(const char *filename);
-		static const ConfigServer			_defaultServer;
+		static  ConfigServer				_defaultServer;
 		static	parseMap					serverParsingMap;
 		static	parseMap					locationParsingMap;
 		static parseMap 					_initServerMap();

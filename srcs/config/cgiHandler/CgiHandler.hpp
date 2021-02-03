@@ -6,7 +6,7 @@
 /*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/13 15:08:57 by frthierr          #+#    #+#             */
-/*   Updated: 2021/01/14 14:21:38 by frthierr         ###   ########.fr       */
+/*   Updated: 2021/01/20 13:31:15 by frthierr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@
 # include <string>
 # include "Config.hpp"
 # include "Request.hpp"
+# include "webserv.hpp"
+# include "RequestConfig.hpp"
 
 class CgiHandler {
 	public:

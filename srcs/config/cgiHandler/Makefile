@@ -2,8 +2,7 @@
 
 CPP= c++
 FLAGS=
-SRCS=	main.cpp\
-		CgiHandler.cpp
+SRCS=	main.cpp
 
 NAME= cgiHandler
 OBJS= ${SRCS:.cpp=.o}

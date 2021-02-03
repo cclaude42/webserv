@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   Config.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 14:30:01 by user42            #+#    #+#             */
-/*   Updated: 2021/01/19 15:15:44 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/01/29 15:00:05 by frthierr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Config.hpp"
 
-Config::Config(void) {
+Config::Config(std::string	defaultServerPath) {
+	ConfigServer::_initDefaultServer(defaultServerPath.c_str());
 	return ;
 }
 
@@ -22,14 +23,14 @@ Config::Config(Config const &src) {
 	return ;
 }
 
-Config::~Config(void) {
-	return ;
-}
-
 Config	&Config::operator=(Config const &src) {
 	if (this != &src)
 		this->_servers = src._servers;
 	return (*this);
+}
+
+Config::~Config(void) {
+	return ;
 }
 
 std::vector<ConfigServer>		Config::getServers() const {
@@ -46,18 +47,20 @@ int     Config::parse(const char *filename) {
 		if (file[i] == "server") {
 			ConfigServer  server;
 			++i;
-			if (file[i] != "{")
+			if (file[i] != "{") {
 				std::cerr << "Error: expecter '{' after server directive" << std::endl;
+				return 1;
+			}
 			++i;
 			if (!server.parseServer(i, file)) {
 				std::cerr << "Error: error in config file \"" << filename << "\"" <<  std::endl;
-				return 0;			
+				return 1;			
 			}
 			this->_servers.push_back(server);
 		}
 		else {
 			std::cerr << "Error: unknown directive " << file[i] << std::endl;
-			return 0;
+			return 1;
 		}
 	}
 	return 0;
@@ -69,7 +72,7 @@ RequestConfig	Config::getConfigForRequest(t_listen const address,\
 	std::string		locationPath;
 
 	this->getServerForRequest(server, address, hostName);
-	server = server.getLocationForRequest(uri, locationPath);	
+	server = server.getLocationForRequest(uri, locationPath);
 	RequestConfig config(server, uri, locationPath);
 	config.setHostPort(address);
 	return config;

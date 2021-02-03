@@ -2,8 +2,13 @@ server {
     listen 80
     error_page 707 404 300 /helloworlderror
     server_name example
-    cgi_param   hello world
-    cgi_pass    localhost:9000
+	location *.js {
+		cgi_param hello world
+		cgi_param gustovo hey
+		cgi_pass ./cgi_bin/js
+		root /javascript
+		
+	}
     location /blabla {
         root /tmpBlabla/
         error_page  404 /err/here

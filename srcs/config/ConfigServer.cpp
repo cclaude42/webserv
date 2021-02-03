@@ -3,16 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   ConfigServer.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 15:28:08 by user42            #+#    #+#             */
-/*   Updated: 2021/01/19 15:30:12 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/01/27 15:29:05 by frthierr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ConfigServer.hpp"
 
 // INITIALIZING STATIC MEMBERS
+
+ConfigServer	ConfigServer::_defaultServer = ConfigServer();
 
 parseMap ConfigServer::_initServerMap() {
 		    parseMap	myMap;
@@ -52,6 +54,8 @@ ConfigServer				ConfigServer::_initDefaultServer(const char *filename) {
 	fileVector		file;
 	
 	file = ConfigReader::readFile(filename);
+	if (file.empty())
+		std::cerr << "Could not open default file at location " << filename << std::endl;
 	fileVector	begin;
 	begin.push_back("server");
 	begin.push_back("{");
@@ -62,10 +66,9 @@ ConfigServer				ConfigServer::_initDefaultServer(const char *filename) {
 		std::cerr << "invalid default file" << std::endl;
 		throw ConfigServer::ExceptionInvalidArguments();
 	}
+	ConfigServer::_defaultServer = server;
 	return server;
 }
-
-const ConfigServer ConfigServer::_defaultServer = ConfigServer::_initDefaultServer(DEFAULT_PATH);
 
 // CONSTRUCTORS
 
@@ -74,7 +77,6 @@ _root(""),
 _client_body_buffer_size(0),
 _autoindex(false)
 {
-	this->_cgi_pass.set = false;
 	return ;
 }
 
@@ -122,7 +124,7 @@ ConfigServer	&ConfigServer::operator=(ConfigServer const &src) {
 int     ConfigServer::parseServer(unsigned int &index, fileVector &file) {
 	fileVector                  args;
 	parseMap::iterator          iter;
-	std::string                 directive = "";
+	std::string                 directive;
 
 	//	calling the function that corresponds to a directive with its args as parameters
 	for ( ; index < file.size() && file[index] != "}" ; index++) {
@@ -192,7 +194,7 @@ void	ConfigServer::passMembers(ConfigServer &server) const {
 			if (server._cgi_param.find(i->first) == server._cgi_param.end())
 				server._cgi_param[i->first] = i->second;
 		}
-		if (!server._cgi_pass.set)
+		if (server._cgi_pass == "")
 			server._cgi_pass = this->_cgi_pass;
 		if (server._allowed_methods.empty())
 			server._allowed_methods = this->_allowed_methods;
@@ -338,26 +340,10 @@ void		ConfigServer::addCgiParam(std::vector<std::string> args) {
 	this->_cgi_param[args[0]] = args[1];
 }
 
-void    	ConfigServer::addCgiPass(std::vector<std::string> args) {
-	t_listen    address;
-	size_t      separator;
-	
-	// std::cout << "in addCgiPass" << std::endl;
-	if (args.size() != 1 || this->_cgi_pass.set == true)
+void    	ConfigServer::addCgiPass(std::vector<std::string> args) {	
+	if (args.size() != 1)
 		throw ConfigServer::ExceptionInvalidArguments();
-	if ((separator = args[0].find(":")) == std::string::npos) {
-		throw ConfigServer::ExceptionInvalidArguments();
-	}
-	address.host = strToIp(args[0].substr(0, separator));
-	separator++;
-	std::string	strPort = args[0].substr(separator);
-	if (isDigits(strPort) == false)
-		throw ConfigServer::ExceptionInvalidArguments();
-	address.port = ft_atoi(strPort.c_str());
-	this->_cgi_pass.address.port = address.port;
-	this->_cgi_pass.address.host = address.host;
-	this->_cgi_pass.set = true;
-	// std::cout << "addCgiPass END" << std::endl;
+	this->_cgi_pass = args[0];
 }
 
 void		ConfigServer::addAllowedMethods(std::vector<std::string> args) {
@@ -414,7 +400,7 @@ std::ostream	&operator<<(std::ostream &out, const ConfigServer &server) {
 	out << "cgi_param:" << std::endl;
 	for (std::map<std::string, std::string>::const_iterator i = server._cgi_param.begin(); i != server._cgi_param.end(); i++)
 		out << "\t" << i->first << " = " << i->second << std::endl;
-	out << "cgi_pass:	" << server._cgi_pass.address.host << ":" << server._cgi_pass.address.port << std::endl;
+	out << "cgi_pass:	" << server._cgi_pass << std::endl;
 	out << "allowed methods: ";
 	for (std::set<std::string>::iterator i = server._allowed_methods.begin(); i != server._allowed_methods.end(); i++)
 		out << " " << *i;
@@ -458,7 +444,7 @@ int									ConfigServer::getClientBodyBufferSize() const {
 std::map<std::string, std::string>	ConfigServer::getCgiParam() const {
 	return this->_cgi_param;
 }
-t_cgi_pass							ConfigServer::getCgiPass() const {
+std::string							ConfigServer::getCgiPass() const {
 	return this->_cgi_pass;
 }
 std::map<std::string, ConfigServer>	ConfigServer::getLocation() const {
@@ -493,12 +479,20 @@ ConfigServer						ConfigServer::getLocationForRequest(std::string const path, st
 		do {
 			tryLocation = path.substr(0, tryLen);
 			iter = this->_location.find(tryLocation);
-			if (iter != this->_location.end()) {
+			if (iter != this->_location.end() && iter->first[0] != '*') {
 				retLocationPath = tryLocation;
 				return iter->second.getLocationForRequest(path, retLocationPath);
 			}
 			tryLen--;
 		} while (tryLen);
+		for (std::map<std::string, ConfigServer>::iterator i = this->_location.begin(); i != this->_location.end(); i++) {
+			if (i->first[0] == '*') {
+				std::string	suffix = i->first.substr(1);
+				if (path.length() > suffix.length() && !path.compare(path.length() - suffix.length(), suffix.length(), suffix)) {
+					return i->second.getLocationForRequest(path, retLocationPath);
+				}
+			}
+		}
 	}
 	return (*this);
 }

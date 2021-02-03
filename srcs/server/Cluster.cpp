@@ -3,10 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   Cluster.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
+/*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/12 16:53:41 by cclaude           #+#    #+#             */
+<<<<<<< HEAD
+/*   Updated: 2021/01/27 11:17:15 by frthierr         ###   ########.fr       */
+=======
 /*   Updated: 2021/01/25 19:55:20 by cclaude          ###   ########.fr       */
+>>>>>>> origin/master
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +58,7 @@ void	Cluster::run(void)
 		timeout.tv_sec  = 5;
 		timeout.tv_usec = 0;
 
-		std::cout << "Waiting on a connection..." << std::endl;
+		// std::cout << "Waiting on a connection..." << std::endl;
 		ret = select(_max_fd + 1, &working_set, NULL, NULL, &timeout);
 		if (ret > 0)
 			std::cout << "Received a connection !" << std::endl << std::endl;
