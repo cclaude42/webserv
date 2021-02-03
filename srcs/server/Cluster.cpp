@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/12 16:53:41 by cclaude           #+#    #+#             */
-/*   Updated: 2020/11/27 11:27:24 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/01/25 19:55:20 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	Cluster::setup(void)
 	ft_memset(&_fd_set, 0, sizeof(fd_set));
 	_max_fd = 0;
 
-	for ( std::vector<t_listen>::const_iterator lstn = vect.cbegin() ; lstn != vect.cend() ; lstn++ )
+	for ( std::vector<t_listen>::const_iterator lstn = vect.begin() ; lstn != vect.end() ; lstn++ )
 	{
 		Server		serv(*lstn);
 		long		fd;
