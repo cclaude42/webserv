@@ -6,7 +6,7 @@
 /*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 15:28:08 by user42            #+#    #+#             */
-/*   Updated: 2021/01/27 15:29:05 by frthierr         ###   ########.fr       */
+/*   Updated: 2021/02/03 12:13:38 by frthierr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,8 @@ ConfigServer				ConfigServer::_initDefaultServer(const char *filename) {
 ConfigServer::ConfigServer(void):
 _root(""),
 _client_body_buffer_size(0),
-_autoindex(false)
+_autoindex(false),
+_aliasSet(false)
 {
 	return ;
 }
@@ -94,6 +95,7 @@ ConfigServer::ConfigServer(ConfigServer const &src) {
 		this->_autoindex = src._autoindex;
 		this->_index = src._index;
 		this->_alias = src._alias;
+		this->_aliasSet = src._aliasSet;
 	}
 	return ;
 }
@@ -116,6 +118,7 @@ ConfigServer	&ConfigServer::operator=(ConfigServer const &src) {
 		this->_autoindex = src._autoindex;
 		this->_index = src._index;
 		this->_alias = src._alias;
+		this->_aliasSet = src._aliasSet;
 	}
 	return *this;
 }
@@ -373,9 +376,11 @@ void	ConfigServer::addAutoIndex(std::vector<std::string> args) {
 }
 
 void	ConfigServer::addAlias(std::vector<std::string> args) {
-	if (args.size() != 1)
+	if (args.size() > 1)
 		throw ConfigServer::ExceptionInvalidArguments();
-	this->_alias = args[0];
+	if (args.size())
+		this->_alias = args[0];
+	this->_aliasSet = true;
 }
 
 
@@ -465,6 +470,10 @@ bool								ConfigServer::getAutoIndex() const {
 
 std::string							ConfigServer::getAlias() const {
 	return this->_alias;
+}
+
+bool								ConfigServer::getAliasSet() const {
+	return this->_aliasSet;
 }
 
 // GET CONFIG FOR HTTP REQUEST

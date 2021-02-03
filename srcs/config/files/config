@@ -2,6 +2,7 @@ server {
     listen 80
     error_page 707 404 300 /helloworlderror
     server_name example
+	root /root/
 	location *.js {
 		cgi_param hello world
 		cgi_param gustovo hey
@@ -15,7 +16,7 @@ server {
         allow_methods POST LIVE
         index blabla_index.html
         autoindex on
-        alias /alias/
+		alias 
     }
     location /hello {
         root /world/

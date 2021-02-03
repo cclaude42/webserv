@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ConfigReader.hpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
+/*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 14:33:47 by user42            #+#    #+#             */
-/*   Updated: 2020/11/18 14:33:10 by user42           ###   ########.fr       */
+/*   Updated: 2021/01/29 15:28:46 by frthierr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,9 @@ class ConfigReader {
 		static fileVector  		readFile(const char *filename);
 		static fileVector		split(std::string str, std::string charset);
 	private:
+		class	FileNotFoundException: public std::exception{
+			virtual const char	*what() const throw();
+		};
 };
 
 #endif
