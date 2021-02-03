@@ -3,14 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Cluster.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/12 16:53:41 by cclaude           #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2021/01/27 11:17:15 by frthierr         ###   ########.fr       */
-=======
-/*   Updated: 2021/01/25 19:55:20 by cclaude          ###   ########.fr       */
->>>>>>> origin/master
+/*   Updated: 2021/02/03 12:25:36 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +27,7 @@ void	Cluster::setup(void)
 	ft_memset(&_fd_set, 0, sizeof(fd_set));
 	_max_fd = 0;
 
-	for ( std::vector<t_listen>::const_iterator lstn = vect.begin() ; lstn != vect.end() ; lstn++ )
+	for ( std::vector<t_listen>::const_iterator lstn = vect.cbegin() ; lstn != vect.cend() ; lstn++ )
 	{
 		Server		serv(*lstn);
 		long		fd;
@@ -55,10 +51,10 @@ void	Cluster::run(void)
 		int				ret;
 
 		ft_memcpy(&working_set, &_fd_set, sizeof(_fd_set));
-		timeout.tv_sec  = 5;
+		timeout.tv_sec  = 10;
 		timeout.tv_usec = 0;
 
-		// std::cout << "Waiting on a connection..." << std::endl;
+		std::cout << "Waiting on a connection..." << std::endl;
 		ret = select(_max_fd + 1, &working_set, NULL, NULL, &timeout);
 		if (ret > 0)
 			std::cout << "Received a connection !" << std::endl << std::endl;
@@ -97,11 +93,11 @@ Cluster & Cluster::operator=(const Cluster & src)
 
 // Constructors and destructors
 
-Cluster::Cluster(void)
+Cluster::Cluster(void) : _config(DEFAULT_CONFIG)
 {
 }
 
-Cluster::Cluster(const Cluster & src)
+Cluster::Cluster(const Cluster & src) : _config(DEFAULT_CONFIG)
 {
 	*this = src;
 }

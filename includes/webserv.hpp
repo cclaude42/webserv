@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   webserv.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/31 13:44:42 by cclaude           #+#    #+#             */
-/*   Updated: 2021/01/19 15:32:48 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/02/03 12:26:15 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,8 @@ extern "C" {
 # define BYTE_2 0x0000ff00
 # define BYTE_3 0x000000ff
 
+// Config
+# define DEFAULT_CONFIG "test_us/conf/default"
 
 
 // NTOH / HTON

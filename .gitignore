@@ -10,3 +10,5 @@ objs/*/*.o
 
 a.out
 client
+
+test_us/root
