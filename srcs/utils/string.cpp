@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   string.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/31 18:58:08 by cclaude           #+#    #+#             */
-/*   Updated: 2021/01/19 15:32:18 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/01/25 20:04:41 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,8 +70,8 @@ std::vector<std::string>		split(const std::string& str, char c)
 
 std::string&					strip(std::string& str, char c)
 {
-	while (str.back() == c)
-		str.pop_back();
+	while (str[str.size()] == c)
+		str = str.substr(0, str.size());
 	return str;
 }
 

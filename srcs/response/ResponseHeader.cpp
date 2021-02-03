@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 15:17:39 by cclaude           #+#    #+#             */
-/*   Updated: 2020/11/27 13:06:22 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/01/25 19:55:09 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ std::string		ResponseHeader::getHeader(std::string content, std::string path, in
 	resetValues();
 	setValues(content, path, code);
 
-	header = "HTTP/1.1 " + std::to_string(code) + " " + getStatusMessage(code) + "\r\n";
+	header = "HTTP/1.1 " + to_string(code) + " " + getStatusMessage(code) + "\r\n";
 	header += writeHeader();
 
 	// std::cout << "[" << header << "]" << std::endl;
@@ -128,7 +128,7 @@ void			ResponseHeader::setContentLanguage(std::string content)
 
 void			ResponseHeader::setContentLength(int size)
 {
-	_contentLength = std::to_string(size);
+	_contentLength = to_string(size);
 }
 
 void			ResponseHeader::setContentLocation(std::string path, int code)
@@ -196,7 +196,7 @@ void			ResponseHeader::setRetryAfter(int code, int sec)
 {
 	if (code == 503 || code == 429 || code == 301)
 	{
-		_retryAfter = std::to_string(sec);
+		_retryAfter = to_string(sec);
 	}
 }
 
