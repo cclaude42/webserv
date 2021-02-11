@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:18:58 by cclaude           #+#    #+#             */
-/*   Updated: 2021/01/25 19:54:52 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/02/11 14:37:01 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,7 @@ int				Response::readContent(void)
 	if (file.is_open() == false)
 		return (403);
 
-	_content.assign(std::istreambuf_iterator<char>(file), std::istreambuf_iterator<char>());
+	file >> _content;
 	file.close();
 
 	return (200);

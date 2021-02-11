@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:29:28 by cclaude           #+#    #+#             */
-/*   Updated: 2021/01/28 16:02:01 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/02/11 14:35:08 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,18 +67,20 @@ std::string	Server::recv(void)
 {
 	char		buffer[4096];
 	std::string	request = "";
-	int			read = 4095;
+	int			tries = 0;
 
-	while (read == 4095)
+	for ( int i = 0 ; i < 100 ; i++ )
 	{
 		ft_memset(buffer, 0, 4096);
-		read = ::recv(_socket, buffer, 4095, 0);
-		if (read == -1)
-			std::cerr << "Could not read request." << std::endl;
+		if (::recv(_socket, buffer, 4095, 0) == -1)
+			tries++;
 		request += std::string(buffer);
 	}
 
-	std::cout << "[" << request << "]" << std::endl;
+	if (tries == 100)
+		std::cerr << "Could not read request." << std::endl;
+	else
+		std::cout << "[" << request << "]" << std::endl;
 
 	return (request);
 }
