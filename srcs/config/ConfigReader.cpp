@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ConfigReader.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
+/*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 14:34:43 by user42            #+#    #+#             */
-/*   Updated: 2020/11/14 14:51:14 by user42           ###   ########.fr       */
+/*   Updated: 2021/01/29 16:05:34 by frthierr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ fileVector	ConfigReader::readFile(const char *filename) {
 	for (int i = 0; i < READER_BUFFER_SIZE + 1;  i++)
 		buffer[i] = '\0';
 	if ((fd = open(filename, O_RDONLY)) <= 0)
-		return file;
+		throw ConfigReader::FileNotFoundException();
 
 	for (ret = READER_BUFFER_SIZE; ret > 0;\
 	ret = read(fd, buffer,READER_BUFFER_SIZE )) {
@@ -76,4 +76,8 @@ fileVector	ConfigReader::readFile(const char *filename) {
 	}
 	file = ConfigReader::split(line, std::string(" \n\t"));
  	return file;
+}
+
+const char	*ConfigReader::FileNotFoundException::what() const throw(){
+	return "Exception thrown: could not open configuration file";
 }

@@ -6,7 +6,7 @@
 /*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 15:27:44 by user42            #+#    #+#             */
-/*   Updated: 2021/01/27 14:52:41 by frthierr         ###   ########.fr       */
+/*   Updated: 2021/02/03 11:22:46 by frthierr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ class ConfigServer {
 		std::vector<std::string>			getIndex() const;
 		bool								getAutoIndex() const;
 		std::string							getAlias() const;
+		bool								getAliasSet() const;
 
 		// RETURN CONFIG ACCORDING TO URI
 		ConfigServer						getLocationForRequest(std::string const path, std::string &locationPath);
@@ -92,6 +93,7 @@ class ConfigServer {
 		std::vector<std::string>			_index;
 		bool								_autoindex;
 		std::string							_alias;
+		bool								_aliasSet;
 		static  ConfigServer				_defaultServer;
 		static	parseMap					serverParsingMap;
 		static	parseMap					locationParsingMap;

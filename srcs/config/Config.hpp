@@ -6,7 +6,7 @@
 /*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 14:29:38 by user42            #+#    #+#             */
-/*   Updated: 2021/01/21 16:13:59 by frthierr         ###   ########.fr       */
+/*   Updated: 2021/01/29 15:17:53 by frthierr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,7 @@
 
 class Config {
 	public:
-		Config();
-		Config(std::string defaultServerPath);
+		Config(std::string defaultServerPath = "./default");
 		Config(Config const &src);
 		virtual ~Config(void);
 

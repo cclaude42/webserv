@@ -6,7 +6,7 @@
 /*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 13:20:34 by frthierr          #+#    #+#             */
-/*   Updated: 2021/01/27 15:01:48 by frthierr         ###   ########.fr       */
+/*   Updated: 2021/02/03 12:14:38 by frthierr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ _autoindex(config.getAutoIndex())
 	std::string	alias = config.getAlias();
 	std::string	root = config.getRoot();
 	std::string	ret;
-	if (locationName != "" && locationName[0] != '*' && alias != "") {
+	if (locationName[0] != '*' && config.getAliasSet()) {
 		ret = root + alias + path.substr(locationName.length());
 	}
 	else
