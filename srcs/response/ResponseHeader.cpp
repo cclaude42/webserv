@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 15:17:39 by cclaude           #+#    #+#             */
-/*   Updated: 2021/01/25 19:55:09 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/02/11 15:22:33 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ std::string		ResponseHeader::getHeader(std::string content, std::string path, in
 	header = "HTTP/1.1 " + to_string(code) + " " + getStatusMessage(code) + "\r\n";
 	header += writeHeader();
 
-	// std::cout << "[" << header << "]" << std::endl;
+	std::cout << "[" << header << "]" << std::endl;
 
 	return (header);
 }

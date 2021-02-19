@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:18:58 by cclaude           #+#    #+#             */
-/*   Updated: 2021/02/11 14:37:01 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/02/19 11:46:54 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,11 @@ void			Response::call(Request & request, RequestConfig & requestConf)
 	_path = requestConf.getPath();
 
 	if (request.getMethod() == "GET")
-		getMethod();
+		getMethod(request, requestConf);
 	else if (request.getMethod() == "HEAD")
 		headMethod();
 	else if (request.getMethod() == "POST")
-		postMethod();
+		postMethod(request, requestConf);
 	else if (request.getMethod() == "PUT")
 		putMethod(request.getBody());
 	else if (request.getMethod() == "DELETE")
@@ -39,11 +39,21 @@ void			Response::call(Request & request, RequestConfig & requestConf)
 
 // Methods
 
-void			Response::getMethod(void)
+void			Response::getMethod(Request & request, RequestConfig & requestConf)
 {
 	ResponseHeader	head;
 
-	_code = readContent();
+	if (requestConf.getCgiPass() != "")
+	{
+		CgiHandler	cgi(request, requestConf);
+
+		_content = cgi.executeCgi(requestConf.getCgiPass());
+
+		_code = 200;// Placeholder
+	}
+	else
+		_code = readContent();
+
 	_response = head.getHeader(_content, _path, _code) + _content;
 }
 
@@ -55,9 +65,16 @@ void			Response::headMethod(void)
 	_response = head.getHeader(_content, _path, _code);
 }
 
-void			Response::postMethod(void)
+void			Response::postMethod(Request & request, RequestConfig & requestConf)
 {
-	// NEED CGI ?
+	ResponseHeader	head;
+	CgiHandler		cgi(request, requestConf);
+
+	_content = cgi.executeCgi(requestConf.getCgiPass());
+
+	_code = 200;// Placeholder
+
+	_response = head.getHeader(_content, _path, _code) + _content;
 }
 
 void			Response::putMethod(std::string content)
