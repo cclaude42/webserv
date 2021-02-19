@@ -14,7 +14,7 @@ CFLAGS = -Wall -Wextra -Werror -g -std=c++11
 
 INCLUDES = -I includes -I libft/includes
 
-CLASSES = -I srcs/config -I srcs/request -I srcs/response -I srcs/server
+CLASSES = -I srcs/config -I srcs/config/CgiHandler -I srcs/request -I srcs/response -I srcs/server
 
 HEADER = webserv.hpp
 
@@ -26,7 +26,7 @@ LIBFT = libft/libft.a
 
 MAIN = webserv
 
-CONFIG = Config ConfigHelperFunctions ConfigReader ConfigServer RequestConfig Autoindex/AutoIndexGenerator
+CONFIG = Config ConfigHelperFunctions ConfigReader ConfigServer RequestConfig Autoindex/AutoIndexGenerator CgiHandler/CgiHandler
 
 REQUEST = Request RequestMembers
 
@@ -58,7 +58,7 @@ OBJ = $(addprefix $(OBJ_DIR)/, $(addsuffix .o, $(MAIN))) \
 
 OBJ_DIR = objs
 
-OBJ_SUBDIR = $(addprefix $(OBJ_DIR)/, config config/Autoindex request response server utils)
+OBJ_SUBDIR = $(addprefix $(OBJ_DIR)/, config config/Autoindex config/CgiHandler request response server utils)
 
 OBJ_BUILD = $(addprefix $(OBJ_DIR)/, $(SRC:cpp=o))
 

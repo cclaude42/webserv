@@ -6,7 +6,7 @@
 /*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/13 15:07:29 by frthierr          #+#    #+#             */
-/*   Updated: 2021/01/20 13:32:04 by frthierr         ###   ########.fr       */
+/*   Updated: 2021/02/19 12:11:58 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,11 +47,11 @@ void		CgiHandler::_initEnv(Request &request, RequestConfig &config) {
 
 	std::string	method = request.getMethod();
 	if (method == "PUT" || method == "POST") {
-		this->_env["CONTENT_TYPE"] = method;		
+		this->_env["CONTENT_TYPE"] = method;
 	}
 	else
 		this->_env["CONTENT_TYPE"] = "";
-	
+
 	this->_env["GATEWAY_INTERFACE"] = "CGI/1.1";
 	this->_env["PATH_INFO"] = request.getPath();
 	this->_env["PATH_TRANSLATED"] = request.getPath();
@@ -62,7 +62,7 @@ void		CgiHandler::_initEnv(Request &request, RequestConfig &config) {
 	this->_env["REQUEST_METHOD"] = request.getMethod();
 	this->_env["REQUEST_URI"] = request.getPath();
 	this->_env["SCRIPT_NAME"] = request.getPath();
-	
+
 	if (headers.find("hostname") != headers.end())
 		this->_env["SERVER_NAME"] = headers["hostname"];
 	else
@@ -105,15 +105,17 @@ std::string		CgiHandler::executeCgi(std::string scriptName) const {
 	// SAVING STDIN AND STDOUT IN ORDER TO TURN THEM BACK TO NORMAL LATER
 	saveStdin = dup(STDIN_FILENO);
 	saveStdout = dup(STDOUT_FILENO);
-	
+
 	pipe(fds);
 	id = fork();
-	
+
 	// REPLACING STDIN AND STDOUT WITH PIPE
 	dup2(fds[0], STDIN_FILENO);
 	dup2(fds[1], STDOUT_FILENO);
-	if (!id) {	
-		execve(scriptName.c_str(), NULL, env);
+	if (!id) {
+		char * const *nll = NULL;
+
+		execve(scriptName.c_str(), nll, env);
 		close(fds[0]);
 		close(fds[1]);
 		return 0;
@@ -131,12 +133,12 @@ std::string		CgiHandler::executeCgi(std::string scriptName) const {
 		// RESETING STDIN AND STDOUT BACK TO NORMAL
 		dup2(saveStdin, STDIN_FILENO);
 		dup2(saveStdout, STDOUT_FILENO);
-		
+
 		close(fds[0]);
 		close(fds[1]);
 		//	RESET BACK TO NORMAL
 		std::cout << io << std::endl;
-		return 0;		
+		return 0;
 	}
 	return 0;
 }

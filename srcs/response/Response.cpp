@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:18:58 by cclaude           #+#    #+#             */
-/*   Updated: 2021/02/19 11:46:54 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/02/19 15:26:22 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,11 +68,20 @@ void			Response::headMethod(void)
 void			Response::postMethod(Request & request, RequestConfig & requestConf)
 {
 	ResponseHeader	head;
-	CgiHandler		cgi(request, requestConf);
 
-	_content = cgi.executeCgi(requestConf.getCgiPass());
+	if (requestConf.getCgiPass() != "")
+	{
+		CgiHandler	cgi(request, requestConf);
 
-	_code = 200;// Placeholder
+		_content = cgi.executeCgi(requestConf.getCgiPass());
+
+		_code = 200;// Placeholder
+	}
+	else
+	{
+		_code = 666;// Making shit up
+		_content = "POST request with no executable ?";
+	}
 
 	_response = head.getHeader(_content, _path, _code) + _content;
 }
@@ -125,7 +134,8 @@ void			Response::traceMethod(Request & request)
 
 int				Response::readContent(void)
 {
-	std::ifstream	file;
+	std::ifstream		file;
+	std::stringstream	buffer;
 
 	_content = "";
 
@@ -136,7 +146,9 @@ int				Response::readContent(void)
 	if (file.is_open() == false)
 		return (403);
 
-	file >> _content;
+	buffer << file.rdbuf();
+	_content = buffer.str();
+
 	file.close();
 
 	return (200);

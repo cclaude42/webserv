@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/31 13:44:42 by cclaude           #+#    #+#             */
-/*   Updated: 2021/02/03 12:26:15 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/02/19 12:07:15 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@
 
 // C System
 # include <sys/types.h>
+# include <sys/wait.h>
 # include <sys/stat.h>
 # include <sys/time.h>
 

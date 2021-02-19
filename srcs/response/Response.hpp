@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:18:58 by cclaude           #+#    #+#             */
-/*   Updated: 2021/02/19 11:51:05 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/02/19 14:42:30 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include "ResponseHeader.hpp"
 # include "Request.hpp"
 # include "RequestConfig.hpp"
+# include "CgiHandler.hpp"
 
 
 class Response {
