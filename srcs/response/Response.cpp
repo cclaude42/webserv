@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:18:58 by cclaude           #+#    #+#             */
-/*   Updated: 2021/02/19 15:26:22 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/02/23 15:57:09 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,9 @@ void			Response::postMethod(Request & request, RequestConfig & requestConf)
 	}
 	else
 	{
-		_code = 666;// Making shit up
+		srand(time(NULL));
+		// int	list[] = { 100, 101, 200, 201, 202, 203, 204, 205, 206, 300, 301, 302, 303, 304, 305, 306, 307, 400, 401, 402, 403, 404, 405, 406, 407, 408, 409, 410, 411, 412, 413, 414, 415, 416, 417, 500, 501, 502, 503, 504, 505 };
+		_code = 405;// Making shit up
 		_content = "POST request with no executable ?";
 	}
 

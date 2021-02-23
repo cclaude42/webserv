@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 15:17:39 by cclaude           #+#    #+#             */
-/*   Updated: 2021/02/11 15:22:33 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/02/23 15:58:59 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,9 @@ std::string		ResponseHeader::writeHeader(void)
 
 std::string		ResponseHeader::getStatusMessage(int code)
 {
-	if (code == 200)
+	if (code == 100)
+		return ("Continue");
+	else if (code == 200)
 		return ("OK");
 	else if (code == 201)
 		return ("Created");
@@ -74,6 +76,8 @@ std::string		ResponseHeader::getStatusMessage(int code)
 		return ("Forbidden");
 	else if (code == 404)
 		return ("Not Found");
+	else if (code == 405)
+		return ("Method Not Allowed");
 	else
 		return ("Unknown Code");
 }
