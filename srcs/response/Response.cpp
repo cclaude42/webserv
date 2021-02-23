@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:18:58 by cclaude           #+#    #+#             */
-/*   Updated: 2021/02/23 15:57:09 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/02/23 21:14:46 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,16 @@ void			Response::call(Request & request, RequestConfig & requestConf)
 {
 	_code = 200;
 	_path = requestConf.getPath();
+
+	if (requestConf.getAllowedMethods().find(request.getMethod()) == requestConf.getAllowedMethods().end())
+	{
+		ResponseHeader	head;
+
+		_code = 405;
+		_response = head.notAllowed(requestConf.getAllowedMethods(), _path);
+
+		return ;
+	}
 
 	if (request.getMethod() == "GET")
 		getMethod(request, requestConf);

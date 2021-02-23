@@ -95,7 +95,7 @@ clean:
 fclean: clean
 	@echo "\033[0;31mDeleting executable..."
 	@rm -f $(NAME)
-	@rm -f client
+	@rm -f test_us/client
 	@rm -rf test_us/root
 	@echo "\033[0m"
 
@@ -106,7 +106,16 @@ test: re
 	@cp test_us/index/basic.html test_us/root/index_example.html
 	@cp test_us/index/basic.html test_us/root/index_permission.html
 	@chmod 000 test_us/root/index_permission.html
-	@clang++ -o client test_us/client.cpp
+	@clang++ -o test_us/client test_us/client.cpp
+	@x-terminal-emulator -n -w $$(pwd) -x "./test_us/client"
 	./webserv test_us/conf/webserv.conf
 
-.PHONY: libft clean fclean re test
+mac: re
+	@x-terminal-emulator -n -w $$(pwd) -x "./test_mac/macos_tester http://localhost:8000"
+	./webserv test_mac/mac.conf
+
+linux: re
+	@x-terminal-emulator -n -w $$(pwd) -x "./test_linux/ubuntu_tester http://localhost:8000"
+	./webserv test_linux/linux.conf
+
+.PHONY: libft clean fclean re test mac linux
