@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/12 16:53:41 by cclaude           #+#    #+#             */
-/*   Updated: 2021/02/03 12:25:36 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/02/23 16:43:47 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,32 +44,48 @@ void	Cluster::setup(void)
 
 void	Cluster::run(void)
 {
+	std::string	dot[3] = {".  ", ".. ", "..."};
+	int			n = 0;
+
 	while (1)
 	{
 		fd_set		working_set;
 		struct timeval	timeout;
-		int				ret;
+		int				ret = 0;
 
-		ft_memcpy(&working_set, &_fd_set, sizeof(_fd_set));
-		timeout.tv_sec  = 10;
-		timeout.tv_usec = 0;
-
-		std::cout << "Waiting on a connection..." << std::endl;
-		ret = select(_max_fd + 1, &working_set, NULL, NULL, &timeout);
-		if (ret > 0)
-			std::cout << "Received a connection !" << std::endl << std::endl;
-
-		for ( std::map<int, Server>::iterator it = _map.begin() ; it != _map.end() && ret ; it++ )
+		while (ret == 0)
 		{
-			long	fd;
+			ft_memcpy(&working_set, &_fd_set, sizeof(_fd_set));
+			timeout.tv_sec  = 1;
+			timeout.tv_usec = 0;
 
-			fd = it->first;
-			if (working_set.fds_bits[fd / 64] & (long)(1UL << fd % 64))
+			std::cout << "\rWaiting on a connection" << dot[n++] << std::flush;
+			if (n == 3)
+				n = 0;
+
+			ret = select(_max_fd + 1, &working_set, NULL, NULL, &timeout);
+		}
+
+		if (ret > 0)
+		{
+			std::cout << std::endl << "Received a connection !" << std::endl << std::endl;
+
+			for ( std::map<int, Server>::iterator it = _map.begin() ; it != _map.end() && ret ; it++ )
 			{
-				it->second.run(_config);
-				ret--;
+				long	fd;
+
+				fd = it->first;
+				if (working_set.fds_bits[fd / 64] & (long)(1UL << fd % 64))
+				{
+					it->second.run(_config);
+					ret--;
+				}
 			}
 		}
+		else
+			std::cout << "Problem with select !" << std::endl;
+
+		n = 0;
 	}
 }
 
