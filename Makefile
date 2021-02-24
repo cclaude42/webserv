@@ -6,7 +6,7 @@ NAME = webserv
 
 CC = clang++
 
-CFLAGS = -Wall -Wextra -Werror -g -std=c++11
+CFLAGS = -Wall -Wextra -Werror -g -std=c++98
 
 ifeq ($(shell uname -s),Darwin)
 OS = mac

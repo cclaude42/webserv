@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 15:17:39 by cclaude           #+#    #+#             */
-/*   Updated: 2021/02/23 21:23:26 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/02/24 11:47:00 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,6 @@ std::string		ResponseHeader::getHeader(std::string content, std::string path, in
 	header = "HTTP/1.1 " + to_string(code) + " " + getStatusMessage(code) + "\r\n";
 	header += writeHeader();
 
-	std::cout << "[" << header << "]" << std::endl;
-
 	return (header);
 }
 
@@ -39,8 +37,6 @@ std::string		ResponseHeader::notAllowed(std::set<std::string> methods, std::stri
 
 	header = "HTTP/1.1 405 Method Not Allowed\r\n";
 	header += writeHeader();
-
-	std::cout << "[" << header << "]" << std::endl;
 
 	return (header);
 }
