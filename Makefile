@@ -71,7 +71,7 @@ OBJ_SUBDIR = $(addprefix $(OBJ_DIR)/, config config/Autoindex config/CgiHandler 
 OBJ_BUILD = $(addprefix $(OBJ_DIR)/, $(SRC:cpp=o))
 
 ##################################################
-# METHODS
+# MAKING
 ##################################################
 
 all: $(NAME)
@@ -93,6 +93,10 @@ $(OBJ_DIR):
 $(LIBFT):
 	@make --no-print-directory -C libft/
 
+##################################################
+# CLEANING
+##################################################
+
 clean:
 	@echo "\n\033[0;31mCleaning libft..."
 	@make fclean --no-print-directory -C libft/
@@ -108,6 +112,10 @@ fclean: clean
 	@echo "\033[0m"
 
 re: fclean all
+
+##################################################
+# TESTING
+##################################################
 
 test: test_$(OS)
 
