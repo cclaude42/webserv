@@ -6,7 +6,7 @@
 /*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/13 15:07:29 by frthierr          #+#    #+#             */
-/*   Updated: 2021/02/25 10:20:30 by frthierr         ###   ########.fr       */
+/*   Updated: 2021/02/25 10:32:07 by frthierr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void		CgiHandler::_initEnv(Request &request, RequestConfig &config) {
 	this->_env["QUERY_STRING"] = request.getQuerry();
 	this->_env["REMOTE_ADDR"] = config.getHostPort().host;
 	this->_env["REMOTE_IDENT"] = headers["Authorization"];
-	this->_env["REMOTE_USER"] = ;
+	this->_env["REMOTE_USER"] = headers["Authorization"];
 	this->_env["REQUEST_METHOD"] = request.getMethod();
 	this->_env["REQUEST_URI"] = request.getPath();
 	this->_env["SCRIPT_NAME"] = request.getPath();
