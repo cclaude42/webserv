@@ -6,7 +6,7 @@
 /*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/13 15:07:29 by frthierr          #+#    #+#             */
-/*   Updated: 2021/02/19 12:11:58 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/02/25 10:20:30 by frthierr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ CgiHandler	&CgiHandler::operator=(CgiHandler const &src) {
 void		CgiHandler::_initEnv(Request &request, RequestConfig &config) {
 	std::map<std::string, std::string>	headers = request.getHeaders();
 	if (headers.find("auth-scheme") != headers.end())
-		this->_env["AUTH_TYPE"] = headers["auth-scheme"]; // 	header field of http request that hannibal needs to add
+		this->_env["AUTH_TYPE"] = headers["Authorization"]; // 	header field of http request that hannibal needs to add
 
 	this->_env["CONTENT_LENGTH"] = this->_body.length();
 
@@ -57,8 +57,8 @@ void		CgiHandler::_initEnv(Request &request, RequestConfig &config) {
 	this->_env["PATH_TRANSLATED"] = request.getPath();
 	this->_env["QUERY_STRING"] = request.getQuerry();
 	this->_env["REMOTE_ADDR"] = config.getHostPort().host;
-	// this->_env["REMOTE_IDENT"] = ;
-	// this->_env["REMOTE_USER"] = ;
+	this->_env["REMOTE_IDENT"] = headers["Authorization"];
+	this->_env["REMOTE_USER"] = ;
 	this->_env["REQUEST_METHOD"] = request.getMethod();
 	this->_env["REQUEST_URI"] = request.getPath();
 	this->_env["SCRIPT_NAME"] = request.getPath();
@@ -69,7 +69,7 @@ void		CgiHandler::_initEnv(Request &request, RequestConfig &config) {
 		this->_env["SERVER_NAME"] = this->_env["REMOTE_ADDR"];
 	this->_env["SERVER_PORT"] = config.getHostPort().port;
 	this->_env["SERVER_PROTOCOL"] = "HTTP/1.1";
-	this->_env["SERVER_SOFTWARE"] = "WEEBSERV";
+	this->_env["SERVER_SOFTWARE"] = "Weebserv/1.0";
 
 }
 

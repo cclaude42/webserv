@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Cluster.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
+/*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/12 16:53:41 by cclaude           #+#    #+#             */
-/*   Updated: 2021/02/03 12:25:36 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/02/23 15:59:47 by frthierr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void	Cluster::run(void)
 		int				ret;
 
 		ft_memcpy(&working_set, &_fd_set, sizeof(_fd_set));
-		timeout.tv_sec  = 10;
+		timeout.tv_sec  = 50;
 		timeout.tv_usec = 0;
 
 		std::cout << "Waiting on a connection..." << std::endl;
