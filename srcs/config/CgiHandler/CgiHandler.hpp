@@ -6,7 +6,7 @@
 /*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/13 15:08:57 by frthierr          #+#    #+#             */
-/*   Updated: 2021/01/20 13:31:15 by frthierr         ###   ########.fr       */
+/*   Updated: 2021/02/24 11:49:10 by frthierr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,16 +45,6 @@ class CgiHandler {
 // GATEWAY_INTERFACE
 // PATH_INFO
 // PATH_TRANSLATED
-// QUERY_STRING
-// REMOTE_ADDR
-// REMOTE_IDENT
-// REMOTE_USER
-// REQUEST_METHOD
-// REQUEST_URI
-// SCRIPT_NAME
-// SERVER_NAME
-// SERVER_PORT
-// SERVER_PROTOCOL
-// SERVER_SOFTWARE
+// QUERY_STRING˜
 
 #endif
