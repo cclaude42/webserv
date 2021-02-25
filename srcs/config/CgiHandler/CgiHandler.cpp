@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CgiHandler.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/13 15:07:29 by frthierr          #+#    #+#             */
-/*   Updated: 2021/02/25 10:20:30 by frthierr         ###   ########.fr       */
+/*   Updated: 2021/02/25 10:44:06 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ CgiHandler::CgiHandler(Request &request, RequestConfig &config):
 _body(request.getBody())
 {
 	this->_initEnv(request, config);
+	std::cout << "CgiHandler Constructor" << '\n';
 }
 
 CgiHandler::CgiHandler(CgiHandler const &src) {
@@ -27,6 +28,7 @@ CgiHandler::CgiHandler(CgiHandler const &src) {
 }
 
 CgiHandler::~CgiHandler(void) {
+	std::cout << "CgiHandler Destructor" << '\n';
 	return ;
 }
 
@@ -58,7 +60,7 @@ void		CgiHandler::_initEnv(Request &request, RequestConfig &config) {
 	this->_env["QUERY_STRING"] = request.getQuerry();
 	this->_env["REMOTE_ADDR"] = config.getHostPort().host;
 	this->_env["REMOTE_IDENT"] = headers["Authorization"];
-	this->_env["REMOTE_USER"] = ;
+	this->_env["REMOTE_USER"] = headers["Authorization"];
 	this->_env["REQUEST_METHOD"] = request.getMethod();
 	this->_env["REQUEST_URI"] = request.getPath();
 	this->_env["SCRIPT_NAME"] = request.getPath();
