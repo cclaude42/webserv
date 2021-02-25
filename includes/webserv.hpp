@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/31 13:44:42 by cclaude           #+#    #+#             */
-/*   Updated: 2021/02/19 12:07:15 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/02/24 11:44:52 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,13 @@ extern "C" {
 
 // Config
 # define DEFAULT_CONFIG "test_us/conf/default"
+
+// Colors
+# define RED "\033[31m"
+# define GREEN "\033[32m"
+# define YELLOW "\033[33m"
+# define RESET "\033[0m"
+
 
 
 // NTOH / HTON

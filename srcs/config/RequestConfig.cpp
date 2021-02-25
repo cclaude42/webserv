@@ -6,7 +6,7 @@
 /*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 13:20:34 by frthierr          #+#    #+#             */
-/*   Updated: 2021/02/03 12:14:38 by frthierr         ###   ########.fr       */
+/*   Updated: 2021/02/24 11:42:26 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ void								RequestConfig::setPath(int code)
 {
 	//default value hardcoded because at the moment I can't get access to values from config file
 	this->_path = "/home/hannibal/Documents/Cursus42/webserv_v2/utils_tests/error/";
-	this->_path += std::to_string(code) + ".html";
+	this->_path += to_string(code) + ".html";
 	// this->_path = this->_error_page[code];
 }
 
@@ -130,7 +130,7 @@ std::ostream	&operator<<(std::ostream &out, RequestConfig &request) {
 		out << "\t" << i->first << "=" << i->second << std::endl;
 	out << "cgi_pass: " << request._cgi_pass << std::endl;
 	out << "allowed_methods:" << std::endl;
-	for (std::set<std::string>::iterator i = request._allowed_methods.begin(); i != request._allowed_methods.end(); i++)	
+	for (std::set<std::string>::iterator i = request._allowed_methods.begin(); i != request._allowed_methods.end(); i++)
 		out << "\t" << *i << std::endl;
 	out << "index:" << std::endl;
 	for (std::vector<std::string>::iterator i = request._index.begin(); i != request._index.end(); i++)

@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 15:17:39 by cclaude           #+#    #+#             */
-/*   Updated: 2021/02/11 15:22:33 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/02/24 11:47:00 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,19 @@ std::string		ResponseHeader::getHeader(std::string content, std::string path, in
 	header = "HTTP/1.1 " + to_string(code) + " " + getStatusMessage(code) + "\r\n";
 	header += writeHeader();
 
-	std::cout << "[" << header << "]" << std::endl;
+	return (header);
+}
+
+std::string		ResponseHeader::notAllowed(std::set<std::string> methods, std::string path)
+{
+	std::string	header;
+
+	resetValues();
+	setValues("", path, 405);
+	setAllow(methods);
+
+	header = "HTTP/1.1 405 Method Not Allowed\r\n";
+	header += writeHeader();
 
 	return (header);
 }
@@ -64,7 +76,9 @@ std::string		ResponseHeader::writeHeader(void)
 
 std::string		ResponseHeader::getStatusMessage(int code)
 {
-	if (code == 200)
+	if (code == 100)
+		return ("Continue");
+	else if (code == 200)
 		return ("OK");
 	else if (code == 201)
 		return ("Created");
@@ -74,13 +88,15 @@ std::string		ResponseHeader::getStatusMessage(int code)
 		return ("Forbidden");
 	else if (code == 404)
 		return ("Not Found");
+	else if (code == 405)
+		return ("Method Not Allowed");
 	else
 		return ("Unknown Code");
 }
 
 void			ResponseHeader::setValues(std::string content, std::string path, int code)
 {
-	setAllow(code);
+	setAllow();
 	setContentLanguage(content);
 	setContentLength(content.size());
 	setContentLocation(path, code);
@@ -112,12 +128,22 @@ void			ResponseHeader::resetValues(void)
 
 // Setter functions
 
-void			ResponseHeader::setAllow(int code)
+void			ResponseHeader::setAllow(std::set<std::string> methods)
 {
-	if (code == 405)
-		_allow = "GET, HEAD, POST";
-	else
-		_allow = "";
+	std::set<std::string>::iterator it = methods.begin();
+
+	while (it != methods.end())
+	{
+		_allow += *(it++);
+
+		if (it != methods.end())
+			_allow += ", ";
+	}
+}
+
+void			ResponseHeader::setAllow(void)
+{
+	_allow = "";
 }
 
 void			ResponseHeader::setContentLanguage(std::string content)
@@ -133,7 +159,8 @@ void			ResponseHeader::setContentLength(int size)
 
 void			ResponseHeader::setContentLocation(std::string path, int code)
 {
-	if (code != 404)
+	(void)code;
+	// if (code != 404)
 		_contentLocation = path;
 }
 
