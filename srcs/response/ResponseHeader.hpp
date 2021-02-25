@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 15:17:39 by cclaude           #+#    #+#             */
-/*   Updated: 2020/11/26 15:35:01 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/02/23 21:13:20 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@ public:
 	ResponseHeader & operator=(const ResponseHeader & src);
 
 	// Setter functions
-	void			setAllow(int code);
+	void			setAllow(std::set<std::string> methods);
+	void			setAllow(void);
 	void			setContentLanguage(std::string content);
 	void			setContentLength(int size);
 	void			setContentLocation(std::string path, int code);
@@ -39,6 +40,7 @@ public:
 
 	// Member functions
 	std::string		getHeader(std::string content, std::string path, int code);
+	std::string		notAllowed(std::set<std::string> methods, std::string path);
 	std::string		writeHeader(void);
 	void			setValues(std::string content, std::string path, int code);
 	void			resetValues(void);

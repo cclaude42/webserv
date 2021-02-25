@@ -6,7 +6,15 @@ NAME = webserv
 
 CC = clang++
 
-CFLAGS = -Wall -Wextra -Werror -g -std=c++11
+CFLAGS = -Wall -Wextra -Werror -g -std=c++98
+
+ifeq ($(shell uname -s),Darwin)
+OS = mac
+else
+OS = linux
+endif
+
+PWD = $(shell pwd)
 
 ##################################################
 # INCLUDES
@@ -63,7 +71,7 @@ OBJ_SUBDIR = $(addprefix $(OBJ_DIR)/, config config/Autoindex config/CgiHandler 
 OBJ_BUILD = $(addprefix $(OBJ_DIR)/, $(SRC:cpp=o))
 
 ##################################################
-# METHODS
+# MAKING
 ##################################################
 
 all: $(NAME)
@@ -75,7 +83,7 @@ $(NAME): $(LIBFT) $(OBJ_DIR) $(OBJ_BUILD)
 	@echo "\n\033[0mDone !"
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
-	@printf "\033[0;33mGenerating webserv objects... %-33.33s\r" $@
+	@printf "\033[0;33mGenerating webserv objects... %-35.35s\r" $@
 	@$(CC) $(CFLAGS) $(INCLUDES) $(CLASSES) -o $@ -c $<
 
 $(OBJ_DIR):
@@ -84,6 +92,10 @@ $(OBJ_DIR):
 
 $(LIBFT):
 	@make --no-print-directory -C libft/
+
+##################################################
+# CLEANING
+##################################################
 
 clean:
 	@echo "\n\033[0;31mCleaning libft..."
@@ -95,18 +107,43 @@ clean:
 fclean: clean
 	@echo "\033[0;31mDeleting executable..."
 	@rm -f $(NAME)
-	@rm -f client
+	@rm -f test_us/client
 	@rm -rf test_us/root
 	@echo "\033[0m"
 
 re: fclean all
 
-test: re
+##################################################
+# TESTING
+##################################################
+
+test: test_$(OS)
+
+test_setup: re
 	@mkdir -p test_us/root
 	@cp test_us/index/basic.html test_us/root/index_example.html
 	@cp test_us/index/basic.html test_us/root/index_permission.html
 	@chmod 000 test_us/root/index_permission.html
-	@clang++ -o client test_us/client.cpp
+	@clang++ -o test_us/client test_us/client.cpp
+
+test_mac: test_setup
+	@osascript -e 'tell application "Terminal" to do script "cd $(PWD) && clear && ./test_us/client"'
+	@osascript -e 'tell application "Terminal" to activate'
 	./webserv test_us/conf/webserv.conf
 
-.PHONY: libft clean fclean re test
+test_linux: test_setup
+	@x-terminal-emulator -n -w $$(pwd) -x "./test_us/client"
+	./webserv test_us/conf/webserv.conf
+
+bocal: bocal_$(OS)
+
+bocal_mac: re
+	@osascript -e 'tell application "Terminal" to do script "cd $(PWD) && clear && ./test_mac/macos_tester http://localhost:8000"'
+	@osascript -e 'tell application "Terminal" to activate'
+	./webserv test_mac/mac.conf
+
+bocal_linux: re
+	@x-terminal-emulator -n -w $$(pwd) -x "./test_linux/ubuntu_tester http://localhost:8000"
+	./webserv test_linux/linux.conf
+
+.PHONY: libft clean fclean re test test_setup test_mac test_linux bocal bocal_mac bocal_linux
