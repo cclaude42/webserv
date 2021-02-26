@@ -6,7 +6,7 @@
 /*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 18:41:01 by francisz          #+#    #+#             */
-/*   Updated: 2021/02/03 11:22:33 by frthierr         ###   ########.fr       */
+/*   Updated: 2021/02/26 10:02:05 by frthierr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,14 @@ class RequestConfig {
 		friend std::ostream	&operator<<(std::ostream &out, RequestConfig &request);
 
 		// GETERS
+		const std::string							&getRequestedPath() const;
 		const std::string							&getPath() const;
 		const std::map<int, std::string>			&getErrorPage() const;
 		const int									&getClientBodyBufferSize() const;
 		const std::map<std::string, std::string>	&getCgiParam() const;
 		const std::string							&getCgiPass() const;
-		const std::set<std::string>				&getAllowedMethods() const;
-		const t_listen							&getHostPort() const;
+		const std::set<std::string>					&getAllowedMethods() const;
+		const t_listen								&getHostPort() const;
 
 		//SETTERS
 		void								setPath(int code);
@@ -42,6 +43,7 @@ class RequestConfig {
 		void								setHostPort(const t_listen hostPort);
 
 	private:
+		std::string							_requestedPath;
 		std::string							_path; // local path for request
 		std::map<int, std::string>			_error_page; // error page redirections
 		int									_client_body_buffer_size; // max size for the client body, defaults to 8 000

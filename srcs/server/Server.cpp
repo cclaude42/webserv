@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:29:28 by cclaude           #+#    #+#             */
-/*   Updated: 2021/02/25 10:40:10 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/02/26 09:56:01 by frthierr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,14 +26,14 @@ void		Server::run(Config & conf)
 
 	requestConf = conf.getConfigForRequest(this->_listen, request.getPath(), request.getHeaders().at("Host"));
 
-	CgiHandler		cgiH(request, requestConf);
-	std::cout << RED << "CGI :\n\n";
-	std::cout << cgiH.executeCgi("test_us/cgi_tester");
-	std::cout << RESET << "\n\n";
+	if (requestConf.getCgiPass() != "") {
+		CgiHandler		cgiH(request, requestConf);
+		std::cout << RED << "CGI :\n\n";
+		std::cout << cgiH.executeCgi("test_us/cgi_tester");
+		std::cout << RESET << "\n\n";
 
-	std::cout << YELLOW << "END OF CGI" << RESET << '\n';
-
-
+		std::cout << YELLOW << "END OF CGI" << RESET << '\n';
+	}
 
 	response.call(request, requestConf);
 
