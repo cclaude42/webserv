@@ -6,7 +6,7 @@
 /*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 15:27:44 by user42            #+#    #+#             */
-/*   Updated: 2021/02/03 11:22:46 by frthierr         ###   ########.fr       */
+/*   Updated: 2021/02/26 10:43:13 by frthierr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,10 +97,10 @@ class ConfigServer {
 		static  ConfigServer				_defaultServer;
 		static	parseMap					serverParsingMap;
 		static	parseMap					locationParsingMap;
+		static std::set<std::string>		_httpMethods;
 		static parseMap 					_initServerMap();
 		static parseMap 					_initLocationMap();
-		
-
+		static std::set<std::string>		_initHttpMethods();
 };
 
 #endif

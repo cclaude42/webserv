@@ -6,7 +6,7 @@
 /*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 15:28:08 by user42            #+#    #+#             */
-/*   Updated: 2021/02/03 12:13:38 by frthierr         ###   ########.fr       */
+/*   Updated: 2021/02/26 10:54:22 by frthierr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,23 @@ parseMap ConfigServer::_initLocationMap() {
 }
 
 parseMap ConfigServer::locationParsingMap = ConfigServer::_initLocationMap();
+
+std::set<std::string>	ConfigServer::_initHttpMethods() {
+	std::set<std::string>	mySet;
+	mySet.insert("GET");
+	mySet.insert("HEAD");
+	mySet.insert("POST");
+	mySet.insert("PUT");
+	mySet.insert("DELETE");
+	mySet.insert("CONNECT");
+	mySet.insert("OPTIONS");
+	mySet.insert("TRACE");
+	mySet.insert("PATCH");
+
+	return mySet;
+}
+
+std::set<std::string> ConfigServer::_httpMethods = ConfigServer::_initHttpMethods();
 
 ConfigServer				ConfigServer::_initDefaultServer(const char *filename) {
 	ConfigServer	server;
@@ -354,7 +371,10 @@ void		ConfigServer::addAllowedMethods(std::vector<std::string> args) {
 		throw ConfigServer::ExceptionInvalidArguments();
 	this->_allowed_methods.clear();
 	for (fileVector::iterator i = args.begin(); i != args.end(); i++) {
-		this->_allowed_methods.insert(*i);
+		if (ConfigServer::_httpMethods.find(*i) != ConfigServer::_httpMethods.end())
+			this->_allowed_methods.insert(*i);
+		else
+			throw ConfigServer::ExceptionInvalidArguments();
 	}
 }
 

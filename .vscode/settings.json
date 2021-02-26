@@ -1,5 +1,6 @@
 {
 	"files.associations": {
-		"utility": "cpp"
+		"utility": "cpp",
+		"map": "cpp"
 	}
 }
