@@ -6,7 +6,7 @@
 /*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/13 15:07:29 by frthierr          #+#    #+#             */
-/*   Updated: 2021/02/25 10:32:07 by frthierr         ###   ########.fr       */
+/*   Updated: 2021/02/25 13:16:18 by frthierr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ void		CgiHandler::_initEnv(Request &request, RequestConfig &config) {
 char					**CgiHandler::_getEnvAsCstrArray() const {
 	char	**env = new char*[this->_env.size() + 1];
 	int	j = 0;
-	for (std::map<std::string, std::string>::const_iterator i = this->_env.begin(); i != this->_env.end(); i++) {
+	for (std::map<std::string, std::string>::const_iterator i = this->_env.begin(); i != this->_env.end(); j++, i++) {
 		std::string	element = i->first + "=" + i->second;
 		env[j] = ft_strdup(element.c_str());
 	}
