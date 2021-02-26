@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CgiHandler.hpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/13 15:08:57 by frthierr          #+#    #+#             */
-/*   Updated: 2021/02/24 11:49:10 by frthierr         ###   ########.fr       */
+/*   Updated: 2021/02/25 10:36:38 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,8 @@
 
 # define CGI_HANDLER_HPP
 
-# include <iostream>
-# include <iomanip>
-# include <string>
+
+# include "webserv.hpp"
 # include "Config.hpp"
 # include "Request.hpp"
 # include "webserv.hpp"

@@ -6,7 +6,7 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/25 10:15:30 by hbaudet           #+#    #+#             */
-/*   Updated: 2021/02/25 10:22:50 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/02/25 10:46:28 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,22 @@ int main(int ac, char **av, char **envp)
 	cout << RESET << "Received " << ac << " args" <<'\n';
 	cout << GREEN;
 
+
 	while (--ac >= 0)
 		cout << av[ac] << '\n';
 	
 	cout << "\n" << RESET << "Env is :" << '\n';
 	cout << YELLOW;
 
+
+	if (!envp)
+	{
+		cout << "NO env\n";
+		return 1;
+	}
+	std::cout << "START" << '\n';
+	cout << (long)envp << '\n';
+	cout << envp[0];
 	for (int i = 0; envp[i]; i++)
 		cout << envp[i] << '\n';
 	

@@ -6,7 +6,7 @@
 /*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/13 15:07:29 by frthierr          #+#    #+#             */
-/*   Updated: 2021/02/25 13:16:18 by frthierr         ###   ########.fr       */
+/*   Updated: 2021/02/26 09:51:57 by frthierr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ CgiHandler::CgiHandler(Request &request, RequestConfig &config):
 _body(request.getBody())
 {
 	this->_initEnv(request, config);
+	std::cout << "CgiHandler Constructor" << '\n';
 }
 
 CgiHandler::CgiHandler(CgiHandler const &src) {
@@ -27,6 +28,7 @@ CgiHandler::CgiHandler(CgiHandler const &src) {
 }
 
 CgiHandler::~CgiHandler(void) {
+	std::cout << "CgiHandler Destructor" << '\n';
 	return ;
 }
 
