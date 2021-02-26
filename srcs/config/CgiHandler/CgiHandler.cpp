@@ -6,7 +6,7 @@
 /*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/13 15:07:29 by frthierr          #+#    #+#             */
-/*   Updated: 2021/02/26 09:51:57 by frthierr         ###   ########.fr       */
+/*   Updated: 2021/02/26 11:31:24 by frthierr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,9 @@ char					**CgiHandler::_getEnvAsCstrArray() const {
 		env[j] = ft_strdup(element.c_str());
 	}
 	env[j] = NULL;
+	std::cout << "HERE BABY" << std::endl;
+	for (int k = 0; env[k]; k++)
+		std::cout << env[k] << std::endl;
 	return env;
 }
 
@@ -103,6 +106,7 @@ std::string		CgiHandler::executeCgi(std::string scriptName) const {
 	}
 	catch (std::bad_alloc &e) {
 		std::cout << e.what() << std::endl;
+		exit(1);
 	}
 	// SAVING STDIN AND STDOUT IN ORDER TO TURN THEM BACK TO NORMAL LATER
 	saveStdin = dup(STDIN_FILENO);

@@ -6,7 +6,7 @@
 /*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 15:28:08 by user42            #+#    #+#             */
-/*   Updated: 2021/02/26 10:54:22 by frthierr         ###   ########.fr       */
+/*   Updated: 2021/02/26 11:17:22 by frthierr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -373,8 +373,9 @@ void		ConfigServer::addAllowedMethods(std::vector<std::string> args) {
 	for (fileVector::iterator i = args.begin(); i != args.end(); i++) {
 		if (ConfigServer::_httpMethods.find(*i) != ConfigServer::_httpMethods.end())
 			this->_allowed_methods.insert(*i);
-		else
+		else {
 			throw ConfigServer::ExceptionInvalidArguments();
+		}
 	}
 }
 
