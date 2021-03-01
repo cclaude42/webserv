@@ -107,8 +107,6 @@ clean:
 fclean: clean
 	@echo "\033[0;31mDeleting executable..."
 	@rm -f $(NAME)
-	@rm -f test_us/client
-	@rm -rf test_us/root
 	@echo "\033[0m"
 
 re: fclean all
@@ -119,7 +117,9 @@ re: fclean all
 
 test: test_$(OS)
 
-test_setup: re
+test_setup: all
+	@rm -f test_us/client
+	@rm -rf test_us/root
 	@mkdir -p test_us/root
 	@cp test_us/index/basic.html test_us/root/index_example.html
 	@cp test_us/index/basic.html test_us/root/index_permission.html
@@ -137,12 +137,12 @@ test_linux: test_setup
 
 bocal: bocal_$(OS)
 
-bocal_mac: re
+bocal_mac: all
 	@osascript -e 'tell application "Terminal" to do script "cd $(PWD) && clear && ./test_mac/macos_tester http://localhost:8000"'
 	@osascript -e 'tell application "Terminal" to activate'
 	./webserv test_mac/mac.conf
 
-bocal_linux: re
+bocal_linux: all
 	@x-terminal-emulator -n -w $$(pwd) -x "./test_linux/ubuntu_tester http://localhost:8000"
 	./webserv test_linux/linux.conf
 

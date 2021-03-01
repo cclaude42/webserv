@@ -3,11 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Cluster.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/12 16:53:41 by cclaude           #+#    #+#             */
-/*   Updated: 2021/02/23 15:59:47 by frthierr         ###   ########.fr       */
-/*   Updated: 2021/02/24 11:42:59 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/03/01 11:48:25 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +39,7 @@ void	Cluster::setup(void)
 		_map.insert(std::make_pair(serv.getFD(), serv));
 		if (serv.getFD() > _max_fd)
 			_max_fd = serv.getFD();
+		std::cout << "Set up " << lstn->host << ":" << lstn->port << " on FD " << fd << std::endl;
 	}
 }
 
@@ -53,6 +53,8 @@ void	Cluster::run(void)
 		fd_set		working_set;
 		struct timeval	timeout;
 		int				ret = 0;
+
+		std::cout << std::endl;
 
 		while (ret == 0)
 		{
@@ -69,7 +71,7 @@ void	Cluster::run(void)
 
 		if (ret > 0)
 		{
-			std::cout << std::endl << "Received a connection !" << std::endl << std::endl;
+			std::cout << std::endl << "\rReceived a connection !   " << std::endl;
 
 			for ( std::map<int, Server>::iterator it = _map.begin() ; it != _map.end() && ret ; it++ )
 			{
@@ -78,13 +80,14 @@ void	Cluster::run(void)
 				fd = it->first;
 				if (working_set.fds_bits[fd / 64] & (long)(1UL << fd % 64))
 				{
+					std::cout << "Reading from : " << fd << std::endl;
 					it->second.run(_config);
 					ret--;
 				}
 			}
 		}
 		else
-			std::cout << "Problem with select !" << std::endl;
+			std::cout << RED << "Problem with select !" << RESET << std::endl;
 
 		n = 0;
 	}

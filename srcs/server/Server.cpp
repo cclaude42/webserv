@@ -6,7 +6,11 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:29:28 by cclaude           #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2021/03/01 11:20:46 by hbaudet          ###   ########.fr       */
+=======
+/*   Updated: 2021/02/25 17:03:06 by cclaude          ###   ########.fr       */
+>>>>>>> master
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +23,15 @@ void		Server::run(Config & conf)
 	Request			request;
 	RequestConfig	requestConf;
 	Response		response;
+	std::string		recvd;
 
 	this->accept();
 
-	request.parse(this->recv());
+	recvd = this->recv();
+	if (recvd == "")
+		return ;
+
+	request.parse(recvd);
 
 	requestConf = conf.getConfigForRequest(this->_listen, request.getPath(), request.getHeaders().at("Host"));
 
@@ -55,7 +64,7 @@ void		Server::setup(void)
 	this->setAddr();
 	if (bind(_fd, (struct sockaddr *)&_addr, sizeof(_addr)) == -1)
 		std::cerr << "Could not bind port " << _listen.port << "." << std::endl;
-	if (listen(_fd, 10) == -1)
+	if (listen(_fd, 1) == -1)
 		std::cerr << "Could not listen." << std::endl;
 }
 
@@ -73,7 +82,7 @@ void		Server::accept(void)
 
 	_socket = ::accept(_fd, (struct sockaddr *)&_addr, (socklen_t *)&addrlen);
 	if (_socket == -1)
-		std::cerr << "Could not create socket." << std::endl;
+		std::cerr << RED << "Could not create socket." << RESET << std::endl;
 	fcntl(_socket, F_SETFL, O_NONBLOCK);
 }
 
@@ -83,7 +92,7 @@ std::string	Server::recv(void)
 	std::string	request = "";
 	int			tries = 0;
 
-	for ( int i = 0 ; i < 100 ; i++ )
+	for ( int i = 0 ; i < 5000 ; i++ )
 	{
 		ft_memset(buffer, 0, 4096);
 		if (::recv(_socket, buffer, 4095, 0) == -1)
@@ -91,10 +100,9 @@ std::string	Server::recv(void)
 		request += std::string(buffer);
 	}
 
-	if (tries == 100)
-		std::cerr << "Could not read request." << std::endl;
-	else
-		std::cout << "Request :" << std::endl << "[" << YELLOW << request << RESET << "]" << std::endl;
+	if (tries == 5000)
+		std::cerr << RED << "Could not read request." << RESET << std::endl;
+	std::cout << "Request :" << std::endl << "[" << YELLOW << request << RESET << "]" << std::endl;
 
 	return (request);
 }
