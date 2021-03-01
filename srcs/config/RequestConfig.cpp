@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RequestConfig.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 13:20:34 by frthierr          #+#    #+#             */
-/*   Updated: 2021/02/24 11:42:26 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/03/01 11:26:47 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ RequestConfig::RequestConfig(void) {
 	return ;
 }
 
-RequestConfig::RequestConfig(ConfigServer &config, std::string path, std::string locationName):
+RequestConfig::RequestConfig(ConfigServer &config, const std::string &path, const std::string &locationName):
 _error_page(config.getErrorPage()),
 _client_body_buffer_size(config.getClientBodyBufferSize()),
 _cgi_param(config.getCgiParam()),
@@ -104,12 +104,12 @@ const t_listen							&RequestConfig::getHostPort() const {
 void								RequestConfig::setPath(int code)
 {
 	//default value hardcoded because at the moment I can't get access to values from config file
-	this->_path = "/home/hannibal/Documents/Cursus42/webserv_v2/utils_tests/error/";
+	this->_path = "./test_us/error/error/";
 	this->_path += to_string(code) + ".html";
 	// this->_path = this->_error_page[code];
 }
 
-void								RequestConfig::setPath(std::string path)
+void								RequestConfig::setPath(const std::string &path)
 {
 	this->_path = path;
 }

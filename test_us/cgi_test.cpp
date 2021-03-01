@@ -6,7 +6,7 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/25 10:15:30 by hbaudet           #+#    #+#             */
-/*   Updated: 2021/02/25 10:46:28 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/02/26 09:46:52 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int main(int ac, char **av, char **envp)
 	cout << YELLOW;
 
 
-	if (!envp)
+	if (!envp || !envp[0])
 	{
 		cout << "NO env\n";
 		return 1;
