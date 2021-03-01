@@ -6,7 +6,7 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:29:28 by cclaude           #+#    #+#             */
-/*   Updated: 2021/03/01 11:49:04 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/01 12:21:55 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,18 +32,14 @@ void		Server::run(Config & conf)
 	requestConf = conf.getConfigForRequest(this->_listen, request.getPath(), request.getHeaders().at("Host"));
 
 
-	//DEBUG
-	std::cout << RED << "Path :\n" << request.getPath() << RESET << '\n';
-
-	// CgiHandler		cgiH(request, requestConf);
-	// std::cout << RED << "CGI :\n\n";
-	// std::cout << cgiH.executeCgi("test_us/cgi_tester");
-	// std::cout << RESET << "\n\n";
-
-	// std::cout << YELLOW << "END OF CGI" << RESET << '\n';
+	//	DEBUG
+	std::cout << RED << "Reqested path : " << request.getPath() << RESET << '\n';
+	std::cout << YELLOW << "Content-Location : " << requestConf.getContentLocation() << RESET << '\n';
+	std::cout << YELLOW << "Full path : " << requestConf.getPath() << RESET << '\n';
 
 
-	//  /DBEUG
+
+	//  /DEBUG
 
 	response.call(request, requestConf);
 

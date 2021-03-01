@@ -6,7 +6,7 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/13 15:08:57 by frthierr          #+#    #+#             */
-/*   Updated: 2021/02/25 10:36:38 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/01 16:03:29 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ class CgiHandler {
 		virtual ~CgiHandler(void);
 
 		CgiHandler   	&operator=(CgiHandler const &src);
-		std::string		executeCgi(std::string scriptName) const;	// executes cgi and returns body
+		std::string		executeCgi(const std::string &scriptName);	// executes cgi and returns body
 	private:
 		CgiHandler(void);
 		void								_initEnv(Request &request, RequestConfig &config);

@@ -6,7 +6,7 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 17:10:06 by hbaudet           #+#    #+#             */
-/*   Updated: 2021/01/20 10:11:22 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/01 15:45:26 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	Request::resetHeaders()
 	this->_headers["Accept-Language"] = "";
 	this->_headers["Allow"] = "";
 	this->_headers["Authorization"] = "";
-	this->_headers["Aontent-Language"] = "";
+	this->_headers["Content-Language"] = "";
 	this->_headers["Content-Length"] = "";
 	this->_headers["Content-Location"] = "";
 	this->_headers["Content-Type"] = "";
@@ -56,6 +56,7 @@ void	Request::resetHeaders()
 	this->_headers["Transfer-Encoding"] = "";
 	this->_headers["User-Agent"] = "";
 	this->_headers["Www-Authenticate"] = "";
+	this->_headers["Connection"] = "Keep-Alive";
 }
 
 int		Request::readFirstLine(std::string& line)

@@ -129,11 +129,11 @@ test_setup: all
 test_mac: test_setup
 	@osascript -e 'tell application "Terminal" to do script "cd $(PWD) && clear && ./test_us/client"'
 	@osascript -e 'tell application "Terminal" to activate'
-	./webserv test_us/conf/webserv.conf
+	./webserv test_us/conf/youpi_tester.conf
 
 test_linux: test_setup
 	@x-terminal-emulator -n -w $$(pwd) -x "./test_us/client"
-	./webserv test_us/conf/webserv.conf
+	./webserv test_us/conf/youpi_tester.conf
 
 bocal: bocal_$(OS)
 

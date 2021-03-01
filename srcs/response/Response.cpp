@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Response.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:18:58 by cclaude           #+#    #+#             */
-/*   Updated: 2021/02/23 21:14:46 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/03/01 16:09:51 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,9 @@ void			Response::postMethod(Request & request, RequestConfig & requestConf)
 	{
 		CgiHandler	cgi(request, requestConf);
 
+		std::cout << "Executing CGI\n";
 		_content = cgi.executeCgi(requestConf.getCgiPass());
+		std::cout << "Finished executing CGI\n";
 
 		_code = 200;// Placeholder
 	}

@@ -75,7 +75,8 @@ std::string		choose_target(void)
 	std::cout << std::endl << YELLOW << "Choose TARGET FILE :" << std::endl;
 	std::cout << "(a) Exists" << std::endl;
 	std::cout << "(b) Doesn't exist" << std::endl;
-	std::cout << "(c) Wrong permissions" << RESET << std::endl;
+	std::cout << "(c) Wrong permissions" << std::endl;
+	std::cout << "(d) (ONLY for POST/PUT) BONUS" << RESET << std::endl;
 	getline(std::cin, choice);
 
 	if (choice == "a")
@@ -84,7 +85,7 @@ std::string		choose_target(void)
 		return ("_nofile");
 	else if (choice == "c")
 		return ("_permission");
-	return ("_example");
+	return ("_bonus");
 }
 
 std::string		choose_connect(void)
