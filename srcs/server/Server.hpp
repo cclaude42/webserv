@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:29:28 by cclaude           #+#    #+#             */
-/*   Updated: 2020/11/19 14:40:35 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/03/01 14:48:58 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ public:
 
 	long		getFD(void);
 
-	void		run(Config & conf);
+	long		run(Config & conf, long socket);
 	void		setup(void);
 	void		setAddr(void);
 	void		accept(void);
@@ -45,6 +45,7 @@ private:
 	long				_fd;
 	long				_socket;
 	struct sockaddr_in	_addr;
+	int					_closed;
 
 	Server(void);
 
