@@ -6,7 +6,7 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 16:27:33 by hbaudet           #+#    #+#             */
-/*   Updated: 2021/01/19 15:41:27 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/02 13:45:28 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ class Request
 			std::string							_body;
 			int									_port;
 			std::string							_path;
-			std::string							_querry;
+			std::string							_query;
 			std::string							_raw;
 
 			/*** PARSING ***/
@@ -56,7 +56,7 @@ class Request
 			int			readVersion(std::string& line, size_t i);
 			int			checkMethod();
 			int			checkPort();
-			std::string	findQuerry(std::string path);
+			std::string	findQuery(std::string path);
 
 			/*** AVAILABLE HTTP METHODS ***/
 			static	std::vector<std::string>	methods;
@@ -76,15 +76,16 @@ class Request
 			const	std::string&						getBody() const;
 			int											getPort() const;
 			std::string									getPath() const;
-			std::string									getQuerry() const;
+			std::string									getQuery() const;
 			std::string									getRaw() const;
 
 			/*** SETTERS **/
 		//	void	setHeader(const std::string& key, const std::string& value);
 													//not needed as of now
 			void	setBody(std::vector<std::string> line, size_t i);
-			void	setBody(std::string bod);
+			void	setBody(const std::string &bod);
 			void	setRet(int);
+			void	setMethod(const std::string &method);
 
 			/*** UTILS ****/
 			void	resetHeaders();

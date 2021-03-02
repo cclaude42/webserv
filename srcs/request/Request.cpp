@@ -6,7 +6,7 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 16:27:33 by hbaudet           #+#    #+#             */
-/*   Updated: 2021/01/19 15:49:55 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/02 13:46:24 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ std::vector<std::string>		Request::initMethods()
 std::vector<std::string>	Request::methods = Request::initMethods();
 
 Request::Request() :
-	_method(""), _version(""), _ret(200), _body(""), _port(80), _path(""), _querry(""), _raw("")
+	_method(""), _version(""), _ret(200), _body(""), _port(80), _path(""), _query(""), _raw("")
 {
 	if (PRINT)
 		std::cout << "Constructor called\n";
@@ -41,7 +41,7 @@ Request::Request() :
 }
 
 Request::Request(const std::string& str) :
-	_method (""), _version(""), _ret(200), _body(""), _port(80), _path(""), _querry(""), _raw("")
+	_method (""), _version(""), _ret(200), _body(""), _port(80), _path(""), _query(""), _raw("")
 {
 	if (PRINT)
 		std::cout << "std:string constructor called\n";
@@ -117,9 +117,9 @@ std::string			Request::getPath() const
 	return this->_path;
 }
 
-std::string			Request::getQuerry() const
+std::string			Request::getQuery() const
 {
-	return this->_querry;
+	return this->_query;
 }
 
 std::string			Request::getRaw() const
@@ -144,7 +144,7 @@ void	Request::setBody(std::vector<std::string> line, size_t i)
 		i++;
 	}
 }
-void	Request::setBody(std::string bod)
+void	Request::setBody(const std::string &bod)
 {
 	this->_body = bod;
 }
@@ -152,4 +152,9 @@ void	Request::setBody(std::string bod)
 void	Request::setRet(int ret)
 {
 	this->_ret = ret;
+}
+
+void	Request::setMethod(const std::string &method)
+{
+	this->_method = method;
 }

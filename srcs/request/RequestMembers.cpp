@@ -6,7 +6,7 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 17:10:06 by hbaudet           #+#    #+#             */
-/*   Updated: 2021/01/20 10:11:22 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/02 13:56:17 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,9 @@ void	Request::resetHeaders()
 	this->_headers["Accept-Charsets"] = "";
 	this->_headers["Accept-Language"] = "";
 	this->_headers["Allow"] = "";
+	this->_headers["Auth-Scheme"] = "";
 	this->_headers["Authorization"] = "";
-	this->_headers["Aontent-Language"] = "";
+	this->_headers["Content-Language"] = "";
 	this->_headers["Content-Length"] = "";
 	this->_headers["Content-Location"] = "";
 	this->_headers["Content-Type"] = "";
@@ -56,6 +57,7 @@ void	Request::resetHeaders()
 	this->_headers["Transfer-Encoding"] = "";
 	this->_headers["User-Agent"] = "";
 	this->_headers["Www-Authenticate"] = "";
+	this->_headers["Connection"] = "Keep-Alive";
 }
 
 int		Request::readFirstLine(std::string& line)
@@ -86,6 +88,7 @@ int		Request::readPath(std::string& line, size_t i)
 	{
 		this->_ret = 400;
 		std::cout << "No HTTP version\n";
+		return 400;
 	}
 	this->_path.assign(line, j, i - j);
 	return this->readVersion(line, i);
@@ -97,6 +100,7 @@ int		Request::readVersion(std::string& line, size_t i)
 	{
 		this->_ret = 400;
 		std::cout << "No HTTP version\n";
+		return 400;
 	}
 	if (line[i] == 'H' && line[i + 1] == 'T' && line[i + 2] == 'T' &&
 			line[i + 3] == 'P' && line[i + 4] == '/')
@@ -141,8 +145,6 @@ int		Request::parse(const std::string& str)
 	std::vector<std::string> line = split(str, '\n');
 	size_t			i;
 
-	// std::cout << "Request:\n" << str << "===================\n";
-
 	this->_raw = str;
 	if (line.size() < 2)
 		this->_ret = 400;
@@ -165,7 +167,11 @@ int		Request::parse(const std::string& str)
 		this->checkPort();
 	}
 	this->stripAll();
-	this->_querry = findQuerry(this->_path);
+	this->_query = findQuery(this->_path);
+	std::cerr << "Query : " << _query << '\n';
+	std::cerr << "Path : " << _path << '\n';
+	if (this->_query != "" && this->_path.find(this->_query) != std::string::npos)
+		this->_path.resize(this->_path.size() - 1 - this->_query.size());
 	return (this->_ret);
 }
 
@@ -182,14 +188,14 @@ void	Request::stripAll()
 	strip(this->_path, ' ');
 }
 
-std::string	Request::findQuerry(std::string path)
+std::string	Request::findQuery(std::string path)
 {
 	size_t		i;
 	std::string	ret;
 
 	i = path.find_first_of('?');
 	if (i != std::string::npos)
-		ret.assign(path, i, std::string::npos);
+		ret.assign(path, i + 1, std::string::npos);
 
 	return ret;
 }

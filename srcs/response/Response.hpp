@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Response.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:18:58 by cclaude           #+#    #+#             */
-/*   Updated: 2021/02/19 14:42:30 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/03/02 11:34:45 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,13 +36,13 @@ public:
 	void			call(Request & request, RequestConfig & requestConf);
 
 	void			getMethod(Request & request, RequestConfig & requestConf);
-	void			headMethod(void);
+	void			headMethod(RequestConfig & requestConf);
 	void			postMethod(Request & request, RequestConfig & requestConf);
-	void			putMethod(std::string content);
-	void			deleteMethod(void);
-	void			connectMethod(void);
-	void			optionsMethod(void);
-	void			traceMethod(Request & request);
+	void			putMethod(std::string content, RequestConfig & requestConf);
+	void			deleteMethod(RequestConfig & requestConf);
+	void			connectMethod(RequestConfig & requestConf);
+	void			optionsMethod(RequestConfig & requestConf);
+	void			traceMethod(Request & request, RequestConfig & requestConf);
 
 	int				readContent(void);
 	int				writeContent(std::string content);

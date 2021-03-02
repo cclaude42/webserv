@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CgiHandler.hpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/13 15:08:57 by frthierr          #+#    #+#             */
-/*   Updated: 2021/01/20 13:31:15 by frthierr         ###   ########.fr       */
+/*   Updated: 2021/03/01 16:03:29 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,8 @@
 
 # define CGI_HANDLER_HPP
 
-# include <iostream>
-# include <iomanip>
-# include <string>
+
+# include "webserv.hpp"
 # include "Config.hpp"
 # include "Request.hpp"
 # include "webserv.hpp"
@@ -29,7 +28,7 @@ class CgiHandler {
 		virtual ~CgiHandler(void);
 
 		CgiHandler   	&operator=(CgiHandler const &src);
-		std::string		executeCgi(std::string scriptName) const;	// executes cgi and returns body
+		std::string		executeCgi(const std::string &scriptName);	// executes cgi and returns body
 	private:
 		CgiHandler(void);
 		void								_initEnv(Request &request, RequestConfig &config);
@@ -45,16 +44,6 @@ class CgiHandler {
 // GATEWAY_INTERFACE
 // PATH_INFO
 // PATH_TRANSLATED
-// QUERY_STRING
-// REMOTE_ADDR
-// REMOTE_IDENT
-// REMOTE_USER
-// REQUEST_METHOD
-// REQUEST_URI
-// SCRIPT_NAME
-// SERVER_NAME
-// SERVER_PORT
-// SERVER_PROTOCOL
-// SERVER_SOFTWARE
+// QUERY_STRING˜
 
 #endif

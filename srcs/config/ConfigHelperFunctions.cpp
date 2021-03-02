@@ -6,7 +6,7 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/18 14:28:07 by user42            #+#    #+#             */
-/*   Updated: 2021/01/19 15:28:39 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/01 12:24:51 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ unsigned int	strToIp(std::string strIp) {
 	return final;
 }
 
-std::string	removeAdjacentSlashes(std::string &str) {
+std::string	removeAdjacentSlashes(const std::string &str) {
 	std::string	ret;
 	bool		lastIsSlash = false;
 
@@ -51,5 +51,6 @@ std::string	removeAdjacentSlashes(std::string &str) {
 			ret.push_back(str[i]);	
 		}
 	}
+	// std::cout << "removed slashes : " << RED << ret << '\n' << RESET;
 	return ret;
 }

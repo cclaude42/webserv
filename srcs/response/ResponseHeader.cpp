@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ResponseHeader.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 15:17:39 by cclaude           #+#    #+#             */
-/*   Updated: 2021/02/24 11:47:00 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/03/02 14:28:45 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,12 @@
 
 // Member functions
 
-std::string		ResponseHeader::getHeader(std::string content, std::string path, int code)
+std::string		ResponseHeader::getHeader(const std::string& content, const std::string& path, int code, const std::string& contentLocation)
 {
 	std::string	header;
 
 	resetValues();
-	setValues(content, path, code);
+	setValues(content, path, code, contentLocation);
 
 	header = "HTTP/1.1 " + to_string(code) + " " + getStatusMessage(code) + "\r\n";
 	header += writeHeader();
@@ -27,12 +27,12 @@ std::string		ResponseHeader::getHeader(std::string content, std::string path, in
 	return (header);
 }
 
-std::string		ResponseHeader::notAllowed(std::set<std::string> methods, std::string path)
+std::string		ResponseHeader::notAllowed(std::set<std::string> methods, const std::string& path)
 {
 	std::string	header;
 
 	resetValues();
-	setValues("", path, 405);
+	setValues("", path, 405, path);
 	setAllow(methods);
 
 	header = "HTTP/1.1 405 Method Not Allowed\r\n";
@@ -69,37 +69,54 @@ std::string		ResponseHeader::writeHeader(void)
 		header += "Transfer-Encoding: " + _transferEncoding + "\r\n";
 	if (_wwwAuthenticate != "")
 		header += "WWW-Authenticate: " + _wwwAuthenticate + "\r\n";
-	header += "\r\n";
+	// header += "\r\n";
 
 	return (header);
 }
 
 std::string		ResponseHeader::getStatusMessage(int code)
 {
-	if (code == 100)
-		return ("Continue");
-	else if (code == 200)
-		return ("OK");
-	else if (code == 201)
-		return ("Created");
-	else if (code == 204)
-		return ("No Content");
-	else if (code == 403)
-		return ("Forbidden");
-	else if (code == 404)
-		return ("Not Found");
-	else if (code == 405)
-		return ("Method Not Allowed");
-	else
-		return ("Unknown Code");
+	// if (code == 100)
+	// 	return ("Continue");
+	// else if (code == 200)
+	// 	return ("OK");
+	// else if (code == 201)
+	// 	return ("Created");
+	// else if (code == 204)
+	// 	return ("No Content");
+	// else if (code == 400)
+	// 	return ("Bad Request");
+	// else if (code == 403)
+	// 	return ("Forbidden");
+	// else if (code == 404)
+	// 	return ("Not Found");
+	// else if (code == 405)
+	// 	return ("Method Not Allowed");
+	// else
+	// 	return ("Unknown Code");
+	if (_errors.find(code) != _errors.end())
+		return _errors[code];
+	return ("Unknown Code");
 }
 
-void			ResponseHeader::setValues(std::string content, std::string path, int code)
+void			ResponseHeader::initErrorMap()
+{
+	_errors[100] = "Continue";
+	_errors[200] = "OK";
+	_errors[201] = "Created";
+	_errors[204] = "No Content";
+	_errors[400] = "Bad Request";
+	_errors[403] = "Forbidden";
+	_errors[404] = "Not Found";
+	_errors[405] = "Method Not Allowed";
+}
+
+void			ResponseHeader::setValues(const std::string& content, const std::string& path, int code, const std::string& contentLocation)
 {
 	setAllow();
 	setContentLanguage(content);
 	setContentLength(content.size());
-	setContentLocation(path, code);
+	setContentLocation(contentLocation, code);
 	setContentType(path);
 	setDate();
 	setLastModified(path);
@@ -124,6 +141,7 @@ void			ResponseHeader::resetValues(void)
 	_server = "";
 	_transferEncoding = "";
 	_wwwAuthenticate = "";
+	initErrorMap();
 }
 
 // Setter functions
@@ -146,7 +164,7 @@ void			ResponseHeader::setAllow(void)
 	_allow = "";
 }
 
-void			ResponseHeader::setContentLanguage(std::string content)
+void			ResponseHeader::setContentLanguage(const std::string& content)
 {
 	(void)content;
 	_contentLanguage = "en-US";
@@ -157,7 +175,7 @@ void			ResponseHeader::setContentLength(int size)
 	_contentLength = to_string(size);
 }
 
-void			ResponseHeader::setContentLocation(std::string path, int code)
+void			ResponseHeader::setContentLocation(const std::string& path, int code)
 {
 	(void)code;
 	// if (code != 404)
@@ -197,7 +215,7 @@ void			ResponseHeader::setDate(void)
 	_date = std::string(buffer);
 }
 
-void			ResponseHeader::setLastModified(std::string path)
+void			ResponseHeader::setLastModified(const std::string& path)
 {
 	char			buffer[100];
 	struct stat		stats;
@@ -211,7 +229,7 @@ void			ResponseHeader::setLastModified(std::string path)
 	}
 }
 
-void			ResponseHeader::setLocation(int code, std::string redirect)
+void			ResponseHeader::setLocation(int code, const std::string& redirect)
 {
 	if (code == 201 || code / 100 == 3)
 	{

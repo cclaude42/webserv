@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:29:28 by cclaude           #+#    #+#             */
-/*   Updated: 2021/03/01 14:48:58 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/03/02 10:38:59 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include "Response.hpp"
 # include "Config.hpp"
 # include "RequestConfig.hpp"
+# include "CgiHandler.hpp"
 
 class Server {
 public:

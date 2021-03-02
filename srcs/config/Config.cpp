@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Config.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 14:30:01 by user42            #+#    #+#             */
-/*   Updated: 2021/02/03 11:10:53 by frthierr         ###   ########.fr       */
+/*   Updated: 2021/03/02 12:56:38 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,13 +67,15 @@ int     Config::parse(const char *filename) {
 }
 
 RequestConfig	Config::getConfigForRequest(t_listen const address,\
-					std::string const uri, std::string const hostName) const {
+					std::string const uri, std::string const hostName, const std::string& method) const {
 	ConfigServer	server;
 	std::string		locationPath;
 
 	this->getServerForRequest(server, address, hostName);
 	server = server.getLocationForRequest(uri, locationPath);
-	RequestConfig config(server, uri, locationPath);
+	if (*(--locationPath.end()) == '/')
+		locationPath.resize(locationPath.size() - 1);
+	RequestConfig config(server, uri, method, locationPath);
 	config.setHostPort(address);
 	return config;
 }

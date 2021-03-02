@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RequestConfig.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 13:20:34 by frthierr          #+#    #+#             */
-/*   Updated: 2021/02/24 11:42:26 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/03/02 12:58:24 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ RequestConfig::RequestConfig(void) {
 	return ;
 }
 
-RequestConfig::RequestConfig(ConfigServer &config, std::string path, std::string locationName):
+RequestConfig::RequestConfig(ConfigServer &config, const std::string &path, const std::string &method, const std::string &locationName):
 _error_page(config.getErrorPage()),
 _client_body_buffer_size(config.getClientBodyBufferSize()),
 _cgi_param(config.getCgiParam()),
@@ -31,14 +31,21 @@ _autoindex(config.getAutoIndex())
 	std::string	ret;
 	if (locationName[0] != '*' && config.getAliasSet()) {
 		ret = root + alias + path.substr(locationName.length());
+		this->_contentLocation = alias + removeAdjacentSlashes(path.substr(locationName.length()));
 	}
-	else
+	else {
 		ret = root + path;
+		this->_contentLocation = removeAdjacentSlashes(path);
+	}
 	this->_path = removeAdjacentSlashes(ret);
+	std::cout << "method : " << method << "\n";
+	if (!pathIsFile(this->_path) && method == "GET" )
+		this->addIndex();
 }
 
 RequestConfig::RequestConfig(RequestConfig const &src) {
 	if (this != &src) {
+		this->_contentLocation = src._contentLocation;
 		this->_path = src._path;
 		this->_error_page = src._error_page;
 		this->_client_body_buffer_size = src._client_body_buffer_size;
@@ -57,6 +64,7 @@ RequestConfig::~RequestConfig(void) {
 
 RequestConfig	&RequestConfig::operator=(RequestConfig const &src) {
 	if (this != &src) {
+		this->_contentLocation = src._contentLocation;
 		this->_path = src._path;
 		this->_error_page = src._error_page;
 		this->_client_body_buffer_size = src._client_body_buffer_size;
@@ -70,6 +78,10 @@ RequestConfig	&RequestConfig::operator=(RequestConfig const &src) {
 }
 
 // GETER FUNCTIONS
+const std::string							&RequestConfig::getContentLocation() const {
+	return this->_contentLocation;
+}
+
 const std::string							&RequestConfig::getPath() const {
 	return this->_path;
 }
@@ -104,19 +116,48 @@ const t_listen							&RequestConfig::getHostPort() const {
 void								RequestConfig::setPath(int code)
 {
 	//default value hardcoded because at the moment I can't get access to values from config file
-	this->_path = "/home/hannibal/Documents/Cursus42/webserv_v2/utils_tests/error/";
+	this->_path = "./test_us/error/error/";
 	this->_path += to_string(code) + ".html";
 	// this->_path = this->_error_page[code];
 }
 
-void								RequestConfig::setPath(std::string path)
+void								RequestConfig::setPath(const std::string &path)
 {
 	this->_path = path;
+}
+
+void								RequestConfig::setContentLocation(const std::string &path)
+{
+	this->_contentLocation = path;
 }
 
 void								RequestConfig::setHostPort(const t_listen hostPort){
 	this->_hostPort= hostPort;
 }
+
+void								RequestConfig::addIndex()
+{
+	std::vector<std::string>::iterator	it;
+	std::string							path;
+
+	it = this->_index.begin();
+	while(it != this->_index.end())
+	{
+		path = this->_path;
+		path += "/"  + *it;
+		std::cout << "Testing path ; " << path << '\n';
+		if (pathIsFile(path))
+		{
+			this->_path = path;
+			this->_contentLocation += "/" + *it;
+			std::cout << "Path |" << this->_path << "| valid\n";
+			return ;
+		}
+		it++;
+	}
+	std::cout << "No valid index to add\n";
+}
+
 
 std::ostream	&operator<<(std::ostream &out, RequestConfig &request) {
 	out << "path: " << request._path << std::endl;

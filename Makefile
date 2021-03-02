@@ -42,7 +42,7 @@ RESPONSE = Response ResponseHeader
 
 SERVER = Server Cluster
 
-TOOLS = ntoh string
+TOOLS = ntoh string pathIsFile
 
 ##################################################
 # SRC
@@ -122,20 +122,23 @@ test: test_$(OS)
 test_setup: all
 	@rm -f test_us/client
 	@rm -rf test_us/root
-	@mkdir -p test_us/root
+	@mkdir -p test_us/root/tmp_dir_for_php
+	@cp test_us/index/index.php test_us/root/tmp_dir_for_php/index.php
+	@cp test_us/index/other.php test_us/root/tmp_dir_for_php/other.php
 	@cp test_us/index/basic.html test_us/root/index_example.html
 	@cp test_us/index/basic.html test_us/root/index_permission.html
 	@chmod 000 test_us/root/index_permission.html
-	@clang++ -o test_us/client test_us/client.cpp
+	@$(CC) -o test_us/client test_us/client.cpp
+	@$(CC) -o test_us/cgi_tester test_us/cgi_test.cpp
 
 test_mac: test_setup
 	@osascript -e 'tell application "Terminal" to do script "cd $(PWD) && clear && ./test_us/client"'
 	@osascript -e 'tell application "Terminal" to activate'
-	./webserv test_us/conf/webserv.conf
+	./webserv test_us/conf/youpi_tester.conf
 
 test_linux: test_setup
-	@x-terminal-emulator -n -w $$(pwd) -x "./test_us/client"
-	./webserv test_us/conf/webserv.conf
+	@x-terminal-emulator --working-directory=$$(pwd) -x "./test_us/client"&
+	./webserv test_us/conf/youpi_tester.conf
 
 bocal: bocal_$(OS)
 
@@ -145,7 +148,7 @@ bocal_mac: all
 	./webserv test_mac/mac.conf
 
 bocal_linux: all
-	@x-terminal-emulator -n -w $$(pwd) -x "./test_linux/ubuntu_tester http://localhost:8000"
+	@x-terminal-emulator --working-directory=$$(pwd) -x "./test_linux/ubuntu_tester http://localhost:8000" &
 	./webserv test_linux/linux.conf
 
 .PHONY: libft clean fclean re test test_setup test_mac test_linux bocal bocal_mac bocal_linux

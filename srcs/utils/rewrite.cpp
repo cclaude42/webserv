@@ -6,7 +6,7 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/02 16:57:03 by hbaudet           #+#    #+#             */
-/*   Updated: 2021/02/02 17:13:16 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/01 12:14:37 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,4 @@ std::string rewrite(std::string location, std::string uri, std::string path)
    
 
     return ret.str();
-}
-
-int main()
-{
-    std::string my_str = rewrite("/directory", "/directory/ma_page.html", "/YoupiBanane");
-    
-    std::cout <<my_str << std::endl;
 }

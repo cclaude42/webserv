@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   webserv.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/31 13:44:42 by cclaude           #+#    #+#             */
-/*   Updated: 2021/02/24 11:44:52 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/03/02 12:17:55 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,10 @@ std::string&				to_lower(std::string& str);
 std::string&				to_upper(std::string& str);
 std::string&				capitalize(std::string& str);
 std::string					to_string(size_t n);
+
+//UTILS
+int							pathIsFile(const std::string& path);
+
 
 
 
