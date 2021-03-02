@@ -120,12 +120,13 @@ test: test_$(OS)
 test_setup: all
 	@rm -f test_us/client
 	@rm -rf test_us/root
-	@mkdir -p test_us/root
+	@mkdir -p test_us/root/tmp_dir_for_php
 	@cp test_us/index/basic.html test_us/root/index_example.html
+	@cp test_us/index/index.php test_us/root/tmp_dir_for_php/index.php
 	@cp test_us/index/basic.html test_us/root/index_permission.html
 	@chmod 000 test_us/root/index_permission.html
-	@clang++ -o test_us/client test_us/client.cpp
-	@clang++ -o test_us/cgi_tester test_us/cgi_test.cpp
+	@$(CC) $(CFLAGS) -o test_us/client test_us/client.cpp
+	@$(CC) $(CFLAGS) -o test_us/cgi_tester test_us/cgi_test.cpp
 
 test_mac: test_setup
 	@osascript -e 'tell application "Terminal" to do script "cd $(PWD) && clear && ./test_us/client"'
