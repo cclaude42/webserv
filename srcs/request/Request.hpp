@@ -47,7 +47,7 @@ class Request
 			std::string							_body;
 			int									_port;
 			std::string							_path;
-			std::string							_querry;
+			std::string							_query;
 			std::string							_raw;
 
 			/*** PARSING ***/
@@ -56,7 +56,7 @@ class Request
 			int			readVersion(std::string& line, size_t i);
 			int			checkMethod();
 			int			checkPort();
-			std::string	findQuerry(std::string path);
+			std::string	findQuery(std::string path);
 
 			/*** AVAILABLE HTTP METHODS ***/
 			static	std::vector<std::string>	methods;
@@ -76,7 +76,7 @@ class Request
 			const	std::string&						getBody() const;
 			int											getPort() const;
 			std::string									getPath() const;
-			std::string									getQuerry() const;
+			std::string									getQuery() const;
 			std::string									getRaw() const;
 
 			/*** SETTERS **/

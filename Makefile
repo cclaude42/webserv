@@ -125,6 +125,7 @@ test_setup: all
 	@cp test_us/index/basic.html test_us/root/index_permission.html
 	@chmod 000 test_us/root/index_permission.html
 	@clang++ -o test_us/client test_us/client.cpp
+	@clang++ -o test_us/cgi_tester test_us/cgi_test.cpp
 
 test_mac: test_setup
 	@osascript -e 'tell application "Terminal" to do script "cd $(PWD) && clear && ./test_us/client"'
@@ -132,7 +133,7 @@ test_mac: test_setup
 	./webserv test_us/conf/youpi_tester.conf
 
 test_linux: test_setup
-	@x-terminal-emulator -n -w $$(pwd) -x "./test_us/client"
+	@x-terminal-emulator --working-directory=$$(pwd) -x "./test_us/client"&
 	./webserv test_us/conf/youpi_tester.conf
 
 bocal: bocal_$(OS)
@@ -143,7 +144,7 @@ bocal_mac: all
 	./webserv test_mac/mac.conf
 
 bocal_linux: all
-	@x-terminal-emulator -n -w $$(pwd) -x "./test_linux/ubuntu_tester http://localhost:8000"
+	@x-terminal-emulator --working-directory=$$(pwd) -x "./test_linux/ubuntu_tester http://localhost:8000" &
 	./webserv test_linux/linux.conf
 
 .PHONY: libft clean fclean re test test_setup test_mac test_linux bocal bocal_mac bocal_linux

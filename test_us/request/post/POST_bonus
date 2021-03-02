@@ -1,4 +1,4 @@
-POST /directory/youpi.bla HTTP/1.1
+POST /tmp_dir_for_php/index.php?truc=machin&foo=bar&jean-michel=francis HTTP/1.1
 User-Agent: custom-client
 Host: weebserv
 Accept-Language: en-US

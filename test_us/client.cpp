@@ -76,7 +76,7 @@ std::string		choose_target(void)
 	std::cout << "(a) Exists" << std::endl;
 	std::cout << "(b) Doesn't exist" << std::endl;
 	std::cout << "(c) Wrong permissions" << std::endl;
-	std::cout << "(d) (ONLY for POST/PUT) BONUS" << RESET << std::endl;
+	std::cout << "(d) Bonus (CGI)" << RESET << std::endl;
 	getline(std::cin, choice);
 
 	if (choice == "a")

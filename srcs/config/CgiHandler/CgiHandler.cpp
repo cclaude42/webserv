@@ -40,37 +40,32 @@ CgiHandler	&CgiHandler::operator=(CgiHandler const &src) {
 
 void		CgiHandler::_initEnv(Request &request, RequestConfig &config) {
 	std::map<std::string, std::string>	headers = request.getHeaders();
-	if (headers.find("auth-scheme") != headers.end())
-		this->_env["AUTH_TYPE"] = headers["Authorization"]; // 	header field of http request that hannibal needs to add
+	if (headers.find("Auth-Scheme") != headers.end() && headers["Auth-Scheme"] != "")
+		this->_env["AUTH_TYPE"] = headers["Authorization"];
 
-	this->_env["CONTENT_LENGTH"] = this->_body.length();
-
-	// std::string	method = request.getMethod();
-
-	// if (method == "PUT" || method == "POST") {
-	// 	this->_env["CONTENT_TYPE"] = method;
-	// }
-	// else
-	// 	this->_env["CONTENT_TYPE"] = "";
-	this->_env["CONTENT_TYPE"] = headers["Content-Type"];
+	this->_env["REDIRECT_STATUS"] = "200"; //Security needed to execute php-cgi
 	this->_env["GATEWAY_INTERFACE"] = "CGI/1.1";
-	this->_env["PATH_INFO"] = request.getPath(); //might need some change, using config path/contentLocation
-	this->_env["PATH_TRANSLATED"] = request.getPath(); //might need some change, using config path/contentLocation
-	this->_env["QUERY_STRING"] = request.getQuerry();
-	this->_env["REMOTE_ADDR"] = config.getHostPort().host;
-	this->_env["REMOTE_IDENT"] = headers["Authorization"];
-	this->_env["REMOTE_USER"] = headers["Authorization"];
+	this->_env["SCRIPT_NAME"] = config.getPath();
+	this->_env["SCRIPT_FILENAME"] = config.getPath();
+	// this->_env["SCRIPT_NAME"] = "default-cgi-script";
 	this->_env["REQUEST_METHOD"] = request.getMethod();
-	this->_env["REQUEST_URI"] = request.getPath();
-	this->_env["SCRIPT_NAME"] = "default-cgi-script";
+	this->_env["CONTENT_LENGTH"] = to_string(this->_body.length());
+	this->_env["CONTENT_TYPE"] = headers["Content-Type"];
+	this->_env["PATH_INFO"] = config.getPath(); //might need some change, using config path/contentLocation
+	// this->_env["PATH_TRANSLATED"] = request.getPath(); //might need some change, using config path/contentLocation
+	this->_env["QUERY_STRING"] = request.getQuery();
+	// this->_env["REMOTE_ADDR"] = to_string(config.getHostPort().host);
+	// this->_env["REMOTE_IDENT"] = headers["Authorization"];
+	// this->_env["REMOTE_USER"] = headers["Authorization"];
+	// this->_env["REQUEST_URI"] = request.getPath() + request.getQuery();
 
-	if (headers.find("hostname") != headers.end())
-		this->_env["SERVER_NAME"] = headers["hostname"];
-	else
-		this->_env["SERVER_NAME"] = this->_env["REMOTE_ADDR"];
-	this->_env["SERVER_PORT"] = to_string(config.getHostPort().port);
-	this->_env["SERVER_PROTOCOL"] = "HTTP/1.1";
-	this->_env["SERVER_SOFTWARE"] = "Weebserv/1.0";
+	if (headers.find("Hostname") != headers.end())
+		this->_env["SERVER_NAME"] = headers["Hostname"];
+	// else
+		// this->_env["SERVER_NAME"] = this->_env["REMOTE_ADDR"];
+	// this->_env["SERVER_PORT"] = to_string(config.getHostPort().port);
+	// this->_env["SERVER_PROTOCOL"] = "HTTP/1.1";
+	// this->_env["SERVER_SOFTWARE"] = "Weebserv/1.0";
 
 }
 
@@ -98,7 +93,8 @@ std::string		CgiHandler::executeCgi(const std::string& scriptName) {
 	char		**env;
 
 	// GETTING ENV VARIABLES
-	this->_env["SCRIPT_NAME"] = scriptName;
+	// this->_env["SCRIPT_NAME"] = scriptName;
+	std::cout << "Running CGI with : " << scriptName << '\n';
 	try {
 		env = this->_getEnvAsCstrArray();
 	}
@@ -126,6 +122,7 @@ std::string		CgiHandler::executeCgi(const std::string& scriptName) {
 		close(fds[1]);
 		close(fds[2]);
 		close(fds[3]);
+		std::cerr << "execve crashed, errrno : " << errno << "\n";
 		return "cgi execve crashed, oopsy\n";
 	}
 	else

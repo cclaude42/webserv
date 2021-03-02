@@ -32,7 +32,7 @@ std::vector<std::string>		Request::initMethods()
 std::vector<std::string>	Request::methods = Request::initMethods();
 
 Request::Request() :
-	_method(""), _version(""), _ret(200), _body(""), _port(80), _path(""), _querry(""), _raw("")
+	_method(""), _version(""), _ret(200), _body(""), _port(80), _path(""), _query(""), _raw("")
 {
 	if (PRINT)
 		std::cout << "Constructor called\n";
@@ -41,7 +41,7 @@ Request::Request() :
 }
 
 Request::Request(const std::string& str) :
-	_method (""), _version(""), _ret(200), _body(""), _port(80), _path(""), _querry(""), _raw("")
+	_method (""), _version(""), _ret(200), _body(""), _port(80), _path(""), _query(""), _raw("")
 {
 	if (PRINT)
 		std::cout << "std:string constructor called\n";
@@ -117,9 +117,9 @@ std::string			Request::getPath() const
 	return this->_path;
 }
 
-std::string			Request::getQuerry() const
+std::string			Request::getQuery() const
 {
-	return this->_querry;
+	return this->_query;
 }
 
 std::string			Request::getRaw() const

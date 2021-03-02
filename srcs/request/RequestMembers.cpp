@@ -41,6 +41,7 @@ void	Request::resetHeaders()
 	this->_headers["Accept-Charsets"] = "";
 	this->_headers["Accept-Language"] = "";
 	this->_headers["Allow"] = "";
+	this->_headers["Auth-Scheme"] = "";
 	this->_headers["Authorization"] = "";
 	this->_headers["Content-Language"] = "";
 	this->_headers["Content-Length"] = "";
@@ -166,7 +167,9 @@ int		Request::parse(const std::string& str)
 		this->checkPort();
 	}
 	this->stripAll();
-	this->_querry = findQuerry(this->_path);
+	this->_query = findQuery(this->_path);
+	if (this->_path.find(this->_query) != std::string::npos)
+		this->_path.resize(this->_path.size() - 1 - this->_query.size());
 	return (this->_ret);
 }
 
@@ -183,14 +186,14 @@ void	Request::stripAll()
 	strip(this->_path, ' ');
 }
 
-std::string	Request::findQuerry(std::string path)
+std::string	Request::findQuery(std::string path)
 {
 	size_t		i;
 	std::string	ret;
 
 	i = path.find_first_of('?');
 	if (i != std::string::npos)
-		ret.assign(path, i, std::string::npos);
+		ret.assign(path, i + 1, std::string::npos);
 
 	return ret;
 }

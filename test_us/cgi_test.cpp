@@ -23,18 +23,27 @@ using namespace std;
 int main(int ac, char **av, char **envp)
 {
 	cout << RED << "CGI Tester" <<"\n\n";
+
 	cout << RESET << "Received " << ac << " args" <<'\n';
+	while (--ac >= 0)
+		cout << av[ac] << '\n';
+
 	cout << "Reading body from stdin :\n";
 	cout << GREEN;
 
-	 for (string line; getline(cin, line);) {
+	string	first;
+
+	getline(cin, first);
+	if (first != "\r")
+		cerr << GREEN << "std_error>" << first << RESET << '\n';
+
+	for (string line; getline(cin, line);) {
+		if (line == "\r")
+			break ;
         cout << line << '\n';
 		cerr << GREEN << "std_error>" << line << RESET << '\n';
     }
-	cout << "End of Body\n";
-
-	while (--ac >= 0)
-		cout << av[ac] << '\n';
+	cout << RESET << "End of Body\n";
 	
 	cout << "\n\n" << RESET << "Env is :" << '\n';
 	cout << YELLOW;
@@ -45,14 +54,10 @@ int main(int ac, char **av, char **envp)
 		cout << "NO env\n" << RESET;
 		return 1;
 	}
-	cout << "START" << '\n';
-	cout << (long)envp << '\n';
-	cout << envp[0];
 	for (int i = 0; envp[i]; i++)
 		cout << envp[i] << '\n';
 	
-	cout << "End of CGI-Tester";
-	cout << RESET << "\n\n";
+	cout << RESET << "End of CGI-Tester\n\n";
 
 	return 1;
 }

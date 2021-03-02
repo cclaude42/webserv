@@ -37,8 +37,6 @@ void		Server::run(Config & conf)
 	std::cout << YELLOW << "Content-Location : " << requestConf.getContentLocation() << RESET << '\n';
 	std::cout << YELLOW << "Full path : " << requestConf.getPath() << RESET << '\n';
 
-
-
 	//  /DEBUG
 
 	response.call(request, requestConf);
