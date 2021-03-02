@@ -128,8 +128,8 @@ test_setup: all
 	@cp test_us/index/basic.html test_us/root/index_example.html
 	@cp test_us/index/basic.html test_us/root/index_permission.html
 	@chmod 000 test_us/root/index_permission.html
-	@$(CC) $(CFLAGS) -o test_us/client test_us/client.cpp
-	@$(CC) $(CFLAGS) -o test_us/cgi_tester test_us/cgi_test.cpp
+	@$(CC) -o test_us/client test_us/client.cpp
+	@$(CC) -o test_us/cgi_tester test_us/cgi_test.cpp
 
 test_mac: test_setup
 	@osascript -e 'tell application "Terminal" to do script "cd $(PWD) && clear && ./test_us/client"'
