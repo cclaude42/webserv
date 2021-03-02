@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/12 16:53:41 by cclaude           #+#    #+#             */
-/*   Updated: 2021/02/03 12:23:25 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/03/01 12:18:01 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,11 +33,12 @@ public:
 	void	run(void);
 	void	clean(void);
 private:
-	Config					_config;
-	std::map<int, Server>	_map;
-	fd_set					_fd_set;
-	unsigned int			_fd_size;
-	long					_max_fd;
+	Config						_config;
+	std::map<long, Server>		_servers;
+	std::map<long, Server *>	_accepts;
+	fd_set						_fd_set;
+	unsigned int				_fd_size;
+	long						_max_fd;
 };
 
 #endif

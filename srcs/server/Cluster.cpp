@@ -6,7 +6,11 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/12 16:53:41 by cclaude           #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2021/03/01 11:48:25 by hbaudet          ###   ########.fr       */
+=======
+/*   Updated: 2021/03/01 15:12:38 by cclaude          ###   ########.fr       */
+>>>>>>> master
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +27,8 @@ void	Cluster::setup(void)
 {
 	std::vector<t_listen>	vect = _config.getAllListens();
 
+	FD_ZERO(&_fd_set);
 	_fd_size = vect.size();
-	ft_memset(&_fd_set, 0, sizeof(fd_set));
 	_max_fd = 0;
 
 	for ( std::vector<t_listen>::const_iterator lstn = vect.begin() ; lstn != vect.end() ; lstn++ )
@@ -35,11 +39,11 @@ void	Cluster::setup(void)
 		std::cout << "Setting up " << lstn->host << ":" << lstn->port << "..." << std::endl;
 		serv.setup();
 		fd = serv.getFD();
-		_fd_set.fds_bits[fd / 64] |= (long)(1UL << fd % 64);
-		_map.insert(std::make_pair(serv.getFD(), serv));
-		if (serv.getFD() > _max_fd)
-			_max_fd = serv.getFD();
-		std::cout << "Set up " << lstn->host << ":" << lstn->port << " on FD " << fd << std::endl;
+		FD_SET(fd, &_fd_set);
+		_servers.insert(std::make_pair(fd, serv));
+		if (fd > _max_fd)
+			_max_fd = fd;
+		// std::cout << "Set up " << lstn->host << ":" << lstn->port << " on FD " << fd << std::endl;
 	}
 }
 
@@ -71,23 +75,52 @@ void	Cluster::run(void)
 
 		if (ret > 0)
 		{
-			std::cout << std::endl << "\rReceived a connection !   " << std::endl;
+			std::cout << "\rReceived a connection !   " << std::endl;
 
-			for ( std::map<int, Server>::iterator it = _map.begin() ; it != _map.end() && ret ; it++ )
+			for ( std::map<long, Server *>::iterator it = _accepts.begin() ; it != _accepts.end() && ret ; it++ )
 			{
 				long	fd;
 
 				fd = it->first;
-				if (working_set.fds_bits[fd / 64] & (long)(1UL << fd % 64))
+				if (FD_ISSET(fd, &working_set))
 				{
-					std::cout << "Reading from : " << fd << std::endl;
-					it->second.run(_config);
+					// std::cout << "Reading from : " << fd << std::endl;
+					if (it->second->run(_config, fd) == -1)
+					{
+						FD_CLR(fd, &_fd_set);
+						_accepts.erase(fd);
+					}
+					ret--;
+				}
+			}
+
+			for ( std::map<long, Server>::iterator it = _servers.begin() ; it != _servers.end() && ret ; it++ )
+			{
+				long	fd;
+
+				fd = it->first;
+				if (FD_ISSET(fd, &working_set))
+				{
+					long	retfd;
+
+					// std::cout << "Reading from : " << fd << std::endl;
+					retfd = it->second.run(_config, 0);
+
+					if (ret != -1)
+					{
+						// std::cout << "adding fd " << retfd << std::endl;
+						FD_SET(retfd, &_fd_set);
+						_accepts.insert(std::make_pair(retfd, &(it->second)));
+						if (retfd > _max_fd)
+							_max_fd = retfd;
+					}
+
 					ret--;
 				}
 			}
 		}
 		else
-			std::cout << RED << "Problem with select !" << RESET << std::endl;
+			std::cerr << RED << "Problem with select !" << RESET << std::endl;
 
 		n = 0;
 	}
@@ -95,7 +128,7 @@ void	Cluster::run(void)
 
 void	Cluster::clean(void)
 {
-	for ( std::map<int, Server>::iterator it = _map.begin() ; it != _map.end() ; it++ )
+	for ( std::map<long, Server>::iterator it = _servers.begin() ; it != _servers.end() ; it++ )
 		it->second.clean();
 }
 
@@ -104,7 +137,7 @@ void	Cluster::clean(void)
 Cluster & Cluster::operator=(const Cluster & src)
 {
 	_config = src._config;
-	_map = src._map;
+	_servers = src._servers;
 	_fd_set = src._fd_set;
 	_fd_size = src._fd_size;
 	_max_fd = src._max_fd;

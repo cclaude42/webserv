@@ -6,7 +6,11 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:29:28 by cclaude           #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2021/02/25 10:36:34 by hbaudet          ###   ########.fr       */
+=======
+/*   Updated: 2021/03/01 14:48:58 by cclaude          ###   ########.fr       */
+>>>>>>> master
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +36,7 @@ public:
 
 	long		getFD(void);
 
-	void		run(Config & conf);
+	long		run(Config & conf, long socket);
 	void		setup(void);
 	void		setAddr(void);
 	void		accept(void);
@@ -46,6 +50,7 @@ private:
 	long				_fd;
 	long				_socket;
 	struct sockaddr_in	_addr;
+	int					_closed;
 
 	Server(void);
 

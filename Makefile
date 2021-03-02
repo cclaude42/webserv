@@ -102,6 +102,8 @@ clean:
 	@make fclean --no-print-directory -C libft/
 	@echo "\n\033[0;31mDeleting objects..."
 	@rm -rf $(OBJ_DIR) $(OBJ_SUBDIR)
+	@rm -f test_us/client
+	@rm -rf test_us/root
 	@echo "\033[0m"
 
 fclean: clean
