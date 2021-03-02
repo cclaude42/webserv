@@ -6,7 +6,7 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 17:10:06 by hbaudet           #+#    #+#             */
-/*   Updated: 2021/03/01 15:45:26 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/02 10:44:27 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,8 +143,6 @@ int		Request::parse(const std::string& str)
 	std::vector<std::string> line = split(str, '\n');
 	size_t			i;
 
-	// std::cout << "Request:\n" << str << "===================\n";
-
 	this->_raw = str;
 	if (line.size() < 2)
 		this->_ret = 400;
@@ -168,7 +166,9 @@ int		Request::parse(const std::string& str)
 	}
 	this->stripAll();
 	this->_query = findQuery(this->_path);
-	if (this->_path.find(this->_query) != std::string::npos)
+	std::cerr << "Query : " << _query << '\n';
+	std::cerr << "Path : " << _path << '\n';
+	if (this->_query != "" && this->_path.find(this->_query) != std::string::npos)
 		this->_path.resize(this->_path.size() - 1 - this->_query.size());
 	return (this->_ret);
 }

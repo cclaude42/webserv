@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ResponseHeader.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 15:17:39 by cclaude           #+#    #+#             */
-/*   Updated: 2021/02/24 11:47:00 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/03/02 10:46:55 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ std::string		ResponseHeader::writeHeader(void)
 		header += "Transfer-Encoding: " + _transferEncoding + "\r\n";
 	if (_wwwAuthenticate != "")
 		header += "WWW-Authenticate: " + _wwwAuthenticate + "\r\n";
-	header += "\r\n";
+	// header += "\r\n";
 
 	return (header);
 }
