@@ -6,7 +6,7 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 15:17:39 by cclaude           #+#    #+#             */
-/*   Updated: 2021/03/02 14:02:10 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/02 14:28:45 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,24 +76,39 @@ std::string		ResponseHeader::writeHeader(void)
 
 std::string		ResponseHeader::getStatusMessage(int code)
 {
-	if (code == 100)
-		return ("Continue");
-	else if (code == 200)
-		return ("OK");
-	else if (code == 201)
-		return ("Created");
-	else if (code == 204)
-		return ("No Content");
-	else if (code == 400)
-		return ("Bad Request");
-	else if (code == 403)
-		return ("Forbidden");
-	else if (code == 404)
-		return ("Not Found");
-	else if (code == 405)
-		return ("Method Not Allowed");
-	else
-		return ("Unknown Code");
+	// if (code == 100)
+	// 	return ("Continue");
+	// else if (code == 200)
+	// 	return ("OK");
+	// else if (code == 201)
+	// 	return ("Created");
+	// else if (code == 204)
+	// 	return ("No Content");
+	// else if (code == 400)
+	// 	return ("Bad Request");
+	// else if (code == 403)
+	// 	return ("Forbidden");
+	// else if (code == 404)
+	// 	return ("Not Found");
+	// else if (code == 405)
+	// 	return ("Method Not Allowed");
+	// else
+	// 	return ("Unknown Code");
+	if (_errors.find(code) != _errors.end())
+		return _errors[code];
+	return ("Unknown Code");
+}
+
+void			ResponseHeader::initErrorMap()
+{
+	_errors[100] = "Continue";
+	_errors[200] = "OK";
+	_errors[201] = "Created";
+	_errors[204] = "No Content";
+	_errors[400] = "Bad Request";
+	_errors[403] = "Forbidden";
+	_errors[404] = "Not Found";
+	_errors[405] = "Method Not Allowed";
 }
 
 void			ResponseHeader::setValues(const std::string& content, const std::string& path, int code, const std::string& contentLocation)
@@ -126,6 +141,7 @@ void			ResponseHeader::resetValues(void)
 	_server = "";
 	_transferEncoding = "";
 	_wwwAuthenticate = "";
+	initErrorMap();
 }
 
 // Setter functions

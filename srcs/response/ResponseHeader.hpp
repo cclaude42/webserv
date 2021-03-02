@@ -6,7 +6,7 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 15:17:39 by cclaude           #+#    #+#             */
-/*   Updated: 2021/03/02 11:37:07 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/02 14:22:28 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,18 +47,21 @@ public:
 	std::string		getStatusMessage(int code);
 
 private:
-	std::string				_allow;
-	std::string				_contentLanguage;
-	std::string				_contentLength;
-	std::string				_contentLocation;
-	std::string				_contentType;
-	std::string				_date;
-	std::string				_lastModified;
-	std::string				_location;
-	std::string				_retryAfter;
-	std::string				_server;
-	std::string				_transferEncoding;
-	std::string				_wwwAuthenticate;
+	std::string					_allow;
+	std::string					_contentLanguage;
+	std::string					_contentLength;
+	std::string					_contentLocation;
+	std::string					_contentType;
+	std::string					_date;
+	std::string					_lastModified;
+	std::string					_location;
+	std::string					_retryAfter;
+	std::string					_server;
+	std::string					_transferEncoding;
+	std::string					_wwwAuthenticate;
+	std::map<int, std::string>	_errors;
+
+	void						initErrorMap();
 };
 
 #endif
