@@ -6,7 +6,7 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 16:27:33 by hbaudet           #+#    #+#             */
-/*   Updated: 2021/01/19 15:49:55 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/02 13:46:24 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,7 +144,7 @@ void	Request::setBody(std::vector<std::string> line, size_t i)
 		i++;
 	}
 }
-void	Request::setBody(std::string bod)
+void	Request::setBody(const std::string &bod)
 {
 	this->_body = bod;
 }
@@ -152,4 +152,9 @@ void	Request::setBody(std::string bod)
 void	Request::setRet(int ret)
 {
 	this->_ret = ret;
+}
+
+void	Request::setMethod(const std::string &method)
+{
+	this->_method = method;
 }

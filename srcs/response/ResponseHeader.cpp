@@ -6,7 +6,7 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 15:17:39 by cclaude           #+#    #+#             */
-/*   Updated: 2021/03/02 10:46:55 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/02 14:02:10 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,12 @@
 
 // Member functions
 
-std::string		ResponseHeader::getHeader(std::string content, std::string path, int code)
+std::string		ResponseHeader::getHeader(const std::string& content, const std::string& path, int code, const std::string& contentLocation)
 {
 	std::string	header;
 
 	resetValues();
-	setValues(content, path, code);
+	setValues(content, path, code, contentLocation);
 
 	header = "HTTP/1.1 " + to_string(code) + " " + getStatusMessage(code) + "\r\n";
 	header += writeHeader();
@@ -27,12 +27,12 @@ std::string		ResponseHeader::getHeader(std::string content, std::string path, in
 	return (header);
 }
 
-std::string		ResponseHeader::notAllowed(std::set<std::string> methods, std::string path)
+std::string		ResponseHeader::notAllowed(std::set<std::string> methods, const std::string& path)
 {
 	std::string	header;
 
 	resetValues();
-	setValues("", path, 405);
+	setValues("", path, 405, path);
 	setAllow(methods);
 
 	header = "HTTP/1.1 405 Method Not Allowed\r\n";
@@ -84,6 +84,8 @@ std::string		ResponseHeader::getStatusMessage(int code)
 		return ("Created");
 	else if (code == 204)
 		return ("No Content");
+	else if (code == 400)
+		return ("Bad Request");
 	else if (code == 403)
 		return ("Forbidden");
 	else if (code == 404)
@@ -94,12 +96,12 @@ std::string		ResponseHeader::getStatusMessage(int code)
 		return ("Unknown Code");
 }
 
-void			ResponseHeader::setValues(std::string content, std::string path, int code)
+void			ResponseHeader::setValues(const std::string& content, const std::string& path, int code, const std::string& contentLocation)
 {
 	setAllow();
 	setContentLanguage(content);
 	setContentLength(content.size());
-	setContentLocation(path, code);
+	setContentLocation(contentLocation, code);
 	setContentType(path);
 	setDate();
 	setLastModified(path);
@@ -146,7 +148,7 @@ void			ResponseHeader::setAllow(void)
 	_allow = "";
 }
 
-void			ResponseHeader::setContentLanguage(std::string content)
+void			ResponseHeader::setContentLanguage(const std::string& content)
 {
 	(void)content;
 	_contentLanguage = "en-US";
@@ -157,7 +159,7 @@ void			ResponseHeader::setContentLength(int size)
 	_contentLength = to_string(size);
 }
 
-void			ResponseHeader::setContentLocation(std::string path, int code)
+void			ResponseHeader::setContentLocation(const std::string& path, int code)
 {
 	(void)code;
 	// if (code != 404)
@@ -197,7 +199,7 @@ void			ResponseHeader::setDate(void)
 	_date = std::string(buffer);
 }
 
-void			ResponseHeader::setLastModified(std::string path)
+void			ResponseHeader::setLastModified(const std::string& path)
 {
 	char			buffer[100];
 	struct stat		stats;
@@ -211,7 +213,7 @@ void			ResponseHeader::setLastModified(std::string path)
 	}
 }
 
-void			ResponseHeader::setLocation(int code, std::string redirect)
+void			ResponseHeader::setLocation(int code, const std::string& redirect)
 {
 	if (code == 201 || code / 100 == 3)
 	{

@@ -42,7 +42,7 @@ RESPONSE = Response ResponseHeader
 
 SERVER = Server Cluster
 
-TOOLS = ntoh string
+TOOLS = ntoh string pathIsFile
 
 ##################################################
 # SRC
@@ -123,8 +123,9 @@ test_setup: all
 	@rm -f test_us/client
 	@rm -rf test_us/root
 	@mkdir -p test_us/root/tmp_dir_for_php
-	@cp test_us/index/basic.html test_us/root/index_example.html
 	@cp test_us/index/index.php test_us/root/tmp_dir_for_php/index.php
+	@cp test_us/index/other.php test_us/root/tmp_dir_for_php/other.php
+	@cp test_us/index/basic.html test_us/root/index_example.html
 	@cp test_us/index/basic.html test_us/root/index_permission.html
 	@chmod 000 test_us/root/index_permission.html
 	@$(CC) $(CFLAGS) -o test_us/client test_us/client.cpp

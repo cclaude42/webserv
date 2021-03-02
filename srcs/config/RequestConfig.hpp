@@ -6,7 +6,7 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 18:41:01 by francisz          #+#    #+#             */
-/*   Updated: 2021/03/01 11:24:42 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/02 12:57:29 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,16 @@
 # define REQUEST_CONFIG_HPP
 
 # include "Config.hpp"
+# include "fstream"
+# include <sys/types.h>
+# include <sys/stat.h>
+# include <unistd.h>
+
 
 class RequestConfig {
 	public:
 		RequestConfig(void);
-		RequestConfig(ConfigServer &config, const std::string &path, const std::string &locationName = "");
+		RequestConfig(ConfigServer &config, const std::string &path,  const std::string &method, const std::string &locationName = "");
 		RequestConfig(RequestConfig const &src);
 		virtual ~RequestConfig(void);
 
@@ -42,6 +47,9 @@ class RequestConfig {
 		void								setPath(const std::string&);
 		void								setContentLocation(const std::string&);
 		void								setHostPort(const t_listen hostPort);
+
+		// HELPERS
+		void								addIndex();
 
 	private:
 		std::string							_contentLocation; // public part of the path

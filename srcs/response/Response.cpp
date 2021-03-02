@@ -6,7 +6,7 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:18:58 by cclaude           #+#    #+#             */
-/*   Updated: 2021/03/01 16:09:51 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/02 14:07:29 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 
 void			Response::call(Request & request, RequestConfig & requestConf)
 {
-	_code = 200;
+	_code = request.getRet();
 	_path = requestConf.getPath();
 
 	if (requestConf.getAllowedMethods().find(request.getMethod()) == requestConf.getAllowedMethods().end())
@@ -24,7 +24,7 @@ void			Response::call(Request & request, RequestConfig & requestConf)
 		ResponseHeader	head;
 
 		_code = 405;
-		_response = head.notAllowed(requestConf.getAllowedMethods(), _path);
+		_response = head.notAllowed(requestConf.getAllowedMethods(), requestConf.getContentLocation()) + "\r\n";
 
 		return ;
 	}
@@ -32,19 +32,19 @@ void			Response::call(Request & request, RequestConfig & requestConf)
 	if (request.getMethod() == "GET")
 		getMethod(request, requestConf);
 	else if (request.getMethod() == "HEAD")
-		headMethod();
+		headMethod(requestConf);
 	else if (request.getMethod() == "POST")
 		postMethod(request, requestConf);
 	else if (request.getMethod() == "PUT")
-		putMethod(request.getBody());
+		putMethod(request.getBody(), requestConf);
 	else if (request.getMethod() == "DELETE")
-		deleteMethod();
+		deleteMethod(requestConf);
 	else if (request.getMethod() == "CONNECT")
-		connectMethod();
+		connectMethod(requestConf);
 	else if (request.getMethod() == "OPTIONS")
-		optionsMethod();
+		optionsMethod(requestConf);
 	else if (request.getMethod() == "TRACE")
-		traceMethod(request);
+		traceMethod(request, requestConf);
 }
 
 // Methods
@@ -57,22 +57,30 @@ void			Response::getMethod(Request & request, RequestConfig & requestConf)
 	{
 		CgiHandler	cgi(request, requestConf);
 
+		std::cout << "Executing CGI\n";
 		_content = cgi.executeCgi(requestConf.getCgiPass());
+		std::cout << "Finished executing CGI\n";
 
 		_code = 200;// Placeholder
 	}
-	else
+	else if  (_code == 200)
+	{
 		_code = readContent();
-
-	_response = head.getHeader(_content, _path, _code) + _content;
+	}
+	else
+	{
+		_content = "\r\n<html><head><title>" + to_string(_code) +"</title></head><body><h1>ERROR ";
+		_content += to_string(_code) + "</h1></body></html>";
+	}
+	_response = head.getHeader(_content, _path, _code, requestConf.getContentLocation()) + _content + "\r\n";
 }
 
-void			Response::headMethod(void)
+void			Response::headMethod(RequestConfig & requestConf)
 {
 	ResponseHeader	head;
 
 	_code = readContent();
-	_response = head.getHeader(_content, _path, _code);
+	_response = head.getHeader(_content, _path, _code, requestConf.getContentLocation());
 }
 
 void			Response::postMethod(Request & request, RequestConfig & requestConf)
@@ -94,21 +102,21 @@ void			Response::postMethod(Request & request, RequestConfig & requestConf)
 		srand(time(NULL));
 		// int	list[] = { 100, 101, 200, 201, 202, 203, 204, 205, 206, 300, 301, 302, 303, 304, 305, 306, 307, 400, 401, 402, 403, 404, 405, 406, 407, 408, 409, 410, 411, 412, 413, 414, 415, 416, 417, 500, 501, 502, 503, 504, 505 };
 		_code = 405;// Making shit up
-		_content = "POST request with no executable ?";
+		_content = "\r\n<html><head><title>405</title></head><body>405 Forbidden yo!</body></html>\r\n";
 	}
 
-	_response = head.getHeader(_content, _path, _code) + _content;
+	_response = head.getHeader(_content, _path, _code, requestConf.getContentLocation()) + _content + "\r\n";
 }
 
-void			Response::putMethod(std::string content)
+void			Response::putMethod(std::string content, RequestConfig & requestConf)
 {
 	ResponseHeader	head;
 
 	_code = writeContent(content);
-	_response = head.getHeader(_content, _path, _code);
+	_response = head.getHeader(_content, _path, _code, requestConf.getContentLocation()) + "\r\n";
 }
 
-void			Response::deleteMethod(void)
+void			Response::deleteMethod(RequestConfig & requestConf)
 {
 	ResponseHeader	head;
 
@@ -122,25 +130,27 @@ void			Response::deleteMethod(void)
 	else
 		_code = 404;
 
-	_response = head.getHeader(_content, _path, _code);
+	_response = head.getHeader(_content, _path, _code, requestConf.getContentLocation());
 }
 
-void			Response::connectMethod(void)
+void			Response::connectMethod(RequestConfig & requestConf)
 {
 	// LINK TO OTHER SERVER ?
+	(void)requestConf;
 }
 
-void			Response::optionsMethod(void)
+void			Response::optionsMethod(RequestConfig & requestConf)
 {
 	ResponseHeader	head;
 
 	_code = readContent();
-	_response = head.getHeader(_content, _path, _code);
+	_response = head.getHeader(_content, _path, _code, requestConf.getContentLocation());
 
 }
 
-void			Response::traceMethod(Request & request)
+void			Response::traceMethod(Request & request, RequestConfig & requestConf)
 {
+	(void)requestConf;
 	_response = request.getRaw();
 }
 
@@ -151,9 +161,9 @@ int				Response::readContent(void)
 	std::ifstream		file;
 	std::stringstream	buffer;
 
-	_content = "";
+	_content = "\r\n";
 
-	if (fileExists(_path) == 0)
+	if (pathIsFile(_path) == 0)
 		return (404);
 
 	file.open(_path.c_str(), std::ifstream::in);
@@ -171,23 +181,27 @@ int				Response::readContent(void)
 int				Response::writeContent(std::string content)
 {
 	std::ofstream	file;
-	int				ret = 204;
 
-	if (fileExists(_path) == 0)
-		ret = 201;
+	if (pathIsFile(_path))
+	{
+		file.open(_path);
+		file << content;
+		file.close();
+		return 204;
+	}
+	else
+	{
+		file.open(_path, std::ofstream::out | std::ofstream::trunc);
+		if (file.is_open() == false)
+			return (403);
 
-	file.open(_path.c_str(), std::ofstream::out | std::ofstream::trunc);
-
-	if (file.is_open() == false)
-		return (403);
-
-	file << content;
-	file.close();
-
-	return (ret);
+		file << content;
+		file.close();
+		return (201);
+	}
 }
 
-int				Response::fileExists(std::string path)
+int				Response::fileExists(std::string path) //deprecated, replaced by ::pathIsFile()
 {
 	struct stat		stats;
 

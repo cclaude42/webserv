@@ -6,7 +6,7 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 13:20:34 by frthierr          #+#    #+#             */
-/*   Updated: 2021/03/01 13:18:59 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/02 12:58:24 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ RequestConfig::RequestConfig(void) {
 	return ;
 }
 
-RequestConfig::RequestConfig(ConfigServer &config, const std::string &path, const std::string &locationName):
+RequestConfig::RequestConfig(ConfigServer &config, const std::string &path, const std::string &method, const std::string &locationName):
 _error_page(config.getErrorPage()),
 _client_body_buffer_size(config.getClientBodyBufferSize()),
 _cgi_param(config.getCgiParam()),
@@ -38,6 +38,9 @@ _autoindex(config.getAutoIndex())
 		this->_contentLocation = removeAdjacentSlashes(path);
 	}
 	this->_path = removeAdjacentSlashes(ret);
+	std::cout << "method : " << method << "\n";
+	if (!pathIsFile(this->_path) && method == "GET" )
+		this->addIndex();
 }
 
 RequestConfig::RequestConfig(RequestConfig const &src) {
@@ -131,6 +134,30 @@ void								RequestConfig::setContentLocation(const std::string &path)
 void								RequestConfig::setHostPort(const t_listen hostPort){
 	this->_hostPort= hostPort;
 }
+
+void								RequestConfig::addIndex()
+{
+	std::vector<std::string>::iterator	it;
+	std::string							path;
+
+	it = this->_index.begin();
+	while(it != this->_index.end())
+	{
+		path = this->_path;
+		path += "/"  + *it;
+		std::cout << "Testing path ; " << path << '\n';
+		if (pathIsFile(path))
+		{
+			this->_path = path;
+			this->_contentLocation += "/" + *it;
+			std::cout << "Path |" << this->_path << "| valid\n";
+			return ;
+		}
+		it++;
+	}
+	std::cout << "No valid index to add\n";
+}
+
 
 std::ostream	&operator<<(std::ostream &out, RequestConfig &request) {
 	out << "path: " << request._path << std::endl;

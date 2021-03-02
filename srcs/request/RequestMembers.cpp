@@ -6,7 +6,7 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 17:10:06 by hbaudet           #+#    #+#             */
-/*   Updated: 2021/03/02 10:44:27 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/02 13:56:17 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,7 @@ int		Request::readPath(std::string& line, size_t i)
 	{
 		this->_ret = 400;
 		std::cout << "No HTTP version\n";
+		return 400;
 	}
 	this->_path.assign(line, j, i - j);
 	return this->readVersion(line, i);
@@ -99,6 +100,7 @@ int		Request::readVersion(std::string& line, size_t i)
 	{
 		this->_ret = 400;
 		std::cout << "No HTTP version\n";
+		return 400;
 	}
 	if (line[i] == 'H' && line[i + 1] == 'T' && line[i + 2] == 'T' &&
 			line[i + 3] == 'P' && line[i + 4] == '/')
