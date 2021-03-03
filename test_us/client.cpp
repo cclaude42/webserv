@@ -88,7 +88,9 @@ std::string		choose_target(void)
 		return ("_permission");
 	else if (choice == "d")
 		return ("_bonus");
-	return ("_bad");
+	else if (choice == "e")
+		return ("_bad");
+	return ("_example");
 }
 
 std::string		choose_connect(void)

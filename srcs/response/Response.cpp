@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Response.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:18:58 by cclaude           #+#    #+#             */
-/*   Updated: 2021/03/02 14:07:29 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/03 19:35:03 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,7 @@ void			Response::deleteMethod(RequestConfig & requestConf)
 {
 	ResponseHeader	head;
 
-	if (fileExists(_path))
+	if (pathIsFile(_path))
 	{
 		if (remove(_path.c_str()) == 0)
 			_code = 204;
@@ -184,14 +184,14 @@ int				Response::writeContent(std::string content)
 
 	if (pathIsFile(_path))
 	{
-		file.open(_path);
+		file.open(_path.c_str());
 		file << content;
 		file.close();
-		return 204;
+		return (204);
 	}
 	else
 	{
-		file.open(_path, std::ofstream::out | std::ofstream::trunc);
+		file.open(_path.c_str(), std::ofstream::out | std::ofstream::trunc);
 		if (file.is_open() == false)
 			return (403);
 

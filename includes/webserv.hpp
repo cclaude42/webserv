@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   webserv.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/31 13:44:42 by cclaude           #+#    #+#             */
-/*   Updated: 2021/03/02 12:17:55 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/03 19:34:49 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@
 # include <fcntl.h>
 # include <time.h>
 # include <limits.h>
+# include <errno.h>
 
 // C System
 # include <sys/types.h>
@@ -69,7 +70,8 @@ extern "C" {
 # define BYTE_2 0x0000ff00
 # define BYTE_3 0x000000ff
 
-// Config
+// Default
+# define RECV_SIZE 1048576
 # define DEFAULT_CONFIG "test_us/conf/default"
 
 // Colors
@@ -97,11 +99,12 @@ std::string&				to_lower(std::string& str);
 std::string&				to_upper(std::string& str);
 std::string&				capitalize(std::string& str);
 std::string					to_string(size_t n);
+int							checkEnd(std::string str, std::string end);
+int							checkStart(std::string str, std::string end);
+int							countSubstr(std::string str, std::string sub);
 
-//UTILS
-int							pathIsFile(const std::string& path);
-
-
+// UTILS
+int							pathIsFile(const std::string & path);
 
 
 #endif
