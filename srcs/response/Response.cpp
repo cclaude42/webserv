@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Response.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:18:58 by cclaude           #+#    #+#             */
-/*   Updated: 2021/03/03 19:35:03 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/03/04 15:35:27 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,17 +53,18 @@ void			Response::getMethod(Request & request, RequestConfig & requestConf)
 {
 	ResponseHeader	head;
 
-	if (requestConf.getCgiPass() != "")
-	{
-		CgiHandler	cgi(request, requestConf);
+	(void)request;
+	// if (requestConf.getCgiPass() != "")
+	// {
+	// 	CgiHandler	cgi(request, requestConf);
 
-		std::cout << "Executing CGI\n";
-		_content = cgi.executeCgi(requestConf.getCgiPass());
-		std::cout << "Finished executing CGI\n";
+	// 	std::cout << "Executing CGI\n";
+	// 	_content = cgi.executeCgi(requestConf.getCgiPass());
+	// 	std::cout << "Finished executing CGI\n";
 
-		_code = 200;// Placeholder
-	}
-	else if  (_code == 200)
+	// 	_code = 200;// Placeholder
+	// }
+	if  (_code == 200)
 	{
 		_code = readContent();
 	}

@@ -6,7 +6,7 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/13 15:07:29 by frthierr          #+#    #+#             */
-/*   Updated: 2021/03/01 16:13:35 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/04 16:45:45 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ std::string		CgiHandler::executeCgi(const std::string& scriptName) {
 	int		fds[4];
 	int		saveStdin;
 	int		saveStdout;
-	int		status;
+	// int		status;
 	ssize_t	ret;
 	char	buffer[512] = {0};
 	std::string	io;
@@ -130,9 +130,19 @@ std::string		CgiHandler::executeCgi(const std::string& scriptName) {
 		dup2(fds[0], STDIN_FILENO);
 		dup2(fds[3], STDOUT_FILENO);
 		// SEND RQUEST BODY THROUGH PIPE TO CGI
-		std::cout << _body << "\r\n";
+
+		size_t	i = 0;
+
+		while (i < _body.size())
+		{
+			std::cout << "3e8\r\n" << _body.substr(i, 1000) << "\r\n\r\n";
+			i += 1000;
+			std::cerr << i / 1000 << " - sent another chunk to cgi" << std::endl;
+		}
+		std::cout << "0" << "\r\n\r\n";
+		dup2(saveStdout, STDOUT_FILENO);
 		// WAITING FOR THE CHILD PROCESS TO FINISH
-		waitpid(id, &status, 0);
+		// waitpid(id, &status, 0);
 		// READING CHILD PROCESS' OUTPUT
 		do {
 			ret = read(STDIN_FILENO, buffer, 512);
@@ -141,7 +151,6 @@ std::string		CgiHandler::executeCgi(const std::string& scriptName) {
 		} while (ret == 512);
 		// RESETING STDIN AND STDOUT BACK TO NORMAL
 		dup2(saveStdin, STDIN_FILENO);
-		dup2(saveStdout, STDOUT_FILENO);
 		close(fds[0]);
 		close(fds[1]);
 		close(fds[2]);
