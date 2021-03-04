@@ -104,6 +104,7 @@ clean:
 	@rm -rf $(OBJ_DIR) $(OBJ_SUBDIR)
 	@rm -f test_us/client
 	@rm -rf test_us/root
+	@rm -rf YoupiBanane/put_here/*
 	@echo "\033[0m"
 
 fclean: clean
@@ -137,7 +138,7 @@ test_mac: test_setup
 	./webserv test_us/conf/youpi_tester.conf
 
 test_linux: test_setup
-	@x-terminal-emulator --working-directory=$$(pwd) -x "./test_us/client"&
+	@x-terminal-emulator --working-directory=$$(pwd) -x "./test_us/client" &
 	./webserv test_us/conf/youpi_tester.conf
 
 bocal: bocal_$(OS)

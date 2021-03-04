@@ -6,11 +6,55 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/31 18:58:08 by cclaude           #+#    #+#             */
-/*   Updated: 2021/01/25 20:04:41 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/03/03 19:34:44 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "webserv.hpp"
+
+int								countSubstr(std::string str, std::string sub)
+{
+	int						n = 0;
+	std::string::size_type	pos = 0;
+
+	while ((pos = str.find(sub, pos)) != std::string::npos)
+	{
+		n++;
+		pos += sub.length();
+	}
+
+	return (n);
+}
+
+int								checkStart(std::string str, std::string end)
+{
+	size_t	i = 0;
+	size_t	j = 0;
+
+	while (j < end.size())
+	{
+		if (i >= str.size() || str[i] != end[j])
+			return (1);
+		i++;
+		j++;
+	}
+	return (0);
+}
+
+int								checkEnd(std::string str, std::string end)
+{
+	size_t	i = str.size();
+	size_t	j = end.size();
+
+	while (j > 0)
+	{
+		i--;
+		j--;
+		if (i < 0 || str[i] != end[j])
+			return (1);
+	}
+	return (0);
+}
 
 std::string						readKey(char *line)
 {

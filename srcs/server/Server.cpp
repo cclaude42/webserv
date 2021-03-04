@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:29:28 by cclaude           #+#    #+#             */
-/*   Updated: 2021/03/02 14:03:22 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/03 19:35:21 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,31 +81,62 @@ void		Server::accept(void)
 
 std::string	Server::recv(void)
 {
-	char		buffer[4096];
+	char		buffer[RECV_SIZE];
 	std::string	request = "";
-	int			ret;
-	int			tries = 0;
+	int			running = 1;
 
 	_closed = 0;
-	for ( int i = 0 ; i < 5000 ; i++ )
+	while (running && !_closed)
 	{
-		ft_memset(buffer, 0, 4096);
-		ret = ::recv(_socket, buffer, 4095, 0);
-		if (ret == -1)
-			tries++;
-		else if (ret == 0)
+		ft_memset(buffer, 0, RECV_SIZE);
+
+		if (!::recv(_socket, buffer, RECV_SIZE - 1, 0))
 			_closed = 1;
+
 		request += std::string(buffer);
+
+		if (!checkEnd(request, "\r\n\r\n"))
+		{
+			if ((!checkStart(request, "POST") || !checkStart(request, "PUT")) && countSubstr(request, "\r\n\r\n") < 2)
+				running = 1;
+			else
+				running = 0;
+		}
 	}
+
+	if (request.find("Transfer-Encoding: chunked") != std::string::npos &&
+		request.find("Transfer-Encoding: chunked") < request.find("\r\n\r\n"))
+		request = this->processChunk(request);
 
 	if (_closed)
 		std::cout << "Connection was closed." << std::endl;
-	else if (tries == 5000)
-		std::cerr << RED << "Could not read request." << RESET << std::endl;
-	else
+	else if (request.size() < 1000)
 		std::cout << "Request :" << std::endl << "[" << YELLOW << request << RESET << "]" << std::endl;
+	else
+		std::cout << "Request :" << std::endl << "[" << YELLOW << request.substr(0, 1000) << "..." << RESET << "]" << std::endl;
 
 	return (request);
+}
+
+std::string	Server::processChunk(std::string & request)
+{
+	std::string	head = request.substr(0, request.find("\r\n\r\n"));
+	std::string	chunks = request.substr(request.find("\r\n\r\n") + 4, request.size() - 1);
+	std::string	subchunk = chunks.substr(0, 100);
+	std::string	body = "";
+	int			chunksize = strtol(subchunk.c_str(), NULL, 16);
+	size_t		i = 0;
+
+	while (chunksize)
+	{
+		i = chunks.find("\r\n", i) + 2;
+		body += chunks.substr(i, chunksize);
+		i += chunksize + 2;
+		subchunk = chunks.substr(i, 100);
+		chunksize = strtol(subchunk.c_str(), NULL, 16);
+	}
+
+	return (head + "\r\n\r\n" + body + "\r\n\r\n");
 }
 
 void		Server::send(std::string resp)
