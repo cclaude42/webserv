@@ -6,7 +6,7 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/25 10:15:30 by hbaudet           #+#    #+#             */
-/*   Updated: 2021/03/01 16:14:17 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/04 16:41:12 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,15 +33,17 @@ int main(int ac, char **av, char **envp)
 
 	string	first;
 
-	getline(cin, first);
-	if (first != "\r")
-		cerr << GREEN << "std_error>" << first << RESET << '\n';
+	// getline(cin, first);
+	// if (first != "\r")
+	// 	cerr << GREEN << "std_error>" << first << RESET << endl;
+	size_t	body_size = 0;
 
-	for (string line; getline(cin, line);) {
-		if (line == "\r")
-			break ;
-        cout << line << '\n';
-		cerr << GREEN << "std_error>" << line << RESET << '\n';
+	for (string line = "test"; 1;) {
+		getline(cin, line);
+		body_size += line.size();
+        cout << line << endl;
+		cerr << GREEN << "std_error> " << line << RESET << endl;
+		cerr << "Body size : " << body_size << endl;
     }
 	cout << RESET << "End of Body\n";
 	
