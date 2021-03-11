@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Response.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:18:58 by cclaude           #+#    #+#             */
-/*   Updated: 2021/03/11 14:34:48 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/03/11 16:35:26 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,9 +70,11 @@ void			Response::getMethod(Request & request, RequestConfig & requestConf)
 	}
 	else
 	{
-		_content = "\r\n<html><head><title>" + to_string(_code) +"</title></head><body><h1>ERROR ";
+		_content = "<html><head><title>" + to_string(_code) +"</title></head><body><h1>ERROR ";
 		_content += to_string(_code) + "</h1></body></html>";
 	}
+	if (_content != "")
+		_content = "\r\n" + _content;
 	_response = head.getHeader(_content, _path, _code, requestConf.getContentLocation()) + _content + "\r\n";
 }
 

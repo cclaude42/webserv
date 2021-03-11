@@ -6,7 +6,7 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 16:27:33 by hbaudet           #+#    #+#             */
-/*   Updated: 2021/03/04 17:03:59 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/11 16:26:30 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,15 +139,22 @@ void	Request::setBody(std::vector<std::string> line, size_t i)
 {
 	while (i < line.size())
 	{
-		size_t j;
-		for (j = 0; j < line[i].size() && line[i][j] != '\r' && line[i][j] != '\n'; j++);
-		while (line[i][line[i].size() - 1] == '\r' || line[i][line[i].size() - 1] == '\n')
-			line[i].resize(line[i].size() - 1);
-		this->_body.append(line[i].substr(j));
-		this->_body.push_back('\n');
+		if (line[i] != "\r")
+		{
+			this->_body.append(line[i]);
+			if (i != line.size() - 1)
+				this->_body.push_back('\n');
+		}
 		i++;
+
+		// size_t j;
+		// for (j = 0; j < line[i].size() && line[i][j] != '\r' && line[i][j] != '\n'; j++);
+		// while (line[i][line[i].size() - 1] == '\r' || line[i][line[i].size() - 1] == '\n')
+		// 	line[i].resize(line[i].size() - 1);
+		// this->_body.append(line[i].substr(j));
+		// this->_body.push_back('\n');
+		// i++;
 	}
-	this->_body.resize(this->_body.size() - 1);
 }
 void	Request::setBody(const std::string &bod)
 {
