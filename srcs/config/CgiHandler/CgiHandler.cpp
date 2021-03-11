@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CgiHandler.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/13 15:07:29 by frthierr          #+#    #+#             */
-/*   Updated: 2021/03/04 16:45:45 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/11 14:33:36 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void		CgiHandler::_initEnv(Request &request, RequestConfig &config) {
 	this->_env["PATH_INFO"] = config.getPath(); //might need some change, using config path/contentLocation
 	// this->_env["PATH_TRANSLATED"] = request.getPath(); //might need some change, using config path/contentLocation
 	this->_env["QUERY_STRING"] = request.getQuery();
-	// this->_env["REMOTE_ADDR"] = to_string(config.getHostPort().host);
+	// this->_env["REMOTEaddr"] = to_string(config.getHostPort().host);
 	// this->_env["REMOTE_IDENT"] = headers["Authorization"];
 	// this->_env["REMOTE_USER"] = headers["Authorization"];
 	// this->_env["REQUEST_URI"] = request.getPath() + request.getQuery();
@@ -62,9 +62,9 @@ void		CgiHandler::_initEnv(Request &request, RequestConfig &config) {
 	if (headers.find("Hostname") != headers.end())
 		this->_env["SERVER_NAME"] = headers["Hostname"];
 	// else
-		// this->_env["SERVER_NAME"] = this->_env["REMOTE_ADDR"];
+		// this->_env["SERVER_NAME"] = this->_env["REMOTEaddr"];
 	// this->_env["SERVER_PORT"] = to_string(config.getHostPort().port);
-	// this->_env["SERVER_PROTOCOL"] = "HTTP/1.1";
+	this->_env["SERVER_PROTOCOL"] = "HTTP/1.1";
 	// this->_env["SERVER_SOFTWARE"] = "Weebserv/1.0";
 
 }
@@ -81,87 +81,163 @@ char					**CgiHandler::_getEnvAsCstrArray() const {
 	return env;
 }
 
+int				CgiHandler::_connectSocket(unsigned int port)
+{
+	long				fd;
+	struct sockaddr_in	addr;
+
+	fd = socket(AF_INET, SOCK_STREAM, 0);
+	if (fd == -1)
+		return (-1);
+	memset((char *)&addr, 0, sizeof(addr));
+	addr.sin_family = AF_INET;
+	addr.sin_addr.s_addr = htonl(INADDR_ANY);
+	addr.sin_port = htons(port);
+	if (connect(fd, (struct sockaddr *)&addr, sizeof(addr)) < 0)
+		return (-1);
+	return (fd);
+}
+
+int				CgiHandler::_getSocket(unsigned int port)
+{
+	long				fd;
+	struct sockaddr_in	addr;
+
+	fd = socket(AF_INET, SOCK_STREAM, 0);
+	if (fd == -1)
+		return (-1);
+	memset((char *)&addr, 0, sizeof(addr));
+	addr.sin_family = AF_INET;
+	addr.sin_addr.s_addr = htonl(INADDR_ANY);
+	addr.sin_port = htons(port);
+	if (bind(fd, (struct sockaddr *)&addr, sizeof(addr)) == -1)
+		return (-1);
+	if (listen(fd, 1) == -1)
+		return (-1);
+	return (fd);
+}
+
 std::string		CgiHandler::executeCgi(const std::string& scriptName) {
-	pid_t	id;
-	int		fds[4];
-	int		saveStdin;
-	int		saveStdout;
-	// int		status;
-	ssize_t	ret;
-	char	buffer[512] = {0};
-	std::string	io;
+	pid_t		pid;
+	int			saveStdin;
+	int			saveStdout;
 	char		**env;
+	std::string	newBody;
 
 	// GETTING ENV VARIABLES
 	// this->_env["SCRIPT_NAME"] = scriptName;
-	std::cout << "Running CGI with : " << scriptName << '\n';
+	// std::cout << "Running CGI with : " << scriptName << '\n';
 	try {
 		env = this->_getEnvAsCstrArray();
 	}
 	catch (std::bad_alloc &e) {
 		std::cout << e.what() << std::endl;
 	}
-	
+
 	// SAVING STDIN AND STDOUT IN ORDER TO TURN THEM BACK TO NORMAL LATER
 	saveStdin = dup(STDIN_FILENO);
 	saveStdout = dup(STDOUT_FILENO);
 
-	pipe(fds);
-	pipe(fds + 2);
-	id = fork();
+	long			fdIn = -1;
+	long			fdOut = -1;
+	long			sockIn;
+	long			sockOut;
+	unsigned int	portIn;
+	unsigned int	portOut;
 
-	// REPLACING STDIN AND STDOUT WITH PIPE
-	if (!id) {
-		dup2(fds[2], STDIN_FILENO);
-		dup2(fds[1], STDOUT_FILENO);
-		char * const *nll = NULL;
+	// std::cerr << "Before fdIn setup" << std::endl;
+
+	portIn = 3456;
+	while (fdIn == -1)
+		fdIn = _getSocket(++portIn);
+
+			// std::cerr << "Before fdOut setup" << std::endl;
+	portOut = portIn;
+	while (fdOut == -1)
+		fdOut = _getSocket(++portOut);
+
+			// std::cerr << "Before fork" << std::endl;
+	pid = fork();
+
+	if (pid == 0)
+	{
+		char * const * nll = NULL;
+		struct sockaddr_in	addr;
+		unsigned int		addrlen;
+
+			// std::cerr << "{exec} before accepting in" << std::endl;
+		sockIn = accept(fdIn, (struct sockaddr *)&addr, (socklen_t *)&addrlen);
+		if (sockIn == -1)
+			std::cerr << RED << "Could not create socket. (Pipe in, exec side)" << RESET << std::endl;
+		fcntl(sockIn, F_SETFL, O_NONBLOCK);
+
+			// std::cerr << "{exec} before accepting out" << std::endl;
+		sockOut = accept(fdOut, (struct sockaddr *)&addr, (socklen_t *)&addrlen);
+		if (sockOut == -1)
+			std::cerr << RED << "Could not create socket. (Pipe out, exec side)" << RESET << std::endl;
+		fcntl(sockOut, F_SETFL, O_NONBLOCK);
+
+			// std::cerr << "{exec} before duping" << std::endl;
+		dup2(sockIn, STDIN_FILENO);
+		dup2(sockOut, STDOUT_FILENO);
+		// std::cerr << "{exec} before execve" << std::endl;
 
 		execve(scriptName.c_str(), nll, env);
-		dup2(saveStdout, STDOUT_FILENO);
-		close(fds[0]);
-		close(fds[1]);
-		close(fds[2]);
-		close(fds[3]);
-		std::cerr << "execve crashed, errrno : " << errno << "\n";
-		return "cgi execve crashed, oopsy\n";
+		// (void)scriptName;
+		// execve("../webcgi", nll, env);
+
+		std::cerr << "Execve crashed, errno : " << errno << "\n";
+
+		close(sockIn);
+		close(sockOut);
+		close(fdIn);
+		close(fdOut);
+
+		exit(0);
 	}
 	else
 	{
-		dup2(fds[0], STDIN_FILENO);
-		dup2(fds[3], STDOUT_FILENO);
-		// SEND RQUEST BODY THROUGH PIPE TO CGI
+		//REMOVE THIS v
+		std::string		tmp;
+		while (tmp.size() < 100000000)
+			tmp += "n";
+		//REMOVE THIS ^
 
-		size_t	i = 0;
+		char	buffer[CGI_BUFSIZE];
+		int		ret = 1;
 
-		while (i < _body.size())
+		// std::cerr << "{send} before connecting in" << std::endl;
+		sockIn = _connectSocket(portIn);
+		if (sockIn == -1)
+			std::cerr << RED << "Could not create socket. (Pipe in, sending side)" << RESET << std::endl;
+
+		// std::cerr << "{send} before connecting out" << std::endl;
+		sockOut = _connectSocket(portOut);
+		if (sockOut == -1)
+			std::cerr << RED << "Could not create socket. (Pipe out, sending side)" << RESET << std::endl;
+
+		// std::cerr << "{send} before sending" << std::endl;
+		send(sockIn, tmp.c_str(), tmp.size(), 0);
+		close(sockIn);
+
+		// std::cerr << "{send} before waitpid" << std::endl;
+		waitpid(-1, NULL, 0);
+
+		// std::cerr << "{send} before recving" << std::endl;
+		while (ret > 0)
 		{
-			std::cout << "3e8\r\n" << _body.substr(i, 1000) << "\r\n\r\n";
-			i += 1000;
-			std::cerr << i / 1000 << " - sent another chunk to cgi" << std::endl;
+			ft_memset(buffer, 0, CGI_BUFSIZE);
+			ret = recv(sockOut, buffer, CGI_BUFSIZE - 1, 0);
+			newBody += buffer;
 		}
-		std::cout << "0" << "\r\n\r\n";
-		dup2(saveStdout, STDOUT_FILENO);
-		// WAITING FOR THE CHILD PROCESS TO FINISH
-		// waitpid(id, &status, 0);
-		// READING CHILD PROCESS' OUTPUT
-		do {
-			ret = read(STDIN_FILENO, buffer, 512);
-			for (int i = 0; i < ret ; i++)
-				io += buffer[i];
-		} while (ret == 512);
-		// RESETING STDIN AND STDOUT BACK TO NORMAL
-		dup2(saveStdin, STDIN_FILENO);
-		close(fds[0]);
-		close(fds[1]);
-		close(fds[2]);
-		close(fds[3]);
-		//	RESET BACK TO NORMAL
-		for (int j = 0; env[j]; j++)
-			free(env[j]);
-		delete[] env;
-		return io;
+
+		close(sockOut);
 	}
-	close(fds[0]);
-	close(fds[1]);
-	return "-error-";
+
+	close(fdIn);
+	close(fdOut);
+	dup2(saveStdin, STDIN_FILENO);
+	dup2(saveStdout, STDOUT_FILENO);
+
+	return (newBody);
 }

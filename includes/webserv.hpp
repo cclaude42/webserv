@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/31 13:44:42 by cclaude           #+#    #+#             */
-/*   Updated: 2021/03/03 19:34:49 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/03/11 12:35:15 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <fstream>
 # include <string>
 # include <limits>
+# include <cstdio>
 
 // CPP Containers
 # include <map>
@@ -72,6 +73,7 @@ extern "C" {
 
 // Default
 # define RECV_SIZE 1048576
+# define CGI_BUFSIZE 65536
 # define DEFAULT_CONFIG "test_us/conf/default"
 
 // Colors

@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:29:28 by cclaude           #+#    #+#             */
-/*   Updated: 2021/03/03 19:35:21 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/03/11 14:30:12 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,7 +141,10 @@ std::string	Server::processChunk(std::string & request)
 
 void		Server::send(std::string resp)
 {
-	std::cout << "Response :" << std::endl << "[" << GREEN << resp << RESET << "]" << std::endl;
+	if (resp.size() < 1000)
+		std::cout << "Response :" << std::endl << "[" << GREEN << resp << RESET << "]" << std::endl;
+	else
+		std::cout << "Response :" << std::endl << "[" << GREEN << resp.substr(0, 1000) << RESET << "...]" << std::endl;
 
 	if (::send(_socket, resp.c_str(), resp.size(), 0) == -1)
 		std::cerr << RED << "Could not send response." << RESET << std::endl;

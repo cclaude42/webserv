@@ -104,7 +104,7 @@ clean:
 	@rm -rf $(OBJ_DIR) $(OBJ_SUBDIR)
 	@rm -f test_us/client
 	@rm -rf test_us/root
-	@rm -rf YoupiBanane/put_here/*
+	@rm -rf YoupiBanane/put_here
 	@echo "\033[0m"
 
 fclean: clean
@@ -144,11 +144,13 @@ test_linux: test_setup
 bocal: bocal_$(OS)
 
 bocal_mac: all
+	@mkdir -p YoupiBanane/put_here
 	@osascript -e 'tell application "Terminal" to do script "cd $(PWD) && clear && ./test_mac/macos_tester http://localhost:8000"'
 	@osascript -e 'tell application "Terminal" to activate'
 	./webserv test_mac/mac.conf
 
 bocal_linux: all
+	@mkdir -p YoupiBanane/put_here
 	@x-terminal-emulator --working-directory=$$(pwd) -x "./test_linux/ubuntu_tester http://localhost:8000" &
 	./webserv test_linux/linux.conf
 

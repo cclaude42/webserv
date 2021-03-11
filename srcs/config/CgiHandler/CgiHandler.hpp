@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CgiHandler.hpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/13 15:08:57 by frthierr          #+#    #+#             */
-/*   Updated: 2021/03/01 16:03:29 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/11 12:34:56 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ class CgiHandler {
 		CgiHandler(void);
 		void								_initEnv(Request &request, RequestConfig &config);
 		char								**_getEnvAsCstrArray() const;
+		int									_getSocket(unsigned int port);
+		int									_connectSocket(unsigned int port);
 		std::map<std::string, std::string>	_env;
 		std::string							_body;
 };

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Response.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:18:58 by cclaude           #+#    #+#             */
-/*   Updated: 2021/03/04 15:35:27 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/11 14:34:48 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,9 +92,9 @@ void			Response::postMethod(Request & request, RequestConfig & requestConf)
 	{
 		CgiHandler	cgi(request, requestConf);
 
-		std::cout << "Executing CGI\n";
+		// std::cout << "Executing CGI : \n";
 		_content = cgi.executeCgi(requestConf.getCgiPass());
-		std::cout << "Finished executing CGI\n";
+		// std::cout << "Finished executing CGI\n";
 
 		_code = 200;// Placeholder
 	}
@@ -106,7 +106,7 @@ void			Response::postMethod(Request & request, RequestConfig & requestConf)
 		_content = "\r\n<html><head><title>405</title></head><body>405 Forbidden yo!</body></html>\r\n";
 	}
 
-	_response = head.getHeader(_content, _path, _code, requestConf.getContentLocation()) + _content + "\r\n";
+	_response = head.getHeader(_content, _path, _code, requestConf.getContentLocation()) + "\r\n" + _content + "\r\n";
 }
 
 void			Response::putMethod(std::string content, RequestConfig & requestConf)
