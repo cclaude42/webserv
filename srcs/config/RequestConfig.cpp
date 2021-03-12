@@ -6,7 +6,11 @@
 /*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 13:20:34 by frthierr          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2021/03/09 15:33:20 by cclaude          ###   ########.fr       */
+=======
+/*   Updated: 2021/02/26 10:02:41 by frthierr         ###   ########.fr       */
+>>>>>>> 434d4c1e7a166b3065e4c32a9a20dbc014e80b73
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +21,12 @@ RequestConfig::RequestConfig(void) {
 	return ;
 }
 
+<<<<<<< HEAD
 RequestConfig::RequestConfig(ConfigServer &config, const std::string &path, const std::string &method, const std::string &locationName):
+=======
+RequestConfig::RequestConfig(ConfigServer &config, std::string path, std::string locationName):
+_requestedPath(path),
+>>>>>>> 434d4c1e7a166b3065e4c32a9a20dbc014e80b73
 _error_page(config.getErrorPage()),
 _client_body_buffer_size(config.getClientBodyBufferSize()),
 _cgi_param(config.getCgiParam()),
@@ -109,6 +118,10 @@ const std::set<std::string>				&RequestConfig::getAllowedMethods() const {
 
 const t_listen							&RequestConfig::getHostPort() const {
 	return this->_hostPort;
+}
+
+const std::string						&RequestConfig::getRequestedPath() const {
+	return this->_requestedPath;
 }
 
 
