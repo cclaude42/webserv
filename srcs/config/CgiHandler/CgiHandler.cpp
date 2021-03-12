@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CgiHandler.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/13 15:07:29 by frthierr          #+#    #+#             */
-/*   Updated: 2021/03/11 14:33:36 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/03/12 09:15:40 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,7 +159,9 @@ std::string		CgiHandler::executeCgi(const std::string& scriptName) {
 			// std::cerr << "Before fork" << std::endl;
 	pid = fork();
 
-	if (pid == 0)
+	if (pid == -1)
+		std::cerr << "Fork crashed, plz handle error senpai\n";
+	else if (!pid)
 	{
 		char * const * nll = NULL;
 		struct sockaddr_in	addr;
@@ -181,6 +183,7 @@ std::string		CgiHandler::executeCgi(const std::string& scriptName) {
 		dup2(sockIn, STDIN_FILENO);
 		dup2(sockOut, STDOUT_FILENO);
 		// std::cerr << "{exec} before execve" << std::endl;
+		// std::cerr << "{exec} cgi script : " << scriptName << std::endl;
 
 		execve(scriptName.c_str(), nll, env);
 		// (void)scriptName;
