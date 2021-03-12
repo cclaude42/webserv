@@ -6,7 +6,7 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 16:27:33 by hbaudet           #+#    #+#             */
-/*   Updated: 2021/03/11 16:26:30 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/12 09:03:48 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,6 +155,10 @@ void	Request::setBody(std::vector<std::string> line, size_t i)
 		// this->_body.push_back('\n');
 		// i++;
 	}
+	if (*(--this->_body.end()) == '\n')
+		this->_body.resize(this->_body.size() - 1);
+	if (*(--this->_body.end()) == '\r')
+		this->_body.resize(this->_body.size() - 1);
 }
 void	Request::setBody(const std::string &bod)
 {
