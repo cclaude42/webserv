@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CgiHandler.hpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: francisco <francisco@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/13 15:08:57 by frthierr          #+#    #+#             */
-/*   Updated: 2021/03/11 12:34:56 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/03/12 12:31:39 by francisco        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include "Request.hpp"
 # include "webserv.hpp"
 # include "RequestConfig.hpp"
+# include <cstring>
 
 class CgiHandler {
 	public:
@@ -37,6 +38,7 @@ class CgiHandler {
 		int									_connectSocket(unsigned int port);
 		std::map<std::string, std::string>	_env;
 		std::string							_body;
+		std::string							_currentWorkingDir;
 };
 
 // ENV TO IMPLEMENT
