@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CgiHandler.hpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: francisco <francisco@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/13 15:08:57 by frthierr          #+#    #+#             */
-/*   Updated: 2021/03/11 12:34:56 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/03/12 15:54:52 by francisco        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ class CgiHandler {
 		std::string		executeCgi(const std::string &scriptName);	// executes cgi and returns body
 	private:
 		CgiHandler(void);
+		std::string							_currentWorkingDir;
 		void								_initEnv(Request &request, RequestConfig &config);
 		char								**_getEnvAsCstrArray() const;
 		int									_getSocket(unsigned int port);
