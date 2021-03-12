@@ -3,10 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   CgiHandler.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
+<<<<<<< HEAD
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/13 15:07:29 by frthierr          #+#    #+#             */
 /*   Updated: 2021/03/12 09:15:40 by hbaudet          ###   ########.fr       */
+=======
+<<<<<<< HEAD
+/*   By: francisco <francisco@student.42.fr>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/01/13 15:07:29 by frthierr          #+#    #+#             */
+/*   Updated: 2021/03/12 12:31:03 by francisco        ###   ########.fr       */
+=======
+/*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/01/13 15:07:29 by frthierr          #+#    #+#             */
+/*   Updated: 2021/02/26 11:31:24 by frthierr         ###   ########.fr       */
+>>>>>>> 434d4c1e7a166b3065e4c32a9a20dbc014e80b73
+>>>>>>> master
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +29,12 @@
 CgiHandler::CgiHandler(Request &request, RequestConfig &config):
 _body(request.getBody())
 {
+	char	*cwd = getcwd(NULL, 0);
+
+	this->_currentWorkingDir = std::string(cwd);
+	std::cout << "CWD: " << this->_currentWorkingDir << std::endl;
+	if (cwd)
+		free(cwd);
 	this->_initEnv(request, config);
 }
 
@@ -47,37 +67,51 @@ void		CgiHandler::_initEnv(Request &request, RequestConfig &config) {
 	this->_env["GATEWAY_INTERFACE"] = "CGI/1.1";
 	this->_env["SCRIPT_NAME"] = config.getPath();
 	this->_env["SCRIPT_FILENAME"] = config.getPath();
-	// this->_env["SCRIPT_NAME"] = "default-cgi-script";
+	this->_env["SCRIPT_NAME"] = "default-cgi-script";
 	this->_env["REQUEST_METHOD"] = request.getMethod();
 	this->_env["CONTENT_LENGTH"] = to_string(this->_body.length());
 	this->_env["CONTENT_TYPE"] = headers["Content-Type"];
-	this->_env["PATH_INFO"] = config.getPath(); //might need some change, using config path/contentLocation
-	// this->_env["PATH_TRANSLATED"] = request.getPath(); //might need some change, using config path/contentLocation
+	std::cout << "path: " << config.getPath() << std::endl <<\
+		"contentLoc: " << config.getContentLocation() << '\n' <<\
+		"requestpath: " << request.getPath() << '\n' <<\
+		"query: " << request.getQuery() << std::endl;
+	// this->_env["PATH_INFO"] = removeAdjacentSlashes("/" + config.getPath()); //might need some change, using config path/contentLocation
+	this->_env["PATH_INFO"] = "/directory/youpi.bla"; //might need some change, using config path/contentLocation
+	this->_env["PATH_TRANSLATED"] = removeAdjacentSlashes("/" + config.getPath()); //might need some change, using config path/contentLocation
 	this->_env["QUERY_STRING"] = request.getQuery();
-	// this->_env["REMOTEaddr"] = to_string(config.getHostPort().host);
-	// this->_env["REMOTE_IDENT"] = headers["Authorization"];
-	// this->_env["REMOTE_USER"] = headers["Authorization"];
-	// this->_env["REQUEST_URI"] = request.getPath() + request.getQuery();
+	this->_env["REMOTEaddr"] = to_string(config.getHostPort().host);
+	this->_env["REMOTE_IDENT"] = headers["Authorization"];
+	this->_env["REMOTE_USER"] = headers["Authorization"];
+	this->_env["REQUEST_URI"] = request.getPath() + request.getQuery();
 
 	if (headers.find("Hostname") != headers.end())
 		this->_env["SERVER_NAME"] = headers["Hostname"];
-	// else
-		// this->_env["SERVER_NAME"] = this->_env["REMOTEaddr"];
-	// this->_env["SERVER_PORT"] = to_string(config.getHostPort().port);
+	else
+		this->_env["SERVER_NAME"] = this->_env["REMOTEaddr"];
+	this->_env["SERVER_PORT"] = to_string(config.getHostPort().port);
 	this->_env["SERVER_PROTOCOL"] = "HTTP/1.1";
-	// this->_env["SERVER_SOFTWARE"] = "Weebserv/1.0";
+	this->_env["SERVER_SOFTWARE"] = "Weebserv/1.0";
+
+	for (std::map<std::string, std::string>::const_iterator it = _env.begin(); it != _env.end(); it++) {
+		std::cout << it->first << "=" << it->second << std::endl;
+	}
 
 }
 
 char					**CgiHandler::_getEnvAsCstrArray() const {
 	char	**env = new char*[this->_env.size() + 1];
 	int	j = 0;
-	for (std::map<std::string, std::string>::const_iterator i = this->_env.begin(); i != this->_env.end(); i++) {
+	for (std::map<std::string, std::string>::const_iterator i = this->_env.begin(); i != this->_env.end(); j++, i++) {
 		std::string	element = i->first + "=" + i->second;
-		env[j] = ft_strdup(element.c_str());
+		env[j] = new char[element.size() + 1];
+		std::strcpy(env[j], element.c_str());
 		j++;
 	}
+
 	env[j] = NULL;
+	std::cout << "HERE BABY" << std::endl;
+	for (int k = 0; env[k]; k++)
+		std::cout << env[k] << std::endl;
 	return env;
 }
 
@@ -132,6 +166,11 @@ std::string		CgiHandler::executeCgi(const std::string& scriptName) {
 	}
 	catch (std::bad_alloc &e) {
 		std::cout << e.what() << std::endl;
+<<<<<<< HEAD
+		std::cerr << "FATAL ERROR IN CGIHANDLER" << '\n';
+=======
+>>>>>>> 434d4c1e7a166b3065e4c32a9a20dbc014e80b73
+		exit(1);
 	}
 
 	// SAVING STDIN AND STDOUT IN ORDER TO TURN THEM BACK TO NORMAL LATER
@@ -183,8 +222,13 @@ std::string		CgiHandler::executeCgi(const std::string& scriptName) {
 		dup2(sockIn, STDIN_FILENO);
 		dup2(sockOut, STDOUT_FILENO);
 		// std::cerr << "{exec} before execve" << std::endl;
+<<<<<<< HEAD
 		// std::cerr << "{exec} cgi script : " << scriptName << std::endl;
 
+=======
+		for (int i = 0; env[i]; i++)
+			std::cerr <<env[i] << '\n';
+>>>>>>> master
 		execve(scriptName.c_str(), nll, env);
 		// (void)scriptName;
 		// execve("../webcgi", nll, env);

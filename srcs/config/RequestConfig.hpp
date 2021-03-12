@@ -3,14 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RequestConfig.hpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: francisco <francisco@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 18:41:01 by francisz          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2021/03/02 12:57:29 by hbaudet          ###   ########.fr       */
-=======
-/*   Updated: 2021/02/26 10:02:05 by frthierr         ###   ########.fr       */
->>>>>>> 434d4c1e7a166b3065e4c32a9a20dbc014e80b73
+/*   Updated: 2021/03/12 14:51:18 by francisco        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +33,7 @@ class RequestConfig {
 		friend std::ostream	&operator<<(std::ostream &out, RequestConfig &request);
 
 		// GETERS
-<<<<<<< HEAD
 		const std::string							&getContentLocation() const;
-=======
-		const std::string							&getRequestedPath() const;
->>>>>>> 434d4c1e7a166b3065e4c32a9a20dbc014e80b73
 		const std::string							&getPath() const;
 		const std::map<int, std::string>			&getErrorPage() const;
 		const int									&getClientBodyBufferSize() const;
@@ -60,11 +52,7 @@ class RequestConfig {
 		void								addIndex();
 
 	private:
-<<<<<<< HEAD
 		std::string							_contentLocation; // public part of the path
-=======
-		std::string							_requestedPath;
->>>>>>> 434d4c1e7a166b3065e4c32a9a20dbc014e80b73
 		std::string							_path; // local path for request
 		std::map<int, std::string>			_error_page; // error page redirections
 		int									_client_body_buffer_size; // max size for the client body, defaults to 8 000
