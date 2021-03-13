@@ -78,7 +78,6 @@ void		CgiHandler::_initEnv(Request &request, RequestConfig &config) {
 	this->_env["SERVER_PORT"] = to_string(config.getHostPort().port);
 	this->_env["SERVER_PROTOCOL"] = "HTTP/1.1";
 	this->_env["SERVER_SOFTWARE"] = "Weebserv/1.0";
-
 }
 
 char					**CgiHandler::_getEnvAsCstrArray() const {

@@ -20,6 +20,7 @@
 # include "Request.hpp"
 # include "webserv.hpp"
 # include "RequestConfig.hpp"
+# include <cstring>
 
 class CgiHandler {
 	public:
@@ -38,6 +39,7 @@ class CgiHandler {
 		int									_connectSocket(unsigned int port);
 		std::map<std::string, std::string>	_env;
 		std::string							_body;
+		std::string							_currentWorkingDir;
 };
 
 // ENV TO IMPLEMENT
