@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CgiHandler.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/13 15:07:29 by frthierr          #+#    #+#             */
-/*   Updated: 2021/03/12 09:15:40 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/14 15:40:16 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void		CgiHandler::_initEnv(Request &request, RequestConfig &config) {
 	this->_env["REQUEST_METHOD"] = request.getMethod();
 	this->_env["CONTENT_LENGTH"] = to_string(this->_body.length());
 	this->_env["CONTENT_TYPE"] = headers["Content-Type"];
-	this->_env["PATH_INFO"] = config.getPath(); //might need some change, using config path/contentLocation
+	this->_env["PATH_INFO"] = "/directory/youpi.bla"; //might need some change, using config path/contentLocation
 	// this->_env["PATH_TRANSLATED"] = request.getPath(); //might need some change, using config path/contentLocation
 	this->_env["QUERY_STRING"] = request.getQuery();
 	// this->_env["REMOTEaddr"] = to_string(config.getHostPort().host);
@@ -81,42 +81,6 @@ char					**CgiHandler::_getEnvAsCstrArray() const {
 	return env;
 }
 
-int				CgiHandler::_connectSocket(unsigned int port)
-{
-	long				fd;
-	struct sockaddr_in	addr;
-
-	fd = socket(AF_INET, SOCK_STREAM, 0);
-	if (fd == -1)
-		return (-1);
-	memset((char *)&addr, 0, sizeof(addr));
-	addr.sin_family = AF_INET;
-	addr.sin_addr.s_addr = htonl(INADDR_ANY);
-	addr.sin_port = htons(port);
-	if (connect(fd, (struct sockaddr *)&addr, sizeof(addr)) < 0)
-		return (-1);
-	return (fd);
-}
-
-int				CgiHandler::_getSocket(unsigned int port)
-{
-	long				fd;
-	struct sockaddr_in	addr;
-
-	fd = socket(AF_INET, SOCK_STREAM, 0);
-	if (fd == -1)
-		return (-1);
-	memset((char *)&addr, 0, sizeof(addr));
-	addr.sin_family = AF_INET;
-	addr.sin_addr.s_addr = htonl(INADDR_ANY);
-	addr.sin_port = htons(port);
-	if (bind(fd, (struct sockaddr *)&addr, sizeof(addr)) == -1)
-		return (-1);
-	if (listen(fd, 1) == -1)
-		return (-1);
-	return (fd);
-}
-
 std::string		CgiHandler::executeCgi(const std::string& scriptName) {
 	pid_t		pid;
 	int			saveStdin;
@@ -134,29 +98,24 @@ std::string		CgiHandler::executeCgi(const std::string& scriptName) {
 		std::cout << e.what() << std::endl;
 	}
 
+	for (int i = 0 ; env[i] ; i++)
+	{
+		if (!ft_strncmp(env[i], "PATH_INFO", 9))
+			std::cerr << env[i] << std::endl;
+	}
+
 	// SAVING STDIN AND STDOUT IN ORDER TO TURN THEM BACK TO NORMAL LATER
 	saveStdin = dup(STDIN_FILENO);
 	saveStdout = dup(STDOUT_FILENO);
 
-	long			fdIn = -1;
-	long			fdOut = -1;
-	long			sockIn;
-	long			sockOut;
-	unsigned int	portIn;
-	unsigned int	portOut;
+	FILE	*fIn = tmpfile();
+	FILE	*fOut = tmpfile();
+	long	fdIn = fileno(fIn);
+	long	fdOut = fileno(fOut);
 
-	// std::cerr << "Before fdIn setup" << std::endl;
+	// std::cerr << "Writing " << write(fdIn, _body.c_str(), _body.size()) << " characters to file" << std::endl;
+	lseek(fdIn, 0, SEEK_SET);
 
-	portIn = 3456;
-	while (fdIn == -1)
-		fdIn = _getSocket(++portIn);
-
-			// std::cerr << "Before fdOut setup" << std::endl;
-	portOut = portIn;
-	while (fdOut == -1)
-		fdOut = _getSocket(++portOut);
-
-			// std::cerr << "Before fork" << std::endl;
 	pid = fork();
 
 	if (pid == -1)
@@ -164,83 +123,41 @@ std::string		CgiHandler::executeCgi(const std::string& scriptName) {
 	else if (!pid)
 	{
 		char * const * nll = NULL;
-		struct sockaddr_in	addr;
-		unsigned int		addrlen;
 
-			// std::cerr << "{exec} before accepting in" << std::endl;
-		sockIn = accept(fdIn, (struct sockaddr *)&addr, (socklen_t *)&addrlen);
-		if (sockIn == -1)
-			std::cerr << RED << "Could not create socket. (Pipe in, exec side)" << RESET << std::endl;
-		fcntl(sockIn, F_SETFL, O_NONBLOCK);
-
-			// std::cerr << "{exec} before accepting out" << std::endl;
-		sockOut = accept(fdOut, (struct sockaddr *)&addr, (socklen_t *)&addrlen);
-		if (sockOut == -1)
-			std::cerr << RED << "Could not create socket. (Pipe out, exec side)" << RESET << std::endl;
-		fcntl(sockOut, F_SETFL, O_NONBLOCK);
-
-			// std::cerr << "{exec} before duping" << std::endl;
-		dup2(sockIn, STDIN_FILENO);
-		dup2(sockOut, STDOUT_FILENO);
-		// std::cerr << "{exec} before execve" << std::endl;
-		// std::cerr << "{exec} cgi script : " << scriptName << std::endl;
+		dup2(fdIn, STDIN_FILENO);
+		dup2(fdOut, STDOUT_FILENO);
 
 		execve(scriptName.c_str(), nll, env);
-		// (void)scriptName;
-		// execve("../webcgi", nll, env);
-
 		std::cerr << "Execve crashed, errno : " << errno << "\n";
-
-		close(sockIn);
-		close(sockOut);
-		close(fdIn);
-		close(fdOut);
-
-		exit(0);
 	}
 	else
 	{
-		//REMOVE THIS v
-		std::string		tmp;
-		while (tmp.size() < 100000000)
-			tmp += "n";
-		//REMOVE THIS ^
-
-		char	buffer[CGI_BUFSIZE];
+		char	buffer[CGI_BUFSIZE] = {0};
 		int		ret = 1;
 
-		// std::cerr << "{send} before connecting in" << std::endl;
-		sockIn = _connectSocket(portIn);
-		if (sockIn == -1)
-			std::cerr << RED << "Could not create socket. (Pipe in, sending side)" << RESET << std::endl;
-
-		// std::cerr << "{send} before connecting out" << std::endl;
-		sockOut = _connectSocket(portOut);
-		if (sockOut == -1)
-			std::cerr << RED << "Could not create socket. (Pipe out, sending side)" << RESET << std::endl;
-
-		// std::cerr << "{send} before sending" << std::endl;
-		send(sockIn, tmp.c_str(), tmp.size(), 0);
-		close(sockIn);
-
-		// std::cerr << "{send} before waitpid" << std::endl;
 		waitpid(-1, NULL, 0);
+		lseek(fdOut, 0, SEEK_SET);
 
-		// std::cerr << "{send} before recving" << std::endl;
 		while (ret > 0)
 		{
 			ft_memset(buffer, 0, CGI_BUFSIZE);
-			ret = recv(sockOut, buffer, CGI_BUFSIZE - 1, 0);
+			ret = read(fdOut, buffer, CGI_BUFSIZE - 1);
+			// std::cerr << "Reading " << ret << " characters from file" << std::endl;
 			newBody += buffer;
 		}
-
-		close(sockOut);
 	}
 
-	close(fdIn);
-	close(fdOut);
 	dup2(saveStdin, STDIN_FILENO);
 	dup2(saveStdout, STDOUT_FILENO);
+	fclose(fIn);
+	fclose(fOut);
+	close(fdIn);
+	close(fdOut);
+	close(saveStdin);
+	close(saveStdout);
+
+	if (!pid)
+		exit(0);
 
 	return (newBody);
 }

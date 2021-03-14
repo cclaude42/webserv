@@ -6,7 +6,7 @@
 /*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 13:20:34 by frthierr          #+#    #+#             */
-/*   Updated: 2021/03/09 15:33:20 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/03/14 15:38:07 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,8 @@ _autoindex(config.getAutoIndex())
 		this->_contentLocation = removeAdjacentSlashes(path);
 	}
 	this->_path = removeAdjacentSlashes(ret);
-	std::cout << "path : " << this->_path << "\n";
-	std::cout << "method : " << method << "\n";
+	// std::cout << "path : " << this->_path << "\n";
+	// std::cout << "method : " << method << "\n";
 	if (!pathIsFile(this->_path) && method == "GET" )
 		this->addIndex();
 }
