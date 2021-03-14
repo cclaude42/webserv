@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RequestMembers.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: francisco <francisco@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 17:10:06 by hbaudet           #+#    #+#             */
-/*   Updated: 2021/03/14 15:37:46 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/03/14 16:46:08 by francisco        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,8 +175,8 @@ int		Request::parse(const std::string& str)
 	// std::cerr << "Body_parsed : (first 100 chars)\tlength : " << this->_body.size() << "\n[" << YELLOW << this->_body.substr(0, 100) << RESET << "]\n";
 	for (size_t i = 0; i < this->_body.size(); i++)
 	{
-		if (this->_body[i] != 'n' && this->_body[i] != 'e' && this->_body[i] != 'z')
-			std::cerr << i << "(" << (int)this->_body[i] << ")" << " is an impostor\n";
+		// if (this->_body[i] != 'n' && this->_body[i] != 'e' && this->_body[i] != 'z')
+		// 	std::cerr << i << "(" << (int)this->_body[i] << ")" << " is an impostor\n";
 	}
 	return (this->_ret);
 }

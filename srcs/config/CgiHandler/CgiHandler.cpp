@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CgiHandler.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: francisco <francisco@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/13 15:07:29 by frthierr          #+#    #+#             */
-/*   Updated: 2021/03/14 15:40:16 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/03/14 16:57:32 by francisco        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,25 +47,25 @@ void		CgiHandler::_initEnv(Request &request, RequestConfig &config) {
 	this->_env["GATEWAY_INTERFACE"] = "CGI/1.1";
 	this->_env["SCRIPT_NAME"] = config.getPath();
 	this->_env["SCRIPT_FILENAME"] = config.getPath();
-	// this->_env["SCRIPT_NAME"] = "default-cgi-script";
+	this->_env["SCRIPT_NAME"] = "default-cgi-script";
 	this->_env["REQUEST_METHOD"] = request.getMethod();
 	this->_env["CONTENT_LENGTH"] = to_string(this->_body.length());
 	this->_env["CONTENT_TYPE"] = headers["Content-Type"];
 	this->_env["PATH_INFO"] = "/directory/youpi.bla"; //might need some change, using config path/contentLocation
-	// this->_env["PATH_TRANSLATED"] = request.getPath(); //might need some change, using config path/contentLocation
+	this->_env["PATH_TRANSLATED"] = request.getPath(); //might need some change, using config path/contentLocation
 	this->_env["QUERY_STRING"] = request.getQuery();
-	// this->_env["REMOTEaddr"] = to_string(config.getHostPort().host);
-	// this->_env["REMOTE_IDENT"] = headers["Authorization"];
-	// this->_env["REMOTE_USER"] = headers["Authorization"];
-	// this->_env["REQUEST_URI"] = request.getPath() + request.getQuery();
+	this->_env["REMOTEaddr"] = to_string(config.getHostPort().host);
+	this->_env["REMOTE_IDENT"] = headers["Authorization"];
+	this->_env["REMOTE_USER"] = headers["Authorization"];
+	this->_env["REQUEST_URI"] = request.getPath() + request.getQuery();
 
 	if (headers.find("Hostname") != headers.end())
 		this->_env["SERVER_NAME"] = headers["Hostname"];
-	// else
-		// this->_env["SERVER_NAME"] = this->_env["REMOTEaddr"];
-	// this->_env["SERVER_PORT"] = to_string(config.getHostPort().port);
+	else
+		this->_env["SERVER_NAME"] = this->_env["REMOTEaddr"];
+	this->_env["SERVER_PORT"] = to_string(config.getHostPort().port);
 	this->_env["SERVER_PROTOCOL"] = "HTTP/1.1";
-	// this->_env["SERVER_SOFTWARE"] = "Weebserv/1.0";
+	this->_env["SERVER_SOFTWARE"] = "Weebserv/1.0";
 
 }
 
@@ -74,7 +74,8 @@ char					**CgiHandler::_getEnvAsCstrArray() const {
 	int	j = 0;
 	for (std::map<std::string, std::string>::const_iterator i = this->_env.begin(); i != this->_env.end(); i++) {
 		std::string	element = i->first + "=" + i->second;
-		env[j] = ft_strdup(element.c_str());
+		env[j] = new char[element.size() + 1];
+		env[j] = strcpy(env[j], (const char*)element.c_str());
 		j++;
 	}
 	env[j] = NULL;
@@ -127,6 +128,8 @@ std::string		CgiHandler::executeCgi(const std::string& scriptName) {
 		dup2(fdIn, STDIN_FILENO);
 		dup2(fdOut, STDOUT_FILENO);
 
+		// for (int i = 0; env[i]; i++)
+		// 	std::cout << env[i] << std::endl;
 		execve(scriptName.c_str(), nll, env);
 		std::cerr << "Execve crashed, errno : " << errno << "\n";
 	}
