@@ -6,7 +6,7 @@ NAME = webserv
 
 CC = clang++
 
-CFLAGS = -Wall -Wextra -Werror -g -std=c++98
+CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address -std=c++98
 
 ifeq ($(shell uname -s),Darwin)
 OS = mac
@@ -138,7 +138,7 @@ test_mac: test_setup
 	./webserv test_us/conf/youpi_tester.conf
 
 test_linux: test_setup
-	@x-terminal-emulator --working-directory=$$(pwd) -x "./test_us/client" &
+	@x-terminal-emulator --working-directory=$$(pwd) -x "./test_us/client"
 	./webserv test_us/conf/youpi_tester.conf
 
 bocal: bocal_$(OS)
@@ -151,7 +151,7 @@ bocal_mac: all
 
 bocal_linux: all
 	@mkdir -p YoupiBanane/put_here
-	@x-terminal-emulator --working-directory=$$(pwd) -x "./test_linux/ubuntu_tester http://localhost:8000" &
+	@x-terminal-emulator --working-directory=$$(pwd) -x "./test_linux/ubuntu_tester http://localhost:8000"
 	./webserv test_linux/linux.conf
 
 .PHONY: libft clean fclean re test test_setup test_mac test_linux bocal bocal_mac bocal_linux

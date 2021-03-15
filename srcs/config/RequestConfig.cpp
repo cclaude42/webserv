@@ -3,14 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RequestConfig.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 13:20:34 by frthierr          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2021/03/09 15:33:20 by cclaude          ###   ########.fr       */
-=======
-/*   Updated: 2021/02/26 10:02:41 by frthierr         ###   ########.fr       */
->>>>>>> 434d4c1e7a166b3065e4c32a9a20dbc014e80b73
+/*   Updated: 2021/03/15 09:10:02 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +17,7 @@ RequestConfig::RequestConfig(void) {
 	return ;
 }
 
-<<<<<<< HEAD
 RequestConfig::RequestConfig(ConfigServer &config, const std::string &path, const std::string &method, const std::string &locationName):
-=======
-RequestConfig::RequestConfig(ConfigServer &config, std::string path, std::string locationName):
-_requestedPath(path),
->>>>>>> 434d4c1e7a166b3065e4c32a9a20dbc014e80b73
 _error_page(config.getErrorPage()),
 _client_body_buffer_size(config.getClientBodyBufferSize()),
 _cgi_param(config.getCgiParam()),
@@ -47,8 +38,8 @@ _autoindex(config.getAutoIndex())
 		this->_contentLocation = removeAdjacentSlashes(path);
 	}
 	this->_path = removeAdjacentSlashes(ret);
-	std::cout << "path : " << this->_path << "\n";
-	std::cout << "method : " << method << "\n";
+	// std::cout << "path : " << this->_path << "\n";
+	// std::cout << "method : " << method << "\n";
 	if (!pathIsFile(this->_path) && method == "GET" )
 		this->addIndex();
 }
