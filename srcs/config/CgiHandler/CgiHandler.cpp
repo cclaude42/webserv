@@ -6,7 +6,7 @@
 /*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/13 15:07:29 by frthierr          #+#    #+#             */
-/*   Updated: 2021/03/15 14:16:10 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/03/15 18:16:49 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,6 @@ void		CgiHandler::_initEnv(Request &request, RequestConfig &config) {
 	this->_env["SERVER_PORT"] = to_string(config.getHostPort().port);
 	this->_env["SERVER_PROTOCOL"] = "HTTP/1.1";
 	this->_env["SERVER_SOFTWARE"] = "Weebserv/1.0";
-
 }
 
 char					**CgiHandler::_getEnvAsCstrArray() const {

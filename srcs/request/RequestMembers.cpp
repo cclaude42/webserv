@@ -6,7 +6,7 @@
 /*   By: francisco <francisco@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 17:10:06 by hbaudet           #+#    #+#             */
-/*   Updated: 2021/03/14 16:46:08 by francisco        ###   ########.fr       */
+/*   Updated: 2021/03/15 17:58:48 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,6 +161,8 @@ int		Request::parse(const std::string& str)
 				line[i].erase(--(line[i].end())); // c++98 equivalent of string.pop_back(), sorry again
 			if (this->_headers.count(key))
 				this->_headers[key] = strip(value, ' ');
+			if (key.find("Secret") != std::string::npos)
+				this->_env_for_cgi[key] = strip(value, ' ');
 		}
 		if (i < line.size() - 1)
 			this->setBody(line, i + 1);
@@ -168,16 +170,8 @@ int		Request::parse(const std::string& str)
 	}
 	this->stripAll();
 	this->_query = findQuery(this->_path);
-	// std::cerr << "Query : " << _query << '\n';
-	// std::cerr << "Path : " << _path << '\n';
 	if (this->_query != "" && this->_path.find(this->_query) != std::string::npos)
 		this->_path.resize(this->_path.size() - 1 - this->_query.size());
-	// std::cerr << "Body_parsed : (first 100 chars)\tlength : " << this->_body.size() << "\n[" << YELLOW << this->_body.substr(0, 100) << RESET << "]\n";
-	for (size_t i = 0; i < this->_body.size(); i++)
-	{
-		// if (this->_body[i] != 'n' && this->_body[i] != 'e' && this->_body[i] != 'z')
-		// 	std::cerr << i << "(" << (int)this->_body[i] << ")" << " is an impostor\n";
-	}
 	return (this->_ret);
 }
 
