@@ -3,17 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-<<<<<<< HEAD
-/*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:29:28 by cclaude           #+#    #+#             */
-/*   Updated: 2021/03/11 14:30:12 by cclaude          ###   ########.fr       */
-=======
-/*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/11/03 14:29:28 by cclaude           #+#    #+#             */
-/*   Updated: 2021/02/26 09:56:01 by frthierr         ###   ########.fr       */
->>>>>>> 434d4c1e7a166b3065e4c32a9a20dbc014e80b73
+/*   Updated: 2021/03/15 09:19:06 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +21,6 @@ long		Server::run(Config & conf, long socket)
 	Response		response;
 	std::string		recvd;
 
-<<<<<<< HEAD
 	if (socket == 0)
 		this->accept();
 	else
@@ -42,22 +34,6 @@ long		Server::run(Config & conf, long socket)
 			request.setMethod("GET");
 
 		requestConf = conf.getConfigForRequest(this->_listen, request.getPath(), request.getHeaders().at("Host"), request.getMethod());
-=======
-	this->accept();
-
-	request.parse(this->recv());
-
-	requestConf = conf.getConfigForRequest(this->_listen, request.getPath(), request.getHeaders().at("Host"));
-
-	if (requestConf.getCgiPass() != "") {
-		CgiHandler		cgiH(request, requestConf);
-		std::cout << RED << "CGI :\n\n";
-		std::cout << cgiH.executeCgi("test_us/cgi_tester");
-		std::cout << RESET << "\n\n";
-
-		std::cout << YELLOW << "END OF CGI" << RESET << '\n';
-	}
->>>>>>> 434d4c1e7a166b3065e4c32a9a20dbc014e80b73
 
 		response.call(request, requestConf);
 

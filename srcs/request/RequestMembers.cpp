@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RequestMembers.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: francisco <francisco@student.42.fr>        +#+  +:+       +#+        */
+/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 17:10:06 by hbaudet           #+#    #+#             */
-/*   Updated: 2021/03/14 16:46:08 by francisco        ###   ########.fr       */
+/*   Updated: 2021/03/15 09:48:48 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,7 +159,7 @@ int		Request::parse(const std::string& str)
 				break;
 			if (*(--(line[i].end())) == '\r') // c++98 equivalent of string.back(), sorry
 				line[i].erase(--(line[i].end())); // c++98 equivalent of string.pop_back(), sorry again
-			if (this->_headers.count(key))
+			if (this->_headers.count(key) || key.find("Secret") != std::string::npos)
 				this->_headers[key] = strip(value, ' ');
 		}
 		if (i < line.size() - 1)

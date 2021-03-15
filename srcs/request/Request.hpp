@@ -6,7 +6,7 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 16:27:33 by hbaudet           #+#    #+#             */
-/*   Updated: 2021/03/02 13:45:28 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/15 15:08:02 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ class Request
 			std::string							_method;
 			std::string							_version;
 			std::map<std::string, std::string>	_headers;
+			std::map<std::string, std::string>	_env;
 			int									_ret;
 			std::string							_body;
 			int									_port;

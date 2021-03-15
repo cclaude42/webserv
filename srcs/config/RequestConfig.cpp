@@ -6,7 +6,7 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 13:20:34 by frthierr          #+#    #+#             */
-/*   Updated: 2021/03/15 09:10:02 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/15 09:13:50 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,9 +111,11 @@ const t_listen							&RequestConfig::getHostPort() const {
 	return this->_hostPort;
 }
 
-const std::string						&RequestConfig::getRequestedPath() const {
-	return this->_requestedPath;
-}
+// Replaced by getContentLocation
+
+// const std::string						&RequestConfig::getRequestedPath() const {
+// 	return this->_requestedPath;
+// }
 
 
 //SETTERS

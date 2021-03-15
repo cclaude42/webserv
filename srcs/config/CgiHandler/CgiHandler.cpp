@@ -6,7 +6,7 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/13 15:07:29 by frthierr          #+#    #+#             */
-/*   Updated: 2021/03/15 09:09:05 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/15 09:15:27 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,8 +107,6 @@ std::string		CgiHandler::executeCgi(const std::string& scriptName) {
 	}
 	catch (std::bad_alloc &e) {
 		std::cout << e.what() << std::endl;
-		std::cerr << "FATAL ERROR IN CGIHANDLER" << '\n';
-		exit(1);
 	}
 
 	for (int i = 0 ; env[i] ; i++)
@@ -136,32 +134,6 @@ std::string		CgiHandler::executeCgi(const std::string& scriptName) {
 	else if (!pid)
 	{
 		char * const * nll = NULL;
-		struct sockaddr_in	addr;
-		unsigned int		addrlen;
-
-			// std::cerr << "{exec} before accepting in" << std::endl;
-		sockIn = accept(fdIn, (struct sockaddr *)&addr, (socklen_t *)&addrlen);
-		if (sockIn == -1)
-			std::cerr << RED << "Could not create socket. (Pipe in, exec side)" << RESET << std::endl;
-		fcntl(sockIn, F_SETFL, O_NONBLOCK);
-
-			// std::cerr << "{exec} before accepting out" << std::endl;
-		sockOut = accept(fdOut, (struct sockaddr *)&addr, (socklen_t *)&addrlen);
-		if (sockOut == -1)
-			std::cerr << RED << "Could not create socket. (Pipe out, exec side)" << RESET << std::endl;
-		fcntl(sockOut, F_SETFL, O_NONBLOCK);
-
-			// std::cerr << "{exec} before duping" << std::endl;
-		dup2(sockIn, STDIN_FILENO);
-		dup2(sockOut, STDOUT_FILENO);
-		// std::cerr << "{exec} before execve" << std::endl;
-		// std::cerr << "{exec} cgi script : " << scriptName << std::endl;
-
-		for (int i = 0; env[i]; i++)
-			std::cerr <<env[i] << '\n';
-		execve(scriptName.c_str(), nll, env);
-		// (void)scriptName;
-		// execve("../webcgi", nll, env);
 
 		dup2(fdIn, STDIN_FILENO);
 		dup2(fdOut, STDOUT_FILENO);
