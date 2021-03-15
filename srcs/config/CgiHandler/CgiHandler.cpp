@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CgiHandler.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: francisco <francisco@student.42.fr>        +#+  +:+       +#+        */
+/*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/13 15:07:29 by frthierr          #+#    #+#             */
-/*   Updated: 2021/03/14 16:57:32 by francisco        ###   ########.fr       */
+/*   Updated: 2021/03/15 14:16:10 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,11 +47,11 @@ void		CgiHandler::_initEnv(Request &request, RequestConfig &config) {
 	this->_env["GATEWAY_INTERFACE"] = "CGI/1.1";
 	this->_env["SCRIPT_NAME"] = config.getPath();
 	this->_env["SCRIPT_FILENAME"] = config.getPath();
-	this->_env["SCRIPT_NAME"] = "default-cgi-script";
 	this->_env["REQUEST_METHOD"] = request.getMethod();
 	this->_env["CONTENT_LENGTH"] = to_string(this->_body.length());
 	this->_env["CONTENT_TYPE"] = headers["Content-Type"];
-	this->_env["PATH_INFO"] = "/directory/youpi.bla"; //might need some change, using config path/contentLocation
+	// this->_env["HTTP_X_SECRET_HEADER_FOR_TEST"] = 1;
+	this->_env["PATH_INFO"] = request.getPath(); //might need some change, using config path/contentLocation
 	this->_env["PATH_TRANSLATED"] = request.getPath(); //might need some change, using config path/contentLocation
 	this->_env["QUERY_STRING"] = request.getQuery();
 	this->_env["REMOTEaddr"] = to_string(config.getHostPort().host);
@@ -99,11 +99,12 @@ std::string		CgiHandler::executeCgi(const std::string& scriptName) {
 		std::cout << e.what() << std::endl;
 	}
 
-	for (int i = 0 ; env[i] ; i++)
-	{
-		if (!ft_strncmp(env[i], "PATH_INFO", 9))
-			std::cerr << env[i] << std::endl;
-	}
+	// PRINT PATH
+	// for (int i = 0 ; env[i] ; i++)
+	// {
+	// 	if (!ft_strncmp(env[i], "PATH_INFO", 9))
+	// 		std::cerr << env[i] << std::endl;
+	// }
 
 	// SAVING STDIN AND STDOUT IN ORDER TO TURN THEM BACK TO NORMAL LATER
 	saveStdin = dup(STDIN_FILENO);
@@ -115,6 +116,7 @@ std::string		CgiHandler::executeCgi(const std::string& scriptName) {
 	long	fdOut = fileno(fOut);
 
 	// std::cerr << "Writing " << write(fdIn, _body.c_str(), _body.size()) << " characters to file" << std::endl;
+	write(fdIn, _body.c_str(), _body.size());
 	lseek(fdIn, 0, SEEK_SET);
 
 	pid = fork();

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Response.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:18:58 by cclaude           #+#    #+#             */
-/*   Updated: 2021/03/11 16:35:26 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/14 19:30:03 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,9 +94,16 @@ void			Response::postMethod(Request & request, RequestConfig & requestConf)
 	{
 		CgiHandler	cgi(request, requestConf);
 
-		// std::cout << "Executing CGI : \n";
 		_content = cgi.executeCgi(requestConf.getCgiPass());
-		// std::cout << "Finished executing CGI\n";
+
+		while (countSubstr(_content, "\r\n\r\n") > 0 || !checkStart(_content, "\r\n"))
+		{
+			// std::cerr << "Parsed : [" << _content.substr(0, _content.find("\r\n")) << "]" << std::endl;
+			_content = _content.substr(_content.find("\r\n") + 2, _content.size());
+		}
+
+		while (!checkEnd(_content, "\r\n"))
+			_content = _content.substr(0, _content.size() - 2);
 
 		_code = 200;// Placeholder
 	}
@@ -108,7 +115,7 @@ void			Response::postMethod(Request & request, RequestConfig & requestConf)
 		_content = "\r\n<html><head><title>405</title></head><body>405 Forbidden yo!</body></html>\r\n";
 	}
 
-	_response = head.getHeader(_content, _path, _code, requestConf.getContentLocation()) + "\r\n" + _content + "\r\n";
+	_response = head.getHeader(_content, _path, _code, requestConf.getContentLocation()) + "\r\n" + _content;
 }
 
 void			Response::putMethod(std::string content, RequestConfig & requestConf)

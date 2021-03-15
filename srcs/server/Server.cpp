@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:29:28 by cclaude           #+#    #+#             */
-/*   Updated: 2021/03/11 14:30:12 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/03/15 14:17:46 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,11 +71,9 @@ void		Server::setAddr(void)
 
 void		Server::accept(void)
 {
-	unsigned int	addrlen;
-
-	_socket = ::accept(_fd, (struct sockaddr *)&_addr, (socklen_t *)&addrlen);
+	_socket = ::accept(_fd, NULL, NULL);
 	if (_socket == -1)
-		std::cerr << RED << "Could not create socket." << RESET << std::endl;
+		std::cerr << RED << "Could not create socket. " << strerror(errno) << RESET << std::endl;
 	fcntl(_socket, F_SETFL, O_NONBLOCK);
 }
 
@@ -141,13 +139,27 @@ std::string	Server::processChunk(std::string & request)
 
 void		Server::send(std::string resp)
 {
+	int		ret = 1;
+	int		total = 0;
+
 	if (resp.size() < 1000)
 		std::cout << "Response :" << std::endl << "[" << GREEN << resp << RESET << "]" << std::endl;
 	else
-		std::cout << "Response :" << std::endl << "[" << GREEN << resp.substr(0, 1000) << RESET << "...]" << std::endl;
+		std::cout << "Response :" << std::endl << "[" << GREEN << resp.substr(0, 1000) << "..." << RESET << "]" << std::endl;
 
-	if (::send(_socket, resp.c_str(), resp.size(), 0) == -1)
-		std::cerr << RED << "Could not send response." << RESET << std::endl;
+	while (resp.size() > 0)
+	{
+		ret = ::send(_socket, resp.c_str(), resp.size(), 0);
+
+		// if (ret == -1)
+			// std::cerr << RED << "Could not send response." << RESET << std::endl;
+		if (ret != -1)
+		{
+			total += ret;
+			// std::cerr << "Sent " << ret << " bytes (" << total << " total)" << std::endl;
+			resp = resp.substr(ret, resp.size());
+		}
+	}
 }
 
 void		Server::close(void)
