@@ -6,7 +6,7 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 14:29:38 by user42            #+#    #+#             */
-/*   Updated: 2021/03/02 12:54:01 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/17 15:04:33 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,8 @@ class Config {
 		int         						parse(const char *filename);
 		std::vector<ConfigServer>			getServers() const;
 		RequestConfig						getConfigForRequest(t_listen const address,\
-												std::string const uri, std::string const hostName, const std::string& method) const;
+												std::string const uri, std::string const hostName, const std::string& method,\
+												Request &request) const;
 		friend	std::ostream				&operator<<(std::ostream &out, const Config &config);
 
 		// RETURN LIST OF ADDRESSES AND PORT WITH NO DUPLICATES

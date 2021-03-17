@@ -3,13 +3,12 @@
 /*                                                        :::      ::::::::   */
 /*   RequestConfig.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 13:20:34 by frthierr          #+#    #+#             */
-/*   Updated: 2021/03/14 15:38:07 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/03/17 15:03:25 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "RequestConfig.hpp"
 
@@ -17,7 +16,7 @@ RequestConfig::RequestConfig(void) {
 	return ;
 }
 
-RequestConfig::RequestConfig(ConfigServer &config, const std::string &path, const std::string &method, const std::string &locationName):
+RequestConfig::RequestConfig(ConfigServer &config, Request request, const std::string &path,  const std::string &method, const std::string &locationName):
 _error_page(config.getErrorPage()),
 _client_body_buffer_size(config.getClientBodyBufferSize()),
 _cgi_param(config.getCgiParam()),
@@ -29,6 +28,11 @@ _autoindex(config.getAutoIndex())
 	std::string	alias = config.getAlias();
 	std::string	root = config.getRoot();
 	std::string	ret;
+
+	for (std::map<std::string, std::string>::const_iterator it = request.getEnv().begin();\
+		it != request.getEnv().end(); it++) {
+			_cgi_param[it->first] = it->second;
+		}
 	if (locationName[0] != '*' && config.getAliasSet()) {
 		ret = root + alias + path.substr(locationName.length());
 		this->_contentLocation = alias + removeAdjacentSlashes(path.substr(locationName.length()));
