@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Request.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 16:27:33 by hbaudet           #+#    #+#             */
-/*   Updated: 2021/03/15 17:59:07 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/17 15:47:01 by frthierr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ class Request
 			int			checkMethod();
 			int			checkPort();
 			std::string	findQuery(std::string path);
+			std::string formatHeaderForCGI(std::string& key);
 
 			/*** AVAILABLE HTTP METHODS ***/
 			static	std::vector<std::string>	methods;

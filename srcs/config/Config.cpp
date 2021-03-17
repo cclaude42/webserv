@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Config.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 14:30:01 by user42            #+#    #+#             */
-/*   Updated: 2021/03/17 15:07:12 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/17 15:12:07 by frthierr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ RequestConfig	Config::getConfigForRequest(t_listen const address,\
 	server = server.getLocationForRequest(uri, locationPath);
 	if (*(--locationPath.end()) == '/')
 		locationPath.resize(locationPath.size() - 1);
-	RequestConfig config(server, uri, method, locationPath);
+	RequestConfig config(server, request, uri, method, locationPath);
 	config.setHostPort(address);
 	return config;
 }

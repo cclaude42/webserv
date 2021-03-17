@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RequestMembers.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: francisco <francisco@student.42.fr>        +#+  +:+       +#+        */
+/*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 17:10:06 by hbaudet           #+#    #+#             */
-/*   Updated: 2021/03/15 17:58:48 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/17 15:46:18 by frthierr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,8 +161,9 @@ int		Request::parse(const std::string& str)
 				line[i].erase(--(line[i].end())); // c++98 equivalent of string.pop_back(), sorry again
 			if (this->_headers.count(key))
 				this->_headers[key] = strip(value, ' ');
-			if (key.find("Secret") != std::string::npos)
-				this->_env_for_cgi[key] = strip(value, ' ');
+			if (key.find("Secret") != std::string::npos) {
+				this->_env_for_cgi[formatHeaderForCGI(key)] = strip(value, ' ');
+			}
 		}
 		if (i < line.size() - 1)
 			this->setBody(line, i + 1);
@@ -198,4 +199,13 @@ std::string	Request::findQuery(std::string path)
 		ret.assign(path, i + 1, std::string::npos);
 
 	return ret;
+}
+
+std::string Request::formatHeaderForCGI(std::string& key) {
+	to_upper(key);
+	for (size_t i = 0 ; i < key.size() ; i++) {
+		if (key[i] == '-')
+			key[i] = '_';
+	}
+	return "HTTP_" + key;
 }
