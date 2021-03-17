@@ -6,7 +6,7 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 14:30:01 by user42            #+#    #+#             */
-/*   Updated: 2021/03/02 12:56:38 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/17 15:07:12 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,8 @@ int     Config::parse(const char *filename) {
 }
 
 RequestConfig	Config::getConfigForRequest(t_listen const address,\
-					std::string const uri, std::string const hostName, const std::string& method) const {
+					std::string const uri, std::string const hostName, const std::string& method,\
+					Request &request) const {
 	ConfigServer	server;
 	std::string		locationPath;
 
