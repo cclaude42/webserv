@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Response.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
+/*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:18:58 by cclaude           #+#    #+#             */
-/*   Updated: 2021/03/14 19:30:03 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/03/17 15:58:54 by frthierr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,8 +111,8 @@ void			Response::postMethod(Request & request, RequestConfig & requestConf)
 	{
 		srand(time(NULL));
 		// int	list[] = { 100, 101, 200, 201, 202, 203, 204, 205, 206, 300, 301, 302, 303, 304, 305, 306, 307, 400, 401, 402, 403, 404, 405, 406, 407, 408, 409, 410, 411, 412, 413, 414, 415, 416, 417, 500, 501, 502, 503, 504, 505 };
-		_code = 405;// Making shit up
-		_content = "\r\n<html><head><title>405</title></head><body>405 Forbidden yo!</body></html>\r\n";
+		_code = 204;// Making shit up
+		_content = "<html><head><title>204</title></head><body>Post with empty request and no cgi defined</body></html>\r\n";
 	}
 
 	_response = head.getHeader(_content, _path, _code, requestConf.getContentLocation()) + "\r\n" + _content;
