@@ -6,7 +6,7 @@
 /*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:18:58 by cclaude           #+#    #+#             */
-/*   Updated: 2021/03/17 15:58:54 by frthierr         ###   ########.fr       */
+/*   Updated: 2021/03/17 16:04:15 by frthierr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,14 +96,6 @@ void			Response::postMethod(Request & request, RequestConfig & requestConf)
 
 		_content = cgi.executeCgi(requestConf.getCgiPass());
 
-		while (countSubstr(_content, "\r\n\r\n") > 0 || !checkStart(_content, "\r\n"))
-		{
-			// std::cerr << "Parsed : [" << _content.substr(0, _content.find("\r\n")) << "]" << std::endl;
-			_content = _content.substr(_content.find("\r\n") + 2, _content.size());
-		}
-
-		while (!checkEnd(_content, "\r\n"))
-			_content = _content.substr(0, _content.size() - 2);
 
 		_code = 200;// Placeholder
 	}
@@ -114,6 +106,14 @@ void			Response::postMethod(Request & request, RequestConfig & requestConf)
 		_code = 204;// Making shit up
 		_content = "<html><head><title>204</title></head><body>Post with empty request and no cgi defined</body></html>\r\n";
 	}
+	while (countSubstr(_content, "\r\n\r\n") > 0 || !checkStart(_content, "\r\n"))
+	{
+		// std::cerr << "Parsed : [" << _content.substr(0, _content.find("\r\n")) << "]" << std::endl;
+		_content = _content.substr(_content.find("\r\n") + 2, _content.size());
+	}
+
+	while (!checkEnd(_content, "\r\n"))
+		_content = _content.substr(0, _content.size() - 2);
 
 	_response = head.getHeader(_content, _path, _code, requestConf.getContentLocation()) + "\r\n" + _content;
 }
