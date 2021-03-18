@@ -6,7 +6,7 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 16:27:33 by hbaudet           #+#    #+#             */
-/*   Updated: 2021/03/12 09:03:48 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/15 18:11:03 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ Request::Request(const std::string& str) :
 		std::cout << "std:string constructor called\n";
 
 	this->resetHeaders();
+	this->_env_for_cgi.clear();
 	this->parse(str); 
 	if (this->_ret != 200)
 		std::cout << "Parse error : " << this->_ret << '\n';
@@ -70,6 +71,7 @@ Request&	Request::operator=(const Request& obj)
 	if (PRINT)
 		std::cout << "Assignation operator called\n";
 	this->_headers = obj.getHeaders();
+	this->_env_for_cgi = obj.getEnv();
 	this->_method = obj.getMethod();
 	this->_version = obj.getVersion();
 	this->_ret = obj.getRet();
@@ -85,6 +87,11 @@ Request&	Request::operator=(const Request& obj)
 const std::map<std::string, std::string>&	Request::getHeaders() const
 {
 	return this->_headers;
+}
+
+const std::map<std::string, std::string>&	Request::getEnv() const
+{
+	return this->_env_for_cgi;
 }
 
 const std::string&	Request::getMethod() const

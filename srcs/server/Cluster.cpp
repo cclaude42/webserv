@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Cluster.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
+/*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/12 16:53:41 by cclaude           #+#    #+#             */
-/*   Updated: 2021/03/03 17:49:18 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/03/17 15:33:10 by frthierr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,9 @@ void	Cluster::run(void)
 		{
 			std::cout << "\rReceived a connection !   " << std::endl;
 
-			for ( std::map<long, Server *>::iterator it = _accepts.begin() ; it != _accepts.end() && ret ; it++ )
+			for ( std::map<long, Server *>::iterator it = _accepts.begin() ; it != _accepts.end() && ret ;)
 			{
+				// CEASAR CHECK SI ON A PAS FOUTU LE BORDEL AVEC TON ITERATEUR
 				long	fd;
 
 				fd = it->first;
@@ -84,10 +85,14 @@ void	Cluster::run(void)
 					if (it->second->run(_config, fd) == -1)
 					{
 						FD_CLR(fd, &_fd_set);
+						it++;
 						_accepts.erase(fd);
 					}
-					ret--;
+					else
+						it++;
 				}
+				else
+					it++;
 			}
 
 			for ( std::map<long, Server>::iterator it = _servers.begin() ; it != _servers.end() && ret ; it++ )

@@ -6,7 +6,7 @@
 /*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/13 15:07:29 by frthierr          #+#    #+#             */
-/*   Updated: 2021/03/15 14:16:10 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/03/17 15:39:10 by frthierr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ void		CgiHandler::_initEnv(Request &request, RequestConfig &config) {
 	this->_env["SERVER_PROTOCOL"] = "HTTP/1.1";
 	this->_env["SERVER_SOFTWARE"] = "Weebserv/1.0";
 
+	this->_env.insert(config.getCgiParam().begin(), config.getCgiParam().end());
 }
 
 char					**CgiHandler::_getEnvAsCstrArray() const {
@@ -130,8 +131,8 @@ std::string		CgiHandler::executeCgi(const std::string& scriptName) {
 		dup2(fdIn, STDIN_FILENO);
 		dup2(fdOut, STDOUT_FILENO);
 
-		// for (int i = 0; env[i]; i++)
-		// 	std::cout << env[i] << std::endl;
+		for (int i = 0; env[i]; i++)
+			std::cerr << env[i] << std::endl;
 		execve(scriptName.c_str(), nll, env);
 		std::cerr << "Execve crashed, errno : " << errno << "\n";
 	}

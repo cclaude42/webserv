@@ -6,7 +6,7 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 18:41:01 by francisz          #+#    #+#             */
-/*   Updated: 2021/03/02 12:57:29 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/17 15:01:09 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 # define REQUEST_CONFIG_HPP
 
+#include "webserv.hpp"
+#include "Request.hpp"
 # include "Config.hpp"
 # include "fstream"
 # include <sys/types.h>
@@ -24,7 +26,7 @@
 class RequestConfig {
 	public:
 		RequestConfig(void);
-		RequestConfig(ConfigServer &config, const std::string &path,  const std::string &method, const std::string &locationName = "");
+		RequestConfig(ConfigServer &config, Request request, const std::string &path,  const std::string &method, const std::string &locationName = "");
 		RequestConfig(RequestConfig const &src);
 		virtual ~RequestConfig(void);
 

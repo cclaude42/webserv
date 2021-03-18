@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
+/*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:29:28 by cclaude           #+#    #+#             */
-/*   Updated: 2021/03/15 14:17:46 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/03/17 15:13:42 by frthierr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,8 @@ long		Server::run(Config & conf, long socket)
 		if (request.parse(recvd) != 200)
 			request.setMethod("GET");
 
-		requestConf = conf.getConfigForRequest(this->_listen, request.getPath(), request.getHeaders().at("Host"), request.getMethod());
+		requestConf = conf.getConfigForRequest(this->_listen,  request.getPath(), request.getHeaders().at("Host"), request.getMethod(),\
+		request);
 
 		response.call(request, requestConf);
 

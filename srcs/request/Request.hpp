@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Request.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 16:27:33 by hbaudet           #+#    #+#             */
-/*   Updated: 2021/03/02 13:45:28 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/17 15:47:01 by frthierr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ class Request
 			std::string							_method;
 			std::string							_version;
 			std::map<std::string, std::string>	_headers;
+			std::map<std::string, std::string>	_env_for_cgi;
 			int									_ret;
 			std::string							_body;
 			int									_port;
@@ -57,6 +58,7 @@ class Request
 			int			checkMethod();
 			int			checkPort();
 			std::string	findQuery(std::string path);
+			std::string formatHeaderForCGI(std::string& key);
 
 			/*** AVAILABLE HTTP METHODS ***/
 			static	std::vector<std::string>	methods;
@@ -70,6 +72,7 @@ class Request
 
 			/*** GETTERS ***/
 			const	std::map<std::string, std::string>&	getHeaders() const;
+			const	std::map<std::string, std::string>&	getEnv() const;
 			const	std::string&						getMethod() const;
 			const	std::string&						getVersion() const;
 			int											getRet() const;
