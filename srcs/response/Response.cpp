@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Response.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:18:58 by cclaude           #+#    #+#             */
-/*   Updated: 2021/03/17 16:04:15 by frthierr         ###   ########.fr       */
+/*   Updated: 2021/03/19 01:29:31 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,15 @@ void			Response::call(Request & request, RequestConfig & requestConf)
 	_path = requestConf.getPath();
 
 	if (requestConf.getAllowedMethods().find(request.getMethod()) == requestConf.getAllowedMethods().end())
+		_code = 405;
+	else if (requestConf.getClientBodyBufferSize() < request.getBody().size())
+		_code = 413;
+
+	if (_code == 405 || _code == 413)
 	{
 		ResponseHeader	head;
 
-		_code = 405;
-		_response = head.notAllowed(requestConf.getAllowedMethods(), requestConf.getContentLocation()) + "\r\n";
-
+		_response = head.notAllowed(requestConf.getAllowedMethods(), requestConf.getContentLocation(), _code) + "\r\n";
 		return ;
 	}
 
@@ -59,7 +62,7 @@ void			Response::getMethod(Request & request, RequestConfig & requestConf)
 	// 	CgiHandler	cgi(request, requestConf);
 
 	// 	std::cout << "Executing CGI\n";
-	// 	_content = cgi.executeCgi(requestConf.getCgiPass());
+	// 	_response = cgi.executeCgi(requestConf.getCgiPass());
 	// 	std::cout << "Finished executing CGI\n";
 
 	// 	_code = 200;// Placeholder
@@ -70,12 +73,13 @@ void			Response::getMethod(Request & request, RequestConfig & requestConf)
 	}
 	else
 	{
-		_content = "<html><head><title>" + to_string(_code) +"</title></head><body><h1>ERROR ";
-		_content += to_string(_code) + "</h1></body></html>";
+		_response = "";
 	}
-	if (_content != "")
-		_content = "\r\n" + _content;
-	_response = head.getHeader(_content, _path, _code, requestConf.getContentLocation()) + _content + "\r\n";
+
+	if (_response != "")
+		_response += "\r\n";
+	else
+		_response = head.getHeader(_response, _path, _code, requestConf.getContentLocation()) + "\r\n";
 }
 
 void			Response::headMethod(RequestConfig & requestConf)
@@ -83,7 +87,7 @@ void			Response::headMethod(RequestConfig & requestConf)
 	ResponseHeader	head;
 
 	_code = readContent();
-	_response = head.getHeader(_content, _path, _code, requestConf.getContentLocation());
+	_response = head.getHeader(_response, _path, _code, requestConf.getContentLocation());
 }
 
 void			Response::postMethod(Request & request, RequestConfig & requestConf)
@@ -94,28 +98,26 @@ void			Response::postMethod(Request & request, RequestConfig & requestConf)
 	{
 		CgiHandler	cgi(request, requestConf);
 
-		_content = cgi.executeCgi(requestConf.getCgiPass());
+		_response = cgi.executeCgi(requestConf.getCgiPass());
 
+		while (countSubstr(_response, "\r\n\r\n") > 0 || !checkStart(_response, "\r\n"))
+		{
+			// std::cerr << "Parsed : [" << _response.substr(0, _response.find("\r\n")) << "]" << std::endl;
+			_response = _response.substr(_response.find("\r\n") + 2, _response.size());
+		}
 
-		_code = 200;// Placeholder
+		while (!checkEnd(_response, "\r\n"))
+			_response = _response.substr(0, _response.size() - 2);
+
+		_code = 200;
 	}
 	else
 	{
-		srand(time(NULL));
-		// int	list[] = { 100, 101, 200, 201, 202, 203, 204, 205, 206, 300, 301, 302, 303, 304, 305, 306, 307, 400, 401, 402, 403, 404, 405, 406, 407, 408, 409, 410, 411, 412, 413, 414, 415, 416, 417, 500, 501, 502, 503, 504, 505 };
-		_code = 204;// Making shit up
-		_content = "<html><head><title>204</title></head><body>Post with empty request and no cgi defined</body></html>\r\n";
-	}
-	while (countSubstr(_content, "\r\n\r\n") > 0 || !checkStart(_content, "\r\n"))
-	{
-		// std::cerr << "Parsed : [" << _content.substr(0, _content.find("\r\n")) << "]" << std::endl;
-		_content = _content.substr(_content.find("\r\n") + 2, _content.size());
+		_code = 204;
+		_response = "";
 	}
 
-	while (!checkEnd(_content, "\r\n"))
-		_content = _content.substr(0, _content.size() - 2);
-
-	_response = head.getHeader(_content, _path, _code, requestConf.getContentLocation()) + "\r\n" + _content;
+	_response = head.getHeader(_response, _path, _code, requestConf.getContentLocation()) + "\r\n" + _response;
 }
 
 void			Response::putMethod(std::string content, RequestConfig & requestConf)
@@ -123,7 +125,7 @@ void			Response::putMethod(std::string content, RequestConfig & requestConf)
 	ResponseHeader	head;
 
 	_code = writeContent(content);
-	_response = head.getHeader(_content, _path, _code, requestConf.getContentLocation()) + "\r\n";
+	_response = head.getHeader(_response, _path, _code, requestConf.getContentLocation()) + "\r\n";
 }
 
 void			Response::deleteMethod(RequestConfig & requestConf)
@@ -140,7 +142,7 @@ void			Response::deleteMethod(RequestConfig & requestConf)
 	else
 		_code = 404;
 
-	_response = head.getHeader(_content, _path, _code, requestConf.getContentLocation());
+	_response = head.getHeader(_response, _path, _code, requestConf.getContentLocation()) + "\r\n";
 }
 
 void			Response::connectMethod(RequestConfig & requestConf)
@@ -154,7 +156,7 @@ void			Response::optionsMethod(RequestConfig & requestConf)
 	ResponseHeader	head;
 
 	_code = readContent();
-	_response = head.getHeader(_content, _path, _code, requestConf.getContentLocation());
+	_response = head.getHeader(_response, _path, _code, requestConf.getContentLocation()) + "\r\n";
 
 }
 
@@ -171,7 +173,7 @@ int				Response::readContent(void)
 	std::ifstream		file;
 	std::stringstream	buffer;
 
-	_content = "\r\n";
+	_response = "";
 
 	if (pathIsFile(_path) == 0)
 		return (404);
@@ -181,7 +183,7 @@ int				Response::readContent(void)
 		return (403);
 
 	buffer << file.rdbuf();
-	_content = buffer.str();
+	_response = buffer.str();
 
 	file.close();
 
@@ -232,7 +234,6 @@ std::string		Response::getResponse(void)
 Response & Response::operator=(const Response & src)
 {
 	_response = src._response;
-	_content = src._content;
 	_path = src._path;
 	_code = src._code;
 	return (*this);

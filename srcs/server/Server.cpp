@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:29:28 by cclaude           #+#    #+#             */
-/*   Updated: 2021/03/17 15:13:42 by frthierr         ###   ########.fr       */
+/*   Updated: 2021/03/19 02:16:50 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ long		Server::run(Config & conf, long socket)
 	Request			request;
 	RequestConfig	requestConf;
 	Response		response;
-	std::string		recvd;
+	std::string		recvd = "";
 
 	if (socket == 0)
 		this->accept();
@@ -33,8 +33,11 @@ long		Server::run(Config & conf, long socket)
 		if (request.parse(recvd) != 200)
 			request.setMethod("GET");
 
-		requestConf = conf.getConfigForRequest(this->_listen,  request.getPath(), request.getHeaders().at("Host"), request.getMethod(),\
-		request);
+		// No need to take more room
+		recvd = "";
+		recvd.reserve(0);
+
+		requestConf = conf.getConfigForRequest(this->_listen,  request.getPath(), request.getHeaders().at("Host"), request.getMethod(), request);
 
 		response.call(request, requestConf);
 
@@ -50,16 +53,26 @@ long		Server::run(Config & conf, long socket)
 		return (_socket);
 }
 
-void		Server::setup(void)
+int		Server::setup(void)
 {
 	_fd = socket(AF_INET, SOCK_STREAM, 0);
 	if (_fd == -1)
+	{
 		std::cerr << RED << "Could not create server." << RESET << std::endl;
+		return (-1);
+	}
 	this->setAddr();
 	if (bind(_fd, (struct sockaddr *)&_addr, sizeof(_addr)) == -1)
+	{
 		std::cerr << RED << "Could not bind port " << _listen.port << "." << RESET << std::endl;
-	if (listen(_fd, 1) == -1)
+		return (-1);
+	}
+	if (listen(_fd, 1000) == -1)
+	{
 		std::cerr << RED << "Could not listen." << RESET << std::endl;
+		return (-1);
+	}
+	return (0);
 }
 
 void		Server::setAddr(void)
@@ -146,7 +159,7 @@ void		Server::send(std::string resp)
 	if (resp.size() < 1000)
 		std::cout << "Response :" << std::endl << "[" << GREEN << resp << RESET << "]" << std::endl;
 	else
-		std::cout << "Response :" << std::endl << "[" << GREEN << resp.substr(0, 1000) << "..." << RESET << "]" << std::endl;
+		std::cout << "Response :" << std::endl << "[" << GREEN << resp.substr(0, 1000) << "..." << resp.substr(resp.size() - 10, 15) << RESET << "]" << std::endl;
 
 	while (resp.size() > 0)
 	{

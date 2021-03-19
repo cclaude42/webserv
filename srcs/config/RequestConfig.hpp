@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RequestConfig.hpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: francisz <francisz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 18:41:01 by francisz          #+#    #+#             */
-/*   Updated: 2021/03/17 15:01:09 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/18 20:06:53 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ class RequestConfig {
 		const std::string							&getContentLocation() const;
 		const std::string							&getPath() const;
 		const std::map<int, std::string>			&getErrorPage() const;
-		const int									&getClientBodyBufferSize() const;
+		const unsigned long							&getClientBodyBufferSize() const;
 		const std::map<std::string, std::string>	&getCgiParam() const;
 		const std::string							&getCgiPass() const;
 		const std::set<std::string>				&getAllowedMethods() const;
@@ -57,7 +57,7 @@ class RequestConfig {
 		std::string							_contentLocation; // public part of the path
 		std::string							_path; // local path for request
 		std::map<int, std::string>			_error_page; // error page redirections
-		int									_client_body_buffer_size; // max size for the client body, defaults to 8 000
+		unsigned long						_client_body_buffer_size; // max size for the client body, defaults to 8 000
 		std::map<std::string, std::string>	_cgi_param;
 		std::string							_cgi_pass;
 		std::set<std::string>				_allowed_methods; // allowed http methods for request

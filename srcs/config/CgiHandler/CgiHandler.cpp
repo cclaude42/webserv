@@ -6,7 +6,7 @@
 /*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/13 15:07:29 by frthierr          #+#    #+#             */
-/*   Updated: 2021/03/17 15:39:10 by frthierr         ###   ########.fr       */
+/*   Updated: 2021/03/18 20:36:14 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,8 +131,6 @@ std::string		CgiHandler::executeCgi(const std::string& scriptName) {
 		dup2(fdIn, STDIN_FILENO);
 		dup2(fdOut, STDOUT_FILENO);
 
-		for (int i = 0; env[i]; i++)
-			std::cerr << env[i] << std::endl;
 		execve(scriptName.c_str(), nll, env);
 		std::cerr << "Execve crashed, errno : " << errno << "\n";
 	}

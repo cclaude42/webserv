@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ResponseHeader.hpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 15:17:39 by cclaude           #+#    #+#             */
-/*   Updated: 2021/03/02 14:22:28 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/18 20:16:15 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ public:
 
 	// Member functions
 	std::string		getHeader(const std::string& content, const std::string& path, int code, const std::string& contentLocation);
-	std::string		notAllowed(std::set<std::string> methods, const std::string& path);
+	std::string		notAllowed(std::set<std::string> methods, const std::string& path, int code);
 	std::string		writeHeader(void);
 	void			setValues(const std::string& content, const std::string& path, int code, const std::string& contentLocation);
 	void			resetValues(void);

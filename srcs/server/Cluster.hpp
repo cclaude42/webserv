@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/12 16:53:41 by cclaude           #+#    #+#             */
-/*   Updated: 2021/03/01 12:18:01 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/03/19 01:41:44 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ public:
 	Cluster & operator=(const Cluster & src);
 
 	void	config(std::string fileconf);
-	void	setup(void);
+	int		setup(void);
 	void	run(void);
 	void	clean(void);
 private:

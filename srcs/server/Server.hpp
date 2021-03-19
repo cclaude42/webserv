@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:29:28 by cclaude           #+#    #+#             */
-/*   Updated: 2021/03/03 18:24:35 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/03/19 01:45:41 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ public:
 	long		getFD(void);
 
 	long		run(Config & conf, long socket);
-	void		setup(void);
+	int			setup(void);
 	void		setAddr(void);
 	void		accept(void);
 	std::string	recv(void);

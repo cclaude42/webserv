@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ResponseHeader.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 15:17:39 by cclaude           #+#    #+#             */
-/*   Updated: 2021/03/02 14:28:45 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/18 20:14:32 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,15 +27,18 @@ std::string		ResponseHeader::getHeader(const std::string& content, const std::st
 	return (header);
 }
 
-std::string		ResponseHeader::notAllowed(std::set<std::string> methods, const std::string& path)
+std::string		ResponseHeader::notAllowed(std::set<std::string> methods, const std::string& path, int code)
 {
 	std::string	header;
 
 	resetValues();
-	setValues("", path, 405, path);
+	setValues("", path, code, path);
 	setAllow(methods);
 
-	header = "HTTP/1.1 405 Method Not Allowed\r\n";
+	if (code == 405)
+		header = "HTTP/1.1 405 Method Not Allowed\r\n";
+	else if (code == 413)
+		header = "HTTP/1.1 413 Payload Too Large\r\n";
 	header += writeHeader();
 
 	return (header);
@@ -76,24 +79,6 @@ std::string		ResponseHeader::writeHeader(void)
 
 std::string		ResponseHeader::getStatusMessage(int code)
 {
-	// if (code == 100)
-	// 	return ("Continue");
-	// else if (code == 200)
-	// 	return ("OK");
-	// else if (code == 201)
-	// 	return ("Created");
-	// else if (code == 204)
-	// 	return ("No Content");
-	// else if (code == 400)
-	// 	return ("Bad Request");
-	// else if (code == 403)
-	// 	return ("Forbidden");
-	// else if (code == 404)
-	// 	return ("Not Found");
-	// else if (code == 405)
-	// 	return ("Method Not Allowed");
-	// else
-	// 	return ("Unknown Code");
 	if (_errors.find(code) != _errors.end())
 		return _errors[code];
 	return ("Unknown Code");
@@ -109,6 +94,7 @@ void			ResponseHeader::initErrorMap()
 	_errors[403] = "Forbidden";
 	_errors[404] = "Not Found";
 	_errors[405] = "Method Not Allowed";
+	_errors[413] = "Payload Too Large";
 }
 
 void			ResponseHeader::setValues(const std::string& content, const std::string& path, int code, const std::string& contentLocation)

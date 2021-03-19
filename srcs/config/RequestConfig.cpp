@@ -6,7 +6,7 @@
 /*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 13:20:34 by frthierr          #+#    #+#             */
-/*   Updated: 2021/03/17 15:33:21 by frthierr         ###   ########.fr       */
+/*   Updated: 2021/03/18 20:20:55 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ const std::map<int, std::string>			&RequestConfig::getErrorPage() const {
 	return this->_error_page;
 }
 
-const int									&RequestConfig::getClientBodyBufferSize() const {
+const unsigned long							&RequestConfig::getClientBodyBufferSize() const {
 	return this->_client_body_buffer_size;
 }
 
@@ -150,17 +150,17 @@ void								RequestConfig::addIndex()
 	{
 		path = this->_path;
 		path += "/"  + *it;
-		std::cout << "Testing path ; " << path << '\n';
+		// std::cout << "Testing path ; " << path << '\n';
 		if (pathIsFile(path))
 		{
 			this->_path = path;
 			this->_contentLocation += "/" + *it;
-			std::cout << "Path |" << this->_path << "| valid\n";
+			// std::cout << "Path |" << this->_path << "| valid\n";
 			return ;
 		}
 		it++;
 	}
-	std::cout << "No valid index to add\n";
+	// std::cout << "No valid index to add\n";
 }
 
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Cluster.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/12 16:53:41 by cclaude           #+#    #+#             */
-/*   Updated: 2021/03/17 15:33:10 by frthierr         ###   ########.fr       */
+/*   Updated: 2021/03/19 01:48:20 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	Cluster::config(std::string fileconf)
 	_config.parse(fileconf.c_str());
 }
 
-void	Cluster::setup(void)
+int		Cluster::setup(void)
 {
 	std::vector<t_listen>	vect = _config.getAllListens();
 
@@ -33,20 +33,31 @@ void	Cluster::setup(void)
 		long		fd;
 
 		std::cout << "Setting up " << lstn->host << ":" << lstn->port << "..." << std::endl;
-		serv.setup();
-		fd = serv.getFD();
-		FD_SET(fd, &_fd_set);
-		_servers.insert(std::make_pair(fd, serv));
-		if (fd > _max_fd)
-			_max_fd = fd;
+		if (serv.setup() != -1)
+		{
+			fd = serv.getFD();
+			FD_SET(fd, &_fd_set);
+			_servers.insert(std::make_pair(fd, serv));
+			if (fd > _max_fd)
+				_max_fd = fd;
+		}
 		// std::cout << "Set up " << lstn->host << ":" << lstn->port << " on FD " << fd << std::endl;
 	}
+
+	if (_max_fd == 0)
+	{
+		std::cerr << RED << "Could not setup cluster !" << RESET << std::endl;
+		return (-1);
+	}
+	else
+		return (0);
 }
 
 void	Cluster::run(void)
 {
 	std::string	dot[3] = {".  ", ".. ", "..."};
 	int			n = 0;
+	int			connections = 0;
 
 	while (1)
 	{
@@ -72,52 +83,55 @@ void	Cluster::run(void)
 		if (ret > 0)
 		{
 			std::cout << "\rReceived a connection !   " << std::endl;
+			connections += ret;
+			// std::cout << "Connections : " << connections << std::endl;
 
-			for ( std::map<long, Server *>::iterator it = _accepts.begin() ; it != _accepts.end() && ret ;)
+			std::map<long, Server *>::iterator it = _accepts.begin();
+			while (!_accepts.empty() && it != _accepts.end() && ret)
 			{
-				// CEASAR CHECK SI ON A PAS FOUTU LE BORDEL AVEC TON ITERATEUR
 				long	fd;
 
 				fd = it->first;
 				if (FD_ISSET(fd, &working_set))
 				{
-					// std::cout << "Reading from : " << fd << std::endl;
+					// std::cout << "Ret : " << ret << " Set : " << working_set.fds_bits[0] << " Reading from : " << fd << std::endl;
 					if (it->second->run(_config, fd) == -1)
 					{
 						FD_CLR(fd, &_fd_set);
-						it++;
+						FD_CLR(fd, &working_set);
 						_accepts.erase(fd);
+						it = _accepts.begin();
 					}
-					else
-						it++;
+					ret--;
 				}
-				else
+				if (!_accepts.empty())
 					it++;
 			}
 
-			for ( std::map<long, Server>::iterator it = _servers.begin() ; it != _servers.end() && ret ; it++ )
+			std::map<long, Server>::iterator it2 = _servers.begin();
+			while (it2 != _servers.end() && ret)
 			{
 				long	fd;
 
-				fd = it->first;
+				fd = it2->first;
 				if (FD_ISSET(fd, &working_set))
 				{
 					long	retfd;
 
 					// std::cout << "Reading from : " << fd << std::endl;
-					retfd = it->second.run(_config, 0);
+					retfd = it2->second.run(_config, 0);
 
-					if (ret != -1)
+					if (retfd != -1)
 					{
 						// std::cout << "adding fd " << retfd << std::endl;
 						FD_SET(retfd, &_fd_set);
-						_accepts.insert(std::make_pair(retfd, &(it->second)));
+						_accepts.insert(std::make_pair(retfd, &(it2->second)));
 						if (retfd > _max_fd)
 							_max_fd = retfd;
 					}
-
 					ret--;
 				}
+				it2++;
 			}
 		}
 		else
