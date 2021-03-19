@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/31 18:32:12 by cclaude           #+#    #+#             */
-/*   Updated: 2020/11/04 13:50:18 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/03/19 14:57:24 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,4 +41,16 @@ unsigned int	ft_ntohl(unsigned int l)
 	else if (BYTE_ORDER == LITTLE_ENDIAN)
 		return (ft_bswap32(l));
 	return (0);
+}
+
+void	timeit(std::string op)
+{
+	struct timeval	current;
+	gettimeofday(&current, NULL);
+	static unsigned long	t_last = current.tv_sec * 1000 + current.tv_usec / 1000;
+	unsigned long			t_current = current.tv_sec * 1000 + current.tv_usec / 1000;
+
+	std::cerr << "Operation [" << op << "] took " << t_current - t_last << " milliseconds" << std::endl;
+
+	t_last = t_current;
 }

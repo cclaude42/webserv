@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/31 13:44:42 by cclaude           #+#    #+#             */
-/*   Updated: 2021/03/19 01:33:35 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/03/19 15:37:21 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,12 +101,14 @@ std::string&				to_lower(std::string& str);
 std::string&				to_upper(std::string& str);
 std::string&				capitalize(std::string& str);
 std::string					to_string(size_t n);
-int							checkEnd(std::string str, std::string end);
-int							checkStart(std::string str, std::string end);
-int							countSubstr(std::string str, std::string sub);
+int							checkEnd(std::string & str, std::string end);
+int							checkStart(std::string & str, std::string end);
+int							countSubstr(std::string & str, std::string sub);
 
 // UTILS
 int							pathIsFile(const std::string & path);
+
+void	timeit(std::string op);
 
 
 #endif

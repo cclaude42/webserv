@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:29:28 by cclaude           #+#    #+#             */
-/*   Updated: 2021/03/19 02:16:50 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/03/19 15:38:23 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,30 +20,30 @@ long		Server::run(Config & conf, long socket)
 	RequestConfig	requestConf;
 	Response		response;
 	std::string		recvd = "";
-
+	timeit("Serv restart");
 	if (socket == 0)
 		this->accept();
 	else
 		_socket = socket;
-
+		timeit("Serv accept");
 	recvd = this->recv();
-
+	timeit("Serv recv");
 	if (recvd != "")
 	{
 		if (request.parse(recvd) != 200)
 			request.setMethod("GET");
-
+			timeit("Request parse");
 		// No need to take more room
 		recvd = "";
 		recvd.reserve(0);
-
+		timeit("Recvd resize");
 		requestConf = conf.getConfigForRequest(this->_listen,  request.getPath(), request.getHeaders().at("Host"), request.getMethod(), request);
-
+		timeit("Request conf");
 		response.call(request, requestConf);
-
+		timeit("Response make");
 		this->send(response.getResponse());
 	}
-
+	timeit("Response send");
 	if (_closed)
 	{
 		this->close();
@@ -100,16 +100,22 @@ std::string	Server::recv(void)
 	_closed = 0;
 	while (running && !_closed)
 	{
+		timeit("Recv running");
 		ft_memset(buffer, 0, RECV_SIZE);
-
+		timeit("Recv memset");
 		if (!::recv(_socket, buffer, RECV_SIZE - 1, 0))
 			_closed = 1;
-
+		timeit("Recv recv");
 		request += std::string(buffer);
-
+		timeit("Recv +=");
 		if (!checkEnd(request, "\r\n\r\n"))
 		{
-			if ((!checkStart(request, "POST") || !checkStart(request, "PUT")) && countSubstr(request, "\r\n\r\n") < 2)
+			timeit("Recv ckeckEnd");
+			bool a = (!checkStart(request, "POST") || !checkStart(request, "PUT"));
+			timeit("Recv ckeckStart");
+			bool b = (countSubstr(request, "\r\n\r\n") < 2);
+			timeit("Recv countSub");
+			if (a && b)
 				running = 1;
 			else
 				running = 0;

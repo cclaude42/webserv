@@ -6,13 +6,13 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/31 18:58:08 by cclaude           #+#    #+#             */
-/*   Updated: 2021/03/03 19:34:44 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/03/19 15:37:14 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "webserv.hpp"
 
-int								countSubstr(std::string str, std::string sub)
+int								countSubstr(std::string & str, std::string sub)
 {
 	int						n = 0;
 	std::string::size_type	pos = 0;
@@ -26,7 +26,7 @@ int								countSubstr(std::string str, std::string sub)
 	return (n);
 }
 
-int								checkStart(std::string str, std::string end)
+int								checkStart(std::string & str, std::string end)
 {
 	size_t	i = 0;
 	size_t	j = 0;
@@ -41,7 +41,7 @@ int								checkStart(std::string str, std::string end)
 	return (0);
 }
 
-int								checkEnd(std::string str, std::string end)
+int								checkEnd(std::string & str, std::string end)
 {
 	size_t	i = str.size();
 	size_t	j = end.size();
