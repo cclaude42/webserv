@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 15:17:39 by cclaude           #+#    #+#             */
-/*   Updated: 2021/03/18 20:14:32 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/03/21 13:24:10 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,12 @@
 
 // Member functions
 
-std::string		ResponseHeader::getHeader(const std::string& content, const std::string& path, int code, const std::string& contentLocation)
+std::string		ResponseHeader::getHeader(size_t size, const std::string& path, int code, const std::string& contentLocation)
 {
 	std::string	header;
 
 	resetValues();
-	setValues(content, path, code, contentLocation);
+	setValues(size, path, code, contentLocation);
 
 	header = "HTTP/1.1 " + to_string(code) + " " + getStatusMessage(code) + "\r\n";
 	header += writeHeader();
@@ -32,7 +32,7 @@ std::string		ResponseHeader::notAllowed(std::set<std::string> methods, const std
 	std::string	header;
 
 	resetValues();
-	setValues("", path, code, path);
+	setValues(0, path, code, path);
 	setAllow(methods);
 
 	if (code == 405)
@@ -97,11 +97,11 @@ void			ResponseHeader::initErrorMap()
 	_errors[413] = "Payload Too Large";
 }
 
-void			ResponseHeader::setValues(const std::string& content, const std::string& path, int code, const std::string& contentLocation)
+void			ResponseHeader::setValues(size_t size, const std::string& path, int code, const std::string& contentLocation)
 {
 	setAllow();
-	setContentLanguage(content);
-	setContentLength(content.size());
+	setContentLanguage();
+	setContentLength(size);
 	setContentLocation(contentLocation, code);
 	setContentType(path);
 	setDate();
@@ -150,13 +150,12 @@ void			ResponseHeader::setAllow(void)
 	_allow = "";
 }
 
-void			ResponseHeader::setContentLanguage(const std::string& content)
+void			ResponseHeader::setContentLanguage(void)
 {
-	(void)content;
 	_contentLanguage = "en-US";
 }
 
-void			ResponseHeader::setContentLength(int size)
+void			ResponseHeader::setContentLength(size_t size)
 {
 	_contentLength = to_string(size);
 }

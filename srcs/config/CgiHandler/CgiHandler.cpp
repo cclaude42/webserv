@@ -6,7 +6,7 @@
 /*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/13 15:07:29 by frthierr          #+#    #+#             */
-/*   Updated: 2021/03/18 20:36:14 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/03/21 14:27:13 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,11 +115,20 @@ std::string		CgiHandler::executeCgi(const std::string& scriptName) {
 	FILE	*fOut = tmpfile();
 	long	fdIn = fileno(fIn);
 	long	fdOut = fileno(fOut);
-
+	int		ret = 1;
+	timeit("IN CGI created");
 	// std::cerr << "Writing " << write(fdIn, _body.c_str(), _body.size()) << " characters to file" << std::endl;
-	write(fdIn, _body.c_str(), _body.size());
+	// for (size_t	i = 0 ; i < _body.size() ; )
+	// {
+		// std::string	str = _body.substr(i, CGI_BUFSIZE);
+		// fwrite(_body.c_str(), sizeof(char), _body.size(), fIn);
+		// if (ret != -1)
+			// i += ret;
+	// }
+	write(fdIn, _body.c_str(), 100000000);
+	timeit("IN CGI wrote file");
 	lseek(fdIn, 0, SEEK_SET);
-
+	timeit("IN CGI seeked file");
 	pid = fork();
 
 	if (pid == -1)
@@ -130,25 +139,28 @@ std::string		CgiHandler::executeCgi(const std::string& scriptName) {
 
 		dup2(fdIn, STDIN_FILENO);
 		dup2(fdOut, STDOUT_FILENO);
-
+	timeit("IN CGI duped before execve");
 		execve(scriptName.c_str(), nll, env);
 		std::cerr << "Execve crashed, errno : " << errno << "\n";
 	}
 	else
 	{
 		char	buffer[CGI_BUFSIZE] = {0};
-		int		ret = 1;
 
+		timeit("IN CGI waiting");
 		waitpid(-1, NULL, 0);
+		timeit("IN CGI waited");
 		lseek(fdOut, 0, SEEK_SET);
 
+		ret = 1;
 		while (ret > 0)
 		{
-			ft_memset(buffer, 0, CGI_BUFSIZE);
+			memset(buffer, 0, CGI_BUFSIZE);
 			ret = read(fdOut, buffer, CGI_BUFSIZE - 1);
 			// std::cerr << "Reading " << ret << " characters from file" << std::endl;
 			newBody += buffer;
 		}
+			timeit("IN CGI read");
 	}
 
 	dup2(saveStdin, STDIN_FILENO);

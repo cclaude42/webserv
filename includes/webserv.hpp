@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/31 13:44:42 by cclaude           #+#    #+#             */
-/*   Updated: 2021/03/19 15:37:21 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/03/21 16:55:44 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,14 @@ extern "C" {
 # define GREEN "\033[32m"
 # define YELLOW "\033[33m"
 # define RESET "\033[0m"
+
+// Output
+# ifndef OUT
+#  define OUT 1
+# endif
+# ifndef TIME
+#  define TIME 0
+# endif
 
 
 

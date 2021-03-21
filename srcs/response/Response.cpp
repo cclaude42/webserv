@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:18:58 by cclaude           #+#    #+#             */
-/*   Updated: 2021/03/19 01:29:31 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/03/21 13:23:12 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void			Response::call(Request & request, RequestConfig & requestConf)
 		_response = head.notAllowed(requestConf.getAllowedMethods(), requestConf.getContentLocation(), _code) + "\r\n";
 		return ;
 	}
-
+	timeit("RESPONSE START");
 	if (request.getMethod() == "GET")
 		getMethod(request, requestConf);
 	else if (request.getMethod() == "HEAD")
@@ -48,6 +48,7 @@ void			Response::call(Request & request, RequestConfig & requestConf)
 		optionsMethod(requestConf);
 	else if (request.getMethod() == "TRACE")
 		traceMethod(request, requestConf);
+		timeit("RESPONSE END");
 }
 
 // Methods
@@ -79,7 +80,7 @@ void			Response::getMethod(Request & request, RequestConfig & requestConf)
 	if (_response != "")
 		_response += "\r\n";
 	else
-		_response = head.getHeader(_response, _path, _code, requestConf.getContentLocation()) + "\r\n";
+		_response = head.getHeader(_response.size(), _path, _code, requestConf.getContentLocation()) + "\r\n";
 }
 
 void			Response::headMethod(RequestConfig & requestConf)
@@ -87,28 +88,29 @@ void			Response::headMethod(RequestConfig & requestConf)
 	ResponseHeader	head;
 
 	_code = readContent();
-	_response = head.getHeader(_response, _path, _code, requestConf.getContentLocation());
+	_response = head.getHeader(_response.size(), _path, _code, requestConf.getContentLocation());
 }
 
 void			Response::postMethod(Request & request, RequestConfig & requestConf)
 {
 	ResponseHeader	head;
 
+	timeit("RESPONSE POST");
 	if (requestConf.getCgiPass() != "")
 	{
 		CgiHandler	cgi(request, requestConf);
-
+		timeit("RESPONSE POST CGI INIT");
 		_response = cgi.executeCgi(requestConf.getCgiPass());
-
+		timeit("RESPONSE POST CGI EXEC");
 		while (countSubstr(_response, "\r\n\r\n") > 0 || !checkStart(_response, "\r\n"))
 		{
 			// std::cerr << "Parsed : [" << _response.substr(0, _response.find("\r\n")) << "]" << std::endl;
 			_response = _response.substr(_response.find("\r\n") + 2, _response.size());
 		}
-
+		timeit("RESPONSE POST CGI PARSE");
 		while (!checkEnd(_response, "\r\n"))
 			_response = _response.substr(0, _response.size() - 2);
-
+		timeit("RESPONSE POST CHECKEND");
 		_code = 200;
 	}
 	else
@@ -116,8 +118,8 @@ void			Response::postMethod(Request & request, RequestConfig & requestConf)
 		_code = 204;
 		_response = "";
 	}
-
-	_response = head.getHeader(_response, _path, _code, requestConf.getContentLocation()) + "\r\n" + _response;
+	_response = head.getHeader(_response.size(), _path, _code, requestConf.getContentLocation()) + "\r\n" + _response;
+	timeit("RESPONSE POST HEADER");
 }
 
 void			Response::putMethod(std::string content, RequestConfig & requestConf)
@@ -125,7 +127,7 @@ void			Response::putMethod(std::string content, RequestConfig & requestConf)
 	ResponseHeader	head;
 
 	_code = writeContent(content);
-	_response = head.getHeader(_response, _path, _code, requestConf.getContentLocation()) + "\r\n";
+	_response = head.getHeader(_response.size(), _path, _code, requestConf.getContentLocation()) + "\r\n";
 }
 
 void			Response::deleteMethod(RequestConfig & requestConf)
@@ -142,7 +144,7 @@ void			Response::deleteMethod(RequestConfig & requestConf)
 	else
 		_code = 404;
 
-	_response = head.getHeader(_response, _path, _code, requestConf.getContentLocation()) + "\r\n";
+	_response = head.getHeader(_response.size(), _path, _code, requestConf.getContentLocation()) + "\r\n";
 }
 
 void			Response::connectMethod(RequestConfig & requestConf)
@@ -156,7 +158,7 @@ void			Response::optionsMethod(RequestConfig & requestConf)
 	ResponseHeader	head;
 
 	_code = readContent();
-	_response = head.getHeader(_response, _path, _code, requestConf.getContentLocation()) + "\r\n";
+	_response = head.getHeader(_response.size(), _path, _code, requestConf.getContentLocation()) + "\r\n";
 
 }
 

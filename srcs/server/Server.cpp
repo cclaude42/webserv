@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:29:28 by cclaude           #+#    #+#             */
-/*   Updated: 2021/03/19 15:38:23 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/03/21 16:53:57 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,21 +100,21 @@ std::string	Server::recv(void)
 	_closed = 0;
 	while (running && !_closed)
 	{
-		timeit("Recv running");
-		ft_memset(buffer, 0, RECV_SIZE);
-		timeit("Recv memset");
+		// timeit("Recv running");
+		memset(buffer, 0, RECV_SIZE);
+		// timeit("Recv memset");
 		if (!::recv(_socket, buffer, RECV_SIZE - 1, 0))
 			_closed = 1;
-		timeit("Recv recv");
+		// timeit("Recv recv");
 		request += std::string(buffer);
-		timeit("Recv +=");
+		// timeit("Recv +=");
 		if (!checkEnd(request, "\r\n\r\n"))
 		{
-			timeit("Recv ckeckEnd");
+			// timeit("Recv ckeckEnd");
 			bool a = (!checkStart(request, "POST") || !checkStart(request, "PUT"));
-			timeit("Recv ckeckStart");
+			// timeit("Recv ckeckStart");
 			bool b = (countSubstr(request, "\r\n\r\n") < 2);
-			timeit("Recv countSub");
+			// timeit("Recv countSub");
 			if (a && b)
 				running = 1;
 			else
@@ -126,12 +126,15 @@ std::string	Server::recv(void)
 		request.find("Transfer-Encoding: chunked") < request.find("\r\n\r\n"))
 		request = this->processChunk(request);
 
-	if (_closed)
-		std::cout << "Connection was closed." << std::endl;
-	else if (request.size() < 1000)
-		std::cout << "Request :" << std::endl << "[" << YELLOW << request << RESET << "]" << std::endl;
-	else
-		std::cout << "Request :" << std::endl << "[" << YELLOW << request.substr(0, 1000) << "..." << RESET << "]" << std::endl;
+	if (OUT)
+	{
+		if (_closed)
+			std::cout << "Connection was closed." << std::endl;
+		else if (request.size() < 1000)
+			std::cout << "Request :" << std::endl << "[" << YELLOW << request << RESET << "]" << std::endl;
+		else
+			std::cout << "Request :" << std::endl << "[" << YELLOW << request.substr(0, 1000) << "..." << RESET << "]" << std::endl;
+	}
 
 	return (request);
 }
@@ -159,26 +162,26 @@ std::string	Server::processChunk(std::string & request)
 
 void		Server::send(std::string resp)
 {
-	int		ret = 1;
-	int		total = 0;
+	int		ret = 0;
+	size_t	sent = 0;
 
-	if (resp.size() < 1000)
-		std::cout << "Response :" << std::endl << "[" << GREEN << resp << RESET << "]" << std::endl;
-	else
-		std::cout << "Response :" << std::endl << "[" << GREEN << resp.substr(0, 1000) << "..." << resp.substr(resp.size() - 10, 15) << RESET << "]" << std::endl;
-
-	while (resp.size() > 0)
+	if (OUT)
 	{
-		ret = ::send(_socket, resp.c_str(), resp.size(), 0);
+		if (resp.size() < 1000)
+			std::cout << "Response :" << std::endl << "[" << GREEN << resp << RESET << "]" << std::endl;
+		else
+			std::cout << "Response :" << std::endl << "[" << GREEN << resp.substr(0, 1000) << "..." << resp.substr(resp.size() - 10, 15) << RESET << "]" << std::endl;
+	}
+
+	while (sent < resp.size())
+	{
+		std::string	str = resp.substr(sent, 4096);
+		ret = ::send(_socket, str.c_str(), str.size(), 0);
 
 		// if (ret == -1)
 			// std::cerr << RED << "Could not send response." << RESET << std::endl;
 		if (ret != -1)
-		{
-			total += ret;
-			// std::cerr << "Sent " << ret << " bytes (" << total << " total)" << std::endl;
-			resp = resp.substr(ret, resp.size());
-		}
+			sent += ret;
 	}
 }
 

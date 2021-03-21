@@ -6,7 +6,9 @@ NAME = webserv
 
 CC = clang++
 
-CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address -std=c++98
+CFLAGS = -Wall -Wextra -Werror -O3 -g -fsanitize=address -std=c++98
+
+DEFINES = -D OUT=0 -D TIME=0
 
 ifeq ($(shell uname -s),Darwin)
 OS = mac
@@ -79,12 +81,12 @@ all: $(NAME)
 $(NAME): $(LIBFT) $(OBJ_DIR) $(OBJ_BUILD)
 	@echo "\n"
 	@echo "\033[0;32mCompiling webserv..."
-	@$(CC) $(CFLAGS) $(INCLUDES) $(CLASSES) -o $(NAME) $(OBJ_BUILD) -L libft/ -lft
+	@$(CC) $(CFLAGS) $(INCLUDES) $(DEFINES) $(CLASSES) -o $(NAME) $(OBJ_BUILD) -L libft/ -lft
 	@echo "\n\033[0mDone !"
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
-	@printf "\033[0;33mGenerating webserv objects... %-35.35s\r" $@
-	@$(CC) $(CFLAGS) $(INCLUDES) $(CLASSES) -o $@ -c $<
+	@printf "\033[0;33mGenerating webserv objects... %-38.38s\r" $@
+	@$(CC) $(CFLAGS) $(INCLUDES) $(DEFINES) $(CLASSES) -o $@ -c $<
 
 $(OBJ_DIR):
 	@mkdir -p $(OBJ_DIR)

@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 15:17:39 by cclaude           #+#    #+#             */
-/*   Updated: 2021/03/18 20:16:15 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/03/21 13:21:48 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,8 @@ public:
 	// Setter functions
 	void			setAllow(std::set<std::string> methods);
 	void			setAllow(void);
-	void			setContentLanguage(const std::string& content);
-	void			setContentLength(int size);
+	void			setContentLanguage(void);
+	void			setContentLength(size_t size);
 	void			setContentLocation(const std::string& path, int code);
 	void			setContentType(std::string type);
 	void			setDate(void);
@@ -39,10 +39,10 @@ public:
 	void			setWwwAuthenticate(int code);
 
 	// Member functions
-	std::string		getHeader(const std::string& content, const std::string& path, int code, const std::string& contentLocation);
+	std::string		getHeader(size_t size, const std::string& path, int code, const std::string& contentLocation);
 	std::string		notAllowed(std::set<std::string> methods, const std::string& path, int code);
 	std::string		writeHeader(void);
-	void			setValues(const std::string& content, const std::string& path, int code, const std::string& contentLocation);
+	void			setValues(size_t size, const std::string& path, int code, const std::string& contentLocation);
 	void			resetValues(void);
 	std::string		getStatusMessage(int code);
 
