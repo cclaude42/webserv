@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/31 18:32:12 by cclaude           #+#    #+#             */
-/*   Updated: 2021/03/21 16:52:47 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/03/21 19:13:51 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,15 +43,17 @@ unsigned int	ft_ntohl(unsigned int l)
 	return (0);
 }
 
-void	timeit(std::string op)
+void			timeit(std::string breakpoint)
 {
 	struct timeval	current;
 	gettimeofday(&current, NULL);
 	static unsigned long	t_last = current.tv_sec * 1000 + current.tv_usec / 1000;
 	unsigned long			t_current = current.tv_sec * 1000 + current.tv_usec / 1000;
+	static std::string		prev = "Init";
 
 	if (TIME)
-		std::cerr << "Operation [" << op << "] took " << t_current - t_last << " milliseconds" << std::endl;
+		std::cerr << "Operation [" << prev << " => " << breakpoint << "] took " << t_current - t_last << " milliseconds" << std::endl;
 
 	t_last = t_current;
+	prev = breakpoint;
 }

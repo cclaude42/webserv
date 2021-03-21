@@ -6,7 +6,7 @@
 /*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/13 15:07:29 by frthierr          #+#    #+#             */
-/*   Updated: 2021/03/21 14:27:13 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/03/21 18:47:52 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ void		CgiHandler::_initEnv(Request &request, RequestConfig &config) {
 	this->_env["REQUEST_METHOD"] = request.getMethod();
 	this->_env["CONTENT_LENGTH"] = to_string(this->_body.length());
 	this->_env["CONTENT_TYPE"] = headers["Content-Type"];
-	// this->_env["HTTP_X_SECRET_HEADER_FOR_TEST"] = 1;
 	this->_env["PATH_INFO"] = request.getPath(); //might need some change, using config path/contentLocation
 	this->_env["PATH_TRANSLATED"] = request.getPath(); //might need some change, using config path/contentLocation
 	this->_env["QUERY_STRING"] = request.getQuery();
@@ -117,15 +116,7 @@ std::string		CgiHandler::executeCgi(const std::string& scriptName) {
 	long	fdOut = fileno(fOut);
 	int		ret = 1;
 	timeit("IN CGI created");
-	// std::cerr << "Writing " << write(fdIn, _body.c_str(), _body.size()) << " characters to file" << std::endl;
-	// for (size_t	i = 0 ; i < _body.size() ; )
-	// {
-		// std::string	str = _body.substr(i, CGI_BUFSIZE);
-		// fwrite(_body.c_str(), sizeof(char), _body.size(), fIn);
-		// if (ret != -1)
-			// i += ret;
-	// }
-	write(fdIn, _body.c_str(), 100000000);
+	write(fdIn, _body.c_str(), _body.size());
 	timeit("IN CGI wrote file");
 	lseek(fdIn, 0, SEEK_SET);
 	timeit("IN CGI seeked file");

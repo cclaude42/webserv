@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:29:28 by cclaude           #+#    #+#             */
-/*   Updated: 2021/03/21 16:53:57 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/03/21 19:16:58 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,7 +133,7 @@ std::string	Server::recv(void)
 		else if (request.size() < 1000)
 			std::cout << "Request :" << std::endl << "[" << YELLOW << request << RESET << "]" << std::endl;
 		else
-			std::cout << "Request :" << std::endl << "[" << YELLOW << request.substr(0, 1000) << "..." << RESET << "]" << std::endl;
+			std::cout << "Request :" << std::endl << "[" << YELLOW << request.substr(0, 1000) << "..." << request.substr(request.size() - 10, 15) << RESET << "]" << std::endl;
 	}
 
 	return (request);

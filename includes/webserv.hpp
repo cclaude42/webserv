@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/31 13:44:42 by cclaude           #+#    #+#             */
-/*   Updated: 2021/03/21 16:55:44 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/03/21 19:14:42 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,8 +72,8 @@ extern "C" {
 # define BYTE_3 0x000000ff
 
 // Default
-# define RECV_SIZE 1048576
-# define CGI_BUFSIZE 65536
+# define RECV_SIZE 4096
+# define CGI_BUFSIZE 4096
 # define DEFAULT_CONFIG "test_us/conf/default"
 
 // Colors
@@ -115,8 +115,7 @@ int							countSubstr(std::string & str, std::string sub);
 
 // UTILS
 int							pathIsFile(const std::string & path);
-
-void	timeit(std::string op);
+void						timeit(std::string breakpoint);
 
 
 #endif
