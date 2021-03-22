@@ -61,8 +61,10 @@ void	Cluster::run(void)
 	while (1)
 	{
 		counter++;
-		if (counter == 100000)
+		if (counter == 150000)
 			break ;
+		else if (counter % 10000 == 0)
+			std::cerr << RED << "10000 rounds have passed\n" << RESET;
 		fd_set		reading_set;
 		fd_set		writing_set;
 		struct timeval	timeout;
