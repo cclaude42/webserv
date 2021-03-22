@@ -6,7 +6,7 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 16:27:33 by hbaudet           #+#    #+#             */
-/*   Updated: 2021/03/22 10:59:34 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/22 11:40:52 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,7 +154,7 @@ void	Request::setBody(const std::vector<std::string> &line, size_t i)
 		pop(this->_body);
 	if (this->_body.size() > 0 && this->_body[this->_body.size() - 1] == '\r')
 		pop(this->_body);
-	std::cerr << RED << "Set body (" << this->_body.size() << ") : " << this->_body.substr(0, 20) << RESET << "\n";
+	// std::cerr << RED << "Set body (" << this->_body.size() << ") : " << this->_body.substr(0, 20) << RESET << "\n";
 }
 
 void	Request::setRet(int ret)
