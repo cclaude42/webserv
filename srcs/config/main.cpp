@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/06 15:46:21 by user42            #+#    #+#             */
-/*   Updated: 2021/02/03 11:15:31 by frthierr         ###   ########.fr       */
+/*   Updated: 2021/03/22 01:15:31 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@ int main(int ac, char * const argv[])
         RequestConfig 	requestConfig;
 
         t_listen    listen= {0, 80};
-        
-        config.parse(argv[1]); 
+
+        config.parse(argv[1]);
         requestConfig = config.getConfigForRequest(listen, "/blabla/hello_world", "example");
         std::cout << requestConfig << std::endl;
         // std::vector<t_listen> listens = config.getAllListens();

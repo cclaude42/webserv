@@ -6,52 +6,13 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:29:28 by cclaude           #+#    #+#             */
-/*   Updated: 2021/03/21 19:16:58 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/03/22 00:30:09 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 
 // Member functions
-
-long		Server::run(Config & conf, long socket)
-{
-	Request			request;
-	RequestConfig	requestConf;
-	Response		response;
-	std::string		recvd = "";
-	timeit("Serv restart");
-	if (socket == 0)
-		this->accept();
-	else
-		_socket = socket;
-		timeit("Serv accept");
-	recvd = this->recv();
-	timeit("Serv recv");
-	if (recvd != "")
-	{
-		if (request.parse(recvd) != 200)
-			request.setMethod("GET");
-			timeit("Request parse");
-		// No need to take more room
-		recvd = "";
-		recvd.reserve(0);
-		timeit("Recvd resize");
-		requestConf = conf.getConfigForRequest(this->_listen,  request.getPath(), request.getHeaders().at("Host"), request.getMethod(), request);
-		timeit("Request conf");
-		response.call(request, requestConf);
-		timeit("Response make");
-		this->send(response.getResponse());
-	}
-	timeit("Response send");
-	if (_closed)
-	{
-		this->close();
-		return (-1);
-	}
-	else
-		return (_socket);
-}
 
 int		Server::setup(void)
 {
@@ -83,66 +44,60 @@ void		Server::setAddr(void)
 	_addr.sin_port = ft_htons(_listen.port);
 }
 
-void		Server::accept(void)
+long		Server::accept(void)
 {
-	_socket = ::accept(_fd, NULL, NULL);
-	if (_socket == -1)
+	long	socket;
+
+	socket = ::accept(_fd, NULL, NULL);
+	if (socket == -1)
 		std::cerr << RED << "Could not create socket. " << strerror(errno) << RESET << std::endl;
-	fcntl(_socket, F_SETFL, O_NONBLOCK);
+	else
+	{
+		fcntl(socket, F_SETFL, O_NONBLOCK);
+		_requests.insert(std::make_pair(socket, ""));
+	}
+	return (socket);
 }
 
-std::string	Server::recv(void)
+void		Server::process(long socket, Config & conf)
 {
-	char		buffer[RECV_SIZE];
-	std::string	request = "";
-	int			running = 1;
+	Request			request;
+	RequestConfig	requestConf;
+	Response		response;
+	std::string		recvd = "";
 
-	_closed = 0;
-	while (running && !_closed)
-	{
-		// timeit("Recv running");
-		memset(buffer, 0, RECV_SIZE);
-		// timeit("Recv memset");
-		if (!::recv(_socket, buffer, RECV_SIZE - 1, 0))
-			_closed = 1;
-		// timeit("Recv recv");
-		request += std::string(buffer);
-		// timeit("Recv +=");
-		if (!checkEnd(request, "\r\n\r\n"))
-		{
-			// timeit("Recv ckeckEnd");
-			bool a = (!checkStart(request, "POST") || !checkStart(request, "PUT"));
-			// timeit("Recv ckeckStart");
-			bool b = (countSubstr(request, "\r\n\r\n") < 2);
-			// timeit("Recv countSub");
-			if (a && b)
-				running = 1;
-			else
-				running = 0;
-		}
-	}
-
-	if (request.find("Transfer-Encoding: chunked") != std::string::npos &&
-		request.find("Transfer-Encoding: chunked") < request.find("\r\n\r\n"))
-		request = this->processChunk(request);
+	if (_requests[socket].find("Transfer-Encoding: chunked") != std::string::npos &&
+		_requests[socket].find("Transfer-Encoding: chunked") < _requests[socket].find("\r\n\r\n"))
+		this->processChunk(socket);
 
 	if (OUT)
 	{
-		if (_closed)
-			std::cout << "Connection was closed." << std::endl;
-		else if (request.size() < 1000)
-			std::cout << "Request :" << std::endl << "[" << YELLOW << request << RESET << "]" << std::endl;
+		if (_requests[socket].size() < 1000)
+			std::cout << "\nRequest :" << std::endl << "[" << YELLOW << _requests[socket] << RESET << "]" << std::endl;
 		else
-			std::cout << "Request :" << std::endl << "[" << YELLOW << request.substr(0, 1000) << "..." << request.substr(request.size() - 10, 15) << RESET << "]" << std::endl;
+			std::cout << "\nRequest :" << std::endl << "[" << YELLOW << _requests[socket].substr(0, 1000) << "..." << _requests[socket].substr(_requests[socket].size() - 10, 15) << RESET << "]" << std::endl;
 	}
 
-	return (request);
+	timeit("Process");
+	if (_requests[socket] != "")
+	{
+		if (request.parse(_requests[socket]) != 200)
+			request.setMethod("GET");
+		timeit("Parse");
+		_requests.erase(socket);
+
+		requestConf = conf.getConfigForRequest(this->_listen,  request.getPath(), request.getHeaders().at("Host"), request.getMethod(), request);
+		timeit("Conf");
+		response.call(request, requestConf);
+		timeit("Response");
+		_requests.insert(std::make_pair(socket, response.getResponse()));
+	}
 }
 
-std::string	Server::processChunk(std::string & request)
+void		Server::processChunk(long socket)
 {
-	std::string	head = request.substr(0, request.find("\r\n\r\n"));
-	std::string	chunks = request.substr(request.find("\r\n\r\n") + 4, request.size() - 1);
+	std::string	head = _requests[socket].substr(0, _requests[socket].find("\r\n\r\n"));
+	std::string	chunks = _requests[socket].substr(_requests[socket].find("\r\n\r\n") + 4, _requests[socket].size() - 1);
 	std::string	subchunk = chunks.substr(0, 100);
 	std::string	body = "";
 	int			chunksize = strtol(subchunk.c_str(), NULL, 16);
@@ -157,39 +112,64 @@ std::string	Server::processChunk(std::string & request)
 		chunksize = strtol(subchunk.c_str(), NULL, 16);
 	}
 
-	return (head + "\r\n\r\n" + body + "\r\n\r\n");
+	_requests[socket] = head + "\r\n\r\n" + body + "\r\n\r\n";
 }
 
-void		Server::send(std::string resp)
+int			Server::recv(long socket)
+{
+	char		buffer[RECV_SIZE] = {0};
+
+	if (!::recv(socket, buffer, RECV_SIZE - 1, 0))
+	{
+		this->close(socket);
+		std::cout << "\rConnection was closed.    \n" << std::endl;
+		return (-1);
+	}
+
+	_requests[socket] += std::string(buffer);
+
+	if (!checkEnd(_requests[socket], "\r\n\r\n"))
+	{
+		if ((!checkStart(_requests[socket], "POST") || !checkStart(_requests[socket], "PUT")) && countSubstr(_requests[socket], "\r\n\r\n") < 2)
+			return (1);
+		timeit("READ");
+		return (0);
+	}
+
+	return (1);
+}
+
+void		Server::send(long socket)
 {
 	int		ret = 0;
 	size_t	sent = 0;
 
+	timeit("SEND");
 	if (OUT)
 	{
-		if (resp.size() < 1000)
-			std::cout << "Response :" << std::endl << "[" << GREEN << resp << RESET << "]" << std::endl;
+		if (_requests[socket].size() < 1000)
+			std::cout << "\rResponse :                " << std::endl << "[" << GREEN << _requests[socket] << RESET << "]\n" << std::endl;
 		else
-			std::cout << "Response :" << std::endl << "[" << GREEN << resp.substr(0, 1000) << "..." << resp.substr(resp.size() - 10, 15) << RESET << "]" << std::endl;
+			std::cout << "\rResponse :                " << std::endl << "[" << GREEN << _requests[socket].substr(0, 1000) << "..." << _requests[socket].substr(_requests[socket].size() - 10, 15) << RESET << "]\n" << std::endl;
 	}
 
-	while (sent < resp.size())
+	while (sent < _requests[socket].size())
 	{
-		std::string	str = resp.substr(sent, 4096);
-		ret = ::send(_socket, str.c_str(), str.size(), 0);
+		std::string	str = _requests[socket].substr(sent, 4096);
+		ret = ::send(socket, str.c_str(), str.size(), 0);
 
-		// if (ret == -1)
-			// std::cerr << RED << "Could not send response." << RESET << std::endl;
 		if (ret != -1)
 			sent += ret;
 	}
+
+	_requests.erase(socket);
 }
 
-void		Server::close(void)
+void		Server::close(int socket)
 {
-	if (_socket > 0)
-		::close(_socket);
-	_socket = -1;
+	if (socket > 0)
+		::close(socket);
+	_requests.erase(socket);
 }
 
 void		Server::clean(void)
@@ -212,7 +192,6 @@ Server &	Server::operator=(const Server & src)
 {
 	_listen = src._listen;
 	_fd = src._fd;
-	_socket = src._socket;
 	_addr = src._addr;
 	return (*this);
 }
@@ -228,7 +207,6 @@ Server::Server(const t_listen & listen)
 {
 	_listen = listen;
 	_fd = -1;
-	_socket = -1;
 	this->setAddr();
 }
 

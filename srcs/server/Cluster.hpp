@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/12 16:53:41 by cclaude           #+#    #+#             */
-/*   Updated: 2021/03/19 01:41:44 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/03/21 22:26:04 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,8 @@ public:
 private:
 	Config						_config;
 	std::map<long, Server>		_servers;
-	std::map<long, Server *>	_accepts;
+	std::map<long, Server *>	_sockets;
+	std::vector<int>			_ready;
 	fd_set						_fd_set;
 	unsigned int				_fd_size;
 	long						_max_fd;

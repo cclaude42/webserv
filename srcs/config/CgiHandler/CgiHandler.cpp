@@ -6,7 +6,7 @@
 /*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/13 15:07:29 by frthierr          #+#    #+#             */
-/*   Updated: 2021/03/21 18:47:52 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/03/22 00:05:07 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,11 +115,10 @@ std::string		CgiHandler::executeCgi(const std::string& scriptName) {
 	long	fdIn = fileno(fIn);
 	long	fdOut = fileno(fOut);
 	int		ret = 1;
-	timeit("IN CGI created");
+
 	write(fdIn, _body.c_str(), _body.size());
-	timeit("IN CGI wrote file");
 	lseek(fdIn, 0, SEEK_SET);
-	timeit("IN CGI seeked file");
+
 	pid = fork();
 
 	if (pid == -1)
@@ -130,7 +129,6 @@ std::string		CgiHandler::executeCgi(const std::string& scriptName) {
 
 		dup2(fdIn, STDIN_FILENO);
 		dup2(fdOut, STDOUT_FILENO);
-	timeit("IN CGI duped before execve");
 		execve(scriptName.c_str(), nll, env);
 		std::cerr << "Execve crashed, errno : " << errno << "\n";
 	}
@@ -138,9 +136,7 @@ std::string		CgiHandler::executeCgi(const std::string& scriptName) {
 	{
 		char	buffer[CGI_BUFSIZE] = {0};
 
-		timeit("IN CGI waiting");
 		waitpid(-1, NULL, 0);
-		timeit("IN CGI waited");
 		lseek(fdOut, 0, SEEK_SET);
 
 		ret = 1;
@@ -151,7 +147,6 @@ std::string		CgiHandler::executeCgi(const std::string& scriptName) {
 			// std::cerr << "Reading " << ret << " characters from file" << std::endl;
 			newBody += buffer;
 		}
-			timeit("IN CGI read");
 	}
 
 	dup2(saveStdin, STDIN_FILENO);

@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:18:58 by cclaude           #+#    #+#             */
-/*   Updated: 2021/03/21 13:23:12 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/03/22 00:11:26 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ void			Response::call(Request & request, RequestConfig & requestConf)
 		_response = head.notAllowed(requestConf.getAllowedMethods(), requestConf.getContentLocation(), _code) + "\r\n";
 		return ;
 	}
-	timeit("RESPONSE START");
 	if (request.getMethod() == "GET")
 		getMethod(request, requestConf);
 	else if (request.getMethod() == "HEAD")
@@ -48,7 +47,6 @@ void			Response::call(Request & request, RequestConfig & requestConf)
 		optionsMethod(requestConf);
 	else if (request.getMethod() == "TRACE")
 		traceMethod(request, requestConf);
-		timeit("RESPONSE END");
 }
 
 // Methods
@@ -95,23 +93,27 @@ void			Response::postMethod(Request & request, RequestConfig & requestConf)
 {
 	ResponseHeader	head;
 
-	timeit("RESPONSE POST");
 	if (requestConf.getCgiPass() != "")
 	{
 		CgiHandler	cgi(request, requestConf);
-		timeit("RESPONSE POST CGI INIT");
+		size_t		i = 0;
+		size_t		j = _response.size() - 2;
+
 		_response = cgi.executeCgi(requestConf.getCgiPass());
-		timeit("RESPONSE POST CGI EXEC");
-		while (countSubstr(_response, "\r\n\r\n") > 0 || !checkStart(_response, "\r\n"))
+
+		while (_response.find("\r\n\r\n", i) != std::string::npos || _response.find("\r\n", i) == i)
 		{
-			// std::cerr << "Parsed : [" << _response.substr(0, _response.find("\r\n")) << "]" << std::endl;
-			_response = _response.substr(_response.find("\r\n") + 2, _response.size());
+			std::string	str = _response.substr(i, _response.find("\r\n", i) - i);
+			if (str.find("Status: ") == 0)
+				_code = std::atoi(str.substr(8, 3).c_str());
+			else if (str.find("Content-Type: ") == 0)
+				_type = str.substr(14, str.size());
+			i += str.size() + 2;
 		}
-		timeit("RESPONSE POST CGI PARSE");
-		while (!checkEnd(_response, "\r\n"))
-			_response = _response.substr(0, _response.size() - 2);
-		timeit("RESPONSE POST CHECKEND");
-		_code = 200;
+		while (_response.find("\r\n", j) == j)
+			j -= 2;
+
+		_response = _response.substr(i, j - i);
 	}
 	else
 	{
@@ -119,7 +121,6 @@ void			Response::postMethod(Request & request, RequestConfig & requestConf)
 		_response = "";
 	}
 	_response = head.getHeader(_response.size(), _path, _code, requestConf.getContentLocation()) + "\r\n" + _response;
-	timeit("RESPONSE POST HEADER");
 }
 
 void			Response::putMethod(std::string content, RequestConfig & requestConf)

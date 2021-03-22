@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/12 16:53:41 by cclaude           #+#    #+#             */
-/*   Updated: 2021/03/19 01:48:20 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/03/21 23:32:22 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ int		Cluster::setup(void)
 		Server		serv(*lstn);
 		long		fd;
 
-		std::cout << "Setting up " << lstn->host << ":" << lstn->port << "..." << std::endl;
 		if (serv.setup() != -1)
 		{
 			fd = serv.getFD();
@@ -40,8 +39,8 @@ int		Cluster::setup(void)
 			_servers.insert(std::make_pair(fd, serv));
 			if (fd > _max_fd)
 				_max_fd = fd;
+			std::cout << "Setting up " << lstn->host << ":" << lstn->port << "..." << std::endl;
 		}
-		// std::cout << "Set up " << lstn->host << ":" << lstn->port << " on FD " << fd << std::endl;
 	}
 
 	if (_max_fd == 0)
@@ -57,81 +56,92 @@ void	Cluster::run(void)
 {
 	std::string	dot[3] = {".  ", ".. ", "..."};
 	int			n = 0;
-	int			connections = 0;
 
 	while (1)
 	{
-		fd_set		working_set;
+		fd_set		reading_set;
+		fd_set		writing_set;
 		struct timeval	timeout;
 		int				ret = 0;
 
-		std::cout << std::endl;
-
 		while (ret == 0)
 		{
-			ft_memcpy(&working_set, &_fd_set, sizeof(_fd_set));
 			timeout.tv_sec  = 1;
 			timeout.tv_usec = 0;
+			ft_memcpy(&reading_set, &_fd_set, sizeof(_fd_set));
+			FD_ZERO(&writing_set);
+			for (std::vector<int>::iterator it = _ready.begin() ; it != _ready.end() ; it++)
+				FD_SET(*it, &writing_set);
 
 			std::cout << "\rWaiting on a connection" << dot[n++] << std::flush;
 			if (n == 3)
 				n = 0;
 
-			ret = select(_max_fd + 1, &working_set, NULL, NULL, &timeout);
+			if (_ready.empty())
+				ret = select(_max_fd + 1, &reading_set, NULL, NULL, &timeout);
+			else
+				ret = select(_max_fd + 1, &reading_set, &writing_set, NULL, &timeout);
 		}
 
 		if (ret > 0)
 		{
-			std::cout << "\rReceived a connection !   " << std::endl;
-			connections += ret;
-			// std::cout << "Connections : " << connections << std::endl;
-
-			std::map<long, Server *>::iterator it = _accepts.begin();
-			while (!_accepts.empty() && it != _accepts.end() && ret)
+			for (std::vector<int>::iterator it = _ready.begin() ; ret && it != _ready.end() ; it++)
 			{
-				long	fd;
-
-				fd = it->first;
-				if (FD_ISSET(fd, &working_set))
+				if (FD_ISSET(*it, &writing_set))
 				{
-					// std::cout << "Ret : " << ret << " Set : " << working_set.fds_bits[0] << " Reading from : " << fd << std::endl;
-					if (it->second->run(_config, fd) == -1)
-					{
-						FD_CLR(fd, &_fd_set);
-						FD_CLR(fd, &working_set);
-						_accepts.erase(fd);
-						it = _accepts.begin();
-					}
-					ret--;
+					_sockets[*it]->send(*it);
+					_ready.erase(it);
+					ret = 0;
+					break;
 				}
-				if (!_accepts.empty())
-					it++;
 			}
 
-			std::map<long, Server>::iterator it2 = _servers.begin();
-			while (it2 != _servers.end() && ret)
+			if (ret)
+				std::cout << "\rReceived a connection !   " << std::flush;
+
+			for (std::map<long, Server *>::iterator it = _sockets.begin() ; ret && it != _sockets.end() ; it++)
 			{
-				long	fd;
+				long	socket = it->first;
 
-				fd = it2->first;
-				if (FD_ISSET(fd, &working_set))
+				if (FD_ISSET(socket, &reading_set))
 				{
-					long	retfd;
+					long	ret = it->second->recv(socket);
 
-					// std::cout << "Reading from : " << fd << std::endl;
-					retfd = it2->second.run(_config, 0);
-
-					if (retfd != -1)
+					if (ret == 0)
 					{
-						// std::cout << "adding fd " << retfd << std::endl;
-						FD_SET(retfd, &_fd_set);
-						_accepts.insert(std::make_pair(retfd, &(it2->second)));
-						if (retfd > _max_fd)
-							_max_fd = retfd;
+						it->second->process(socket, _config);
+						_ready.push_back(socket);
 					}
-					ret--;
+					else if (ret == -1)
+					{
+						FD_CLR(socket, &_fd_set);
+						FD_CLR(socket, &reading_set);
+						_sockets.erase(socket);
+						it = _sockets.begin();
+					}
+					ret = 0;
+					break;
 				}
-				it2++;
+			}
+
+			for (std::map<long, Server>::iterator it = _servers.begin() ; ret && it != _servers.end() ; it++)
+			{
+				long	fd = it->first;
+
+				if (FD_ISSET(fd, &reading_set))
+				{
+					long	socket = it->second.accept();
+
+					if (socket != -1)
+					{
+						FD_SET(socket, &_fd_set);
+						_sockets.insert(std::make_pair(socket, &(it->second)));
+						if (socket > _max_fd)
+							_max_fd = socket;
+					}
+					ret = 0;
+					break;
+				}
 			}
 		}
 		else
