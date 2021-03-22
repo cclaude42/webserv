@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Request.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 16:27:33 by hbaudet           #+#    #+#             */
-/*   Updated: 2021/03/17 15:47:01 by frthierr         ###   ########.fr       */
+/*   Updated: 2021/03/22 10:33:55 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,8 +85,7 @@ class Request
 			/*** SETTERS **/
 		//	void	setHeader(const std::string& key, const std::string& value);
 													//not needed as of now
-			void	setBody(std::vector<std::string> line, size_t i);
-			void	setBody(const std::string &bod);
+			void	setBody(const std::vector<std::string> &line, size_t i);
 			void	setRet(int);
 			void	setMethod(const std::string &method);
 

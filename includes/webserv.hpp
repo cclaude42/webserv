@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   webserv.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/31 13:44:42 by cclaude           #+#    #+#             */
-/*   Updated: 2021/03/22 00:37:30 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/03/22 10:53:15 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,8 @@ std::string					to_string(size_t n);
 int							checkEnd(std::string & str, std::string end);
 int							checkStart(std::string & str, std::string end);
 int							countSubstr(std::string & str, std::string sub);
+std::string&				pop(std::string& str);
+
 
 // UTILS
 int							pathIsFile(const std::string & path);

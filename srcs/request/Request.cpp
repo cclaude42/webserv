@@ -6,7 +6,7 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 16:27:33 by hbaudet           #+#    #+#             */
-/*   Updated: 2021/03/15 18:11:03 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/22 10:59:34 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,34 +142,19 @@ void	Request::setHeader(const std::string& key, const std::string& value)
 }
 */
 
-void	Request::setBody(std::vector<std::string> line, size_t i)
+void	Request::setBody(const std::vector<std::string> &line, size_t i)
 {
-	while (i < line.size())
+	this->_body.clear();
+	for (; i < line.size(); i++)
 	{
-		if (line[i] != "\r")
-		{
-			this->_body.append(line[i]);
-			if (i != line.size() - 1)
-				this->_body.push_back('\n');
-		}
-		i++;
-
-		// size_t j;
-		// for (j = 0; j < line[i].size() && line[i][j] != '\r' && line[i][j] != '\n'; j++);
-		// while (line[i][line[i].size() - 1] == '\r' || line[i][line[i].size() - 1] == '\n')
-		// 	line[i].resize(line[i].size() - 1);
-		// this->_body.append(line[i].substr(j));
-		// this->_body.push_back('\n');
-		// i++;
+		if (line[i].size() && line[i][0] != '\r')
+			this->_body.append(line[i] + "\n");
 	}
-	if (*(--this->_body.end()) == '\n')
-		this->_body.resize(this->_body.size() - 1);
-	if (*(--this->_body.end()) == '\r')
-		this->_body.resize(this->_body.size() - 1);
-}
-void	Request::setBody(const std::string &bod)
-{
-	this->_body = bod;
+	if (this->_body.size() > 0 && this->_body[this->_body.size() - 1] == '\n')
+		pop(this->_body);
+	if (this->_body.size() > 0 && this->_body[this->_body.size() - 1] == '\r')
+		pop(this->_body);
+	std::cerr << RED << "Set body (" << this->_body.size() << ") : " << this->_body.substr(0, 20) << RESET << "\n";
 }
 
 void	Request::setRet(int ret)

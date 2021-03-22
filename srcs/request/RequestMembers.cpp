@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RequestMembers.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 17:10:06 by hbaudet           #+#    #+#             */
-/*   Updated: 2021/03/17 15:46:18 by frthierr         ###   ########.fr       */
+/*   Updated: 2021/03/22 11:40:32 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,6 +137,21 @@ int		Request::checkPort()
 	}
 	return (this->_port);
 }
+
+// Opti incoming
+
+// int		Request::parse(std::string& str)
+// {
+// 	std::string		key;
+// 	std::string		value;
+// 	std::string		line;
+
+// 	while ((line = next_line(str)) != "\r\n")
+// 	{
+// 		key = readKey(line[i]);
+// 		value = readValue(line[i]);
+// 	}
+// }
 
 int		Request::parse(const std::string& str)
 {

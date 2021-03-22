@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   string.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/31 18:58:08 by cclaude           #+#    #+#             */
-/*   Updated: 2021/03/19 15:37:14 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/03/22 10:52:47 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,6 +128,13 @@ std::string&					to_upper(std::string& str)
 std::string&					to_lower(std::string& str)
 {
 	std::transform(str.begin(), str.end(),str.begin(), ::tolower);
+	return str;
+}
+
+std::string&					pop(std::string& str)
+{
+	if (str.size())
+		str.resize(str.size() - 1);
 	return str;
 }
 
