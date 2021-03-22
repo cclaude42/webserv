@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/31 13:44:42 by cclaude           #+#    #+#             */
-/*   Updated: 2021/03/21 19:14:42 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/03/22 00:37:30 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ extern "C" {
 
 // Output
 # ifndef OUT
-#  define OUT 1
+#  define OUT 0
 # endif
 # ifndef TIME
 #  define TIME 0

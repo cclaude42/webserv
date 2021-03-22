@@ -6,7 +6,7 @@ NAME = webserv
 
 CC = clang++
 
-CFLAGS = -Wall -Wextra -Werror -g -fno-omit-frame-pointer -fsanitize=address -std=c++98
+CFLAGS = -Wall -Wextra -Werror -O3 -g -fsanitize=address -std=c++98
 
 # DEFINES = -D OUT=0 -D TIME=1
 

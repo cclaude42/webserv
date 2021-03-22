@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:18:58 by cclaude           #+#    #+#             */
-/*   Updated: 2021/03/19 01:29:26 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/03/21 23:57:10 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ private:
 	std::string			_response;
 	std::string			_path;
 	int					_code;
+	std::string			_type;
 };
 
 #endif

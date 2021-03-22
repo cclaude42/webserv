@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:29:28 by cclaude           #+#    #+#             */
-/*   Updated: 2021/03/19 01:45:41 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/03/21 22:57:22 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,24 +30,23 @@ public:
 
 	Server & operator=(const Server & src);
 
-	long		getFD(void);
+	long	getFD(void);
 
-	long		run(Config & conf, long socket);
-	int			setup(void);
-	void		setAddr(void);
-	void		accept(void);
-	std::string	recv(void);
-	std::string	processChunk(std::string & request);
-	void		send(std::string resp);
-	void		close(void);
-	void		clean(void);
+	int		setup(void);
+	void	setAddr(void);
+	long	accept(void);
+	void	process(long socket, Config & conf);
+	void	processChunk(long socket);
+	int		recv(long socket);
+	void	send(long socket);
+	void	close(int socket);
+	void	clean(void);
 
 private:
-	t_listen			_listen;
-	long				_fd;
-	long				_socket;
-	struct sockaddr_in	_addr;
-	int					_closed;
+	std::map<long, std::string>	_requests;
+	t_listen					_listen;
+	long						_fd;
+	struct sockaddr_in			_addr;
 
 	Server(void);
 
