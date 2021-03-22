@@ -53,7 +53,12 @@ void		CgiHandler::_initEnv(Request &request, RequestConfig &config) {
 	this->_env["PATH_INFO"] = request.getPath(); //might need some change, using config path/contentLocation
 	this->_env["PATH_TRANSLATED"] = request.getPath(); //might need some change, using config path/contentLocation
 	this->_env["QUERY_STRING"] = request.getQuery();
-	this->_env["REMOTEaddr"] = to_string(config.getHostPort().host);
+
+	// DANGER !!
+	std::cerr << YELLOW << "Before to_string config.getHostPort.host : " << config.getHostPort().host << RESET << '\n';
+	this->_env["REMOTEaddr"] = to_string(config.getHostPort().host); // UNINITIALIZED VALUE!!!!
+	// /DANGER
+
 	this->_env["REMOTE_IDENT"] = headers["Authorization"];
 	this->_env["REMOTE_USER"] = headers["Authorization"];
 	this->_env["REQUEST_URI"] = request.getPath() + request.getQuery();
@@ -62,7 +67,12 @@ void		CgiHandler::_initEnv(Request &request, RequestConfig &config) {
 		this->_env["SERVER_NAME"] = headers["Hostname"];
 	else
 		this->_env["SERVER_NAME"] = this->_env["REMOTEaddr"];
-	this->_env["SERVER_PORT"] = to_string(config.getHostPort().port);
+
+	// DANGER !!
+	std::cerr << YELLOW << "Before to_string config.getHostPort().port : " << config.getHostPort().port << RESET << '\n';
+	this->_env["SERVER_PORT"] = to_string(config.getHostPort().port);  // UNINITIALIZED VALUE!!!! 
+	// /DANGER
+
 	this->_env["SERVER_PROTOCOL"] = "HTTP/1.1";
 	this->_env["SERVER_SOFTWARE"] = "Weebserv/1.0";
 
@@ -157,6 +167,10 @@ std::string		CgiHandler::executeCgi(const std::string& scriptName) {
 	close(fdOut);
 	close(saveStdin);
 	close(saveStdout);
+
+	for (size_t i = 0; env[i]; i++)
+		delete[] env[i];
+	delete[] env;
 
 	if (!pid)
 		exit(0);
