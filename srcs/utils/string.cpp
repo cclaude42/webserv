@@ -6,13 +6,13 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/31 18:58:08 by cclaude           #+#    #+#             */
-/*   Updated: 2021/03/22 10:52:47 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/22 14:03:22 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "webserv.hpp"
 
-int								countSubstr(std::string & str, std::string sub)
+int								countSubstr(const std::string& str, const std::string& sub)
 {
 	int						n = 0;
 	std::string::size_type	pos = 0;
@@ -26,7 +26,7 @@ int								countSubstr(std::string & str, std::string sub)
 	return (n);
 }
 
-int								checkStart(std::string & str, std::string end)
+int								checkStart(const std::string& str, const std::string& end)
 {
 	size_t	i = 0;
 	size_t	j = 0;
@@ -41,7 +41,7 @@ int								checkStart(std::string & str, std::string end)
 	return (0);
 }
 
-int								checkEnd(std::string & str, std::string end)
+int								checkEnd(const std::string& str, const std::string& end)
 {
 	size_t	i = str.size();
 	size_t	j = end.size();
@@ -63,17 +63,17 @@ std::string						readKey(char *line)
 	for (int i = 0; line[i] && line[i] != ':'; i++)
 		ret.push_back(line[i]);
 	capitalize(ret);
-	return (ret);
+	return (strip(ret, ' '));
 }
 
-std::string						readKey(std::string& line)
+std::string						readKey(const std::string& line)
 {
 	std::string	ret;
 
 	size_t	i = line.find_first_of(':');
 	ret.append(line, 0 , i);
 	capitalize(ret);
-	return (ret);
+	return (strip(ret, ' '));
 }
 
 std::string						readValue(char *line)
@@ -86,10 +86,10 @@ std::string						readValue(char *line)
 	i--;
 	while (line[++i])
 		ret.push_back(line[i]);
-	return ret;
+	return (strip(ret, ' '));
 }
 
-std::string						readValue(std::string& line)
+std::string						readValue(const std::string& line)
 {
 	size_t i;
 	std::string	ret;
@@ -98,7 +98,7 @@ std::string						readValue(std::string& line)
 	i = line.find_first_not_of(' ', i + 1);
 	if (i != std::string::npos)
 		ret.append(line, i, std::string::npos);
-	return ret;
+	return (strip(ret, ' '));
 }
 
 std::vector<std::string>		split(const std::string& str, char c)
@@ -114,8 +114,14 @@ std::vector<std::string>		split(const std::string& str, char c)
 
 std::string&					strip(std::string& str, char c)
 {
-	while (str[str.size()] == c)
-		str = str.substr(0, str.size());
+	size_t	i;
+
+	if (!str.size())
+		return str;
+	i = str.size();
+	while (i && str[i - 1] == c)
+		i--;
+	str.resize(i);
 	return str;
 }
 

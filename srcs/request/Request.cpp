@@ -6,7 +6,7 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 16:27:33 by hbaudet           #+#    #+#             */
-/*   Updated: 2021/03/22 11:40:52 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/22 14:08:34 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,9 @@ int					Request::getRet() const
 
 const std::string&	Request::getBody() const
 {
+	// std::string test(this->_bodBeg, this->_bodEnd);
+
+	// std::cerr << YELLOW << "body (" << test.size() << ") - |" << test.substr(0, 20) << "|\n";
 	return this->_body;
 }
 
@@ -135,26 +138,17 @@ std::string			Request::getRaw() const
 }
 
 /*** SETTERS ***/
-/*
-void	Request::setHeader(const std::string& key, const std::string& value)
-{
-	this->_headers[key] = value;
-}
-*/
 
-void	Request::setBody(const std::vector<std::string> &line, size_t i)
+void	Request::setBody(const std::string& str)
 {
-	this->_body.clear();
-	for (; i < line.size(); i++)
-	{
-		if (line[i].size() && line[i][0] != '\r')
-			this->_body.append(line[i] + "\n");
-	}
-	if (this->_body.size() > 0 && this->_body[this->_body.size() - 1] == '\n')
-		pop(this->_body);
-	if (this->_body.size() > 0 && this->_body[this->_body.size() - 1] == '\r')
-		pop(this->_body);
-	// std::cerr << RED << "Set body (" << this->_body.size() << ") : " << this->_body.substr(0, 20) << RESET << "\n";
+	char	strip[] = {'\n', '\r'};
+
+	this->_body.assign(str);
+	for (int i = 0; i < 4; i++)
+		if (this->_body.size() > 0 && this->_body[this->_body.size() - 1] == strip[i % 2])
+			pop(this->_body);
+		else
+			break ;
 }
 
 void	Request::setRet(int ret)

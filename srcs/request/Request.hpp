@@ -6,7 +6,7 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 16:27:33 by hbaudet           #+#    #+#             */
-/*   Updated: 2021/03/22 10:33:55 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/22 14:05:09 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,8 @@ class Request
 			std::map<std::string, std::string>	_headers;
 			std::map<std::string, std::string>	_env_for_cgi;
 			int									_ret;
+			std::string::const_iterator			_bodBeg;
+			std::string::const_iterator			_bodEnd;
 			std::string							_body;
 			int									_port;
 			std::string							_path;
@@ -52,13 +54,15 @@ class Request
 			std::string							_raw;
 
 			/*** PARSING ***/
-			int			readFirstLine(std::string& line);
-			int			readPath(std::string& line, size_t i);
-			int			readVersion(std::string& line, size_t i);
+			int			readFirstLine(const std::string& line);
+			int			readPath(const std::string& line, size_t i);
+			int			readVersion(const std::string& line, size_t i);
 			int			checkMethod();
 			int			checkPort();
-			std::string	findQuery(std::string path);
+			std::string	findQuery(const std::string& path);
 			std::string formatHeaderForCGI(std::string& key);
+			std::string	nextLine(const std::string &str, size_t& i);
+
 
 			/*** AVAILABLE HTTP METHODS ***/
 			static	std::vector<std::string>	methods;
@@ -85,14 +89,14 @@ class Request
 			/*** SETTERS **/
 		//	void	setHeader(const std::string& key, const std::string& value);
 													//not needed as of now
-			void	setBody(const std::vector<std::string> &line, size_t i);
+			void	setBody(const std::string& line);
 			void	setRet(int);
 			void	setMethod(const std::string &method);
 
 			/*** UTILS ****/
+			int		parse(const std::string& str);
 			void	resetHeaders();
 			void	stripAll();
-			int		parse(const std::string& str);
 			void	displayHeaders() const;
 			static std::vector<std::string>		initMethods();
 

@@ -6,18 +6,18 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 17:10:06 by hbaudet           #+#    #+#             */
-/*   Updated: 2021/03/22 11:40:32 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/22 14:08:36 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Request.hpp"
 
-void	Request::displayHeaders() const
+void				Request::displayHeaders() const
 {
 	std::cout << *this;
 }
 
-std::ostream&	operator<<(std::ostream& os, const Request& re)
+std::ostream&		operator<<(std::ostream& os, const Request& re)
 {
 	std::map<std::string, std::string>::const_iterator	it;
 
@@ -34,7 +34,7 @@ std::ostream&	operator<<(std::ostream& os, const Request& re)
 	return os;
 }
 
-void	Request::resetHeaders()
+void				Request::resetHeaders()
 {
 	this->_headers.clear();
 
@@ -60,9 +60,14 @@ void	Request::resetHeaders()
 	this->_headers["Connection"] = "Keep-Alive";
 }
 
-int		Request::readFirstLine(std::string& line)
+int					Request::readFirstLine(const std::string& str)
 {
-	size_t	i = line.find_first_of(' ');
+	size_t	i;
+	std::string	line;
+
+	i = str.find_first_of('\n');
+	line = str.substr(0, i);
+	i = line.find_first_of(' ');
 
 	if (i == std::string::npos)
 	{
@@ -74,7 +79,7 @@ int		Request::readFirstLine(std::string& line)
 	return this->readPath(line, i);
 }
 
-int		Request::readPath(std::string& line, size_t i)
+int					Request::readPath(const std::string& line, size_t i)
 {
 	size_t	j;
 
@@ -94,7 +99,7 @@ int		Request::readPath(std::string& line, size_t i)
 	return this->readVersion(line, i);
 }
 
-int		Request::readVersion(std::string& line, size_t i)
+int					Request::readVersion(const std::string& line, size_t i)
 {
 	if ((i = line.find_first_not_of(' ', i)) == std::string::npos)
 	{
@@ -114,7 +119,7 @@ int		Request::readVersion(std::string& line, size_t i)
 	return (this->checkMethod());
 }
 
-int		Request::checkMethod()
+int					Request::checkMethod()
 {
 	for (size_t i = 0; i < this->methods.size(); i++)
 		if (this->methods[i] == this->_method)
@@ -124,7 +129,7 @@ int		Request::checkMethod()
 	return this->_ret;
 }
 
-int		Request::checkPort()
+int					Request::checkPort()
 {
 	size_t i = this->_headers["Host"].find_first_of(':');
 
@@ -138,60 +143,46 @@ int		Request::checkPort()
 	return (this->_port);
 }
 
-// Opti incoming
+std::string			Request::nextLine(const std::string &str, size_t& i)
+{
+	std::string		ret;
+	size_t			j;
 
-// int		Request::parse(std::string& str)
-// {
-// 	std::string		key;
-// 	std::string		value;
-// 	std::string		line;
+	if (i == std::string::npos)
+		return "";
+	j = str.find_first_of('\n', i);
+	ret = str.substr(i, j - i);
+	if (ret[ret.size() - 1] == '\r')
+		pop(ret);
+	i = (j == std::string::npos ? j : j + 1);
+	return ret;
+}
 
-// 	while ((line = next_line(str)) != "\r\n")
-// 	{
-// 		key = readKey(line[i]);
-// 		value = readValue(line[i]);
-// 	}
-// }
 
-int		Request::parse(const std::string& str)
+int					Request::parse(const std::string& str)
 {
 	std::string		key;
 	std::string		value;
-	std::vector<std::string> line = split(str, '\n');
-	size_t			i;
+	std::string		line;
+	size_t			i(0);
 
-	this->_raw = str;
-	if (line.size() < 2)
-		this->_ret = 400;
-	else
+	this->readFirstLine(nextLine(str, i));
+	while ((line = nextLine(str, i)) != "\r" && line != "" && this->_ret != 400)
 	{
-		this->readFirstLine(line[0]);
-		for (i = 1; i < line.size() && this->_ret != 400; i++)
-		{
-			key = readKey(line[i]);
-			value = readValue(line[i]);
-			if (line[i][0] == '\r')
-				break;
-			if (*(--(line[i].end())) == '\r') // c++98 equivalent of string.back(), sorry
-				line[i].erase(--(line[i].end())); // c++98 equivalent of string.pop_back(), sorry again
-			if (this->_headers.count(key))
-				this->_headers[key] = strip(value, ' ');
-			if (key.find("Secret") != std::string::npos) {
-				this->_env_for_cgi[formatHeaderForCGI(key)] = strip(value, ' ');
-			}
-		}
-		if (i < line.size() - 1)
-			this->setBody(line, i + 1);
-		this->checkPort();
+		key = readKey(line);
+		value = readValue(line);
+		if (this->_headers.count(key))
+				this->_headers[key] = value;
+		if (key.find("Secret") != std::string::npos)
+			this->_env_for_cgi[formatHeaderForCGI(key)] = value;
 	}
-	this->stripAll();
-	this->_query = findQuery(this->_path);
-	if (this->_query != "" && this->_path.find(this->_query) != std::string::npos)
-		this->_path.resize(this->_path.size() - 1 - this->_query.size());
-	return (this->_ret);
+	this->_bodBeg = std::string::const_iterator(str.begin() + i);
+	this->_bodEnd = str.end();
+	this->setBody(str.substr(i, std::string::npos));
+	return this->_ret;
 }
 
-void	Request::stripAll()
+void				Request::stripAll()
 {
 	strip(this->_method, '\n');
 	strip(this->_method, '\r');
@@ -204,7 +195,7 @@ void	Request::stripAll()
 	strip(this->_path, ' ');
 }
 
-std::string	Request::findQuery(std::string path)
+std::string			Request::findQuery(const std::string& path)
 {
 	size_t		i;
 	std::string	ret;
@@ -216,7 +207,7 @@ std::string	Request::findQuery(std::string path)
 	return ret;
 }
 
-std::string Request::formatHeaderForCGI(std::string& key) {
+std::string 		Request::formatHeaderForCGI(std::string& key) {
 	to_upper(key);
 	for (size_t i = 0 ; i < key.size() ; i++) {
 		if (key[i] == '-')

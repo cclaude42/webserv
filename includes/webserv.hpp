@@ -6,7 +6,7 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/31 13:44:42 by cclaude           #+#    #+#             */
-/*   Updated: 2021/03/22 10:53:15 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/22 13:43:57 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,18 +100,18 @@ unsigned int				ft_htonl(unsigned int l);
 
 // STRINGS
 std::string					readKey(char *line); //Deprecated
-std::string					readKey(std::string& line);
+std::string					readKey(const std::string& line);
 std::string					readValue(char *line); //Deprecated
-std::string					readValue(std::string& line);
+std::string					readValue(const std::string& line);
 std::string&				strip(std::string& str, char c);
 std::vector<std::string>	split(const std::string& str, char c);
 std::string&				to_lower(std::string& str);
 std::string&				to_upper(std::string& str);
 std::string&				capitalize(std::string& str);
 std::string					to_string(size_t n);
-int							checkEnd(std::string & str, std::string end);
-int							checkStart(std::string & str, std::string end);
-int							countSubstr(std::string & str, std::string sub);
+int							checkEnd(const std::string& str, const std::string& end);
+int							checkStart(const std::string& str, const std::string& end);
+int							countSubstr(const std::string& str, const std::string& sub);
 std::string&				pop(std::string& str);
 
 
