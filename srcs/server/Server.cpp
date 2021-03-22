@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:29:28 by cclaude           #+#    #+#             */
-/*   Updated: 2021/03/22 00:30:09 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/03/22 15:08:54 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,7 +155,7 @@ void		Server::send(long socket)
 
 	while (sent < _requests[socket].size())
 	{
-		std::string	str = _requests[socket].substr(sent, 4096);
+		std::string	str = _requests[socket].substr(sent, RECV_SIZE);
 		ret = ::send(socket, str.c_str(), str.size(), 0);
 
 		if (ret != -1)

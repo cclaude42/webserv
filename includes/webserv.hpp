@@ -6,7 +6,7 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/31 13:44:42 by cclaude           #+#    #+#             */
-/*   Updated: 2021/03/22 13:43:57 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/22 15:09:24 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,8 +72,8 @@ extern "C" {
 # define BYTE_3 0x000000ff
 
 // Default
-# define RECV_SIZE 4096
-# define CGI_BUFSIZE 4096
+# define RECV_SIZE 65536
+# define CGI_BUFSIZE 65536
 # define DEFAULT_CONFIG "test_us/conf/default"
 
 // Colors
