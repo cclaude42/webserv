@@ -78,6 +78,8 @@ RequestConfig	&RequestConfig::operator=(RequestConfig const &src) {
 		this->_allowed_methods = src._allowed_methods;
 		this->_autoindex = src._autoindex;
 		this->_index = src._index;
+		this->_hostPort.host = src._hostPort.host;
+		this->_hostPort.port = src._hostPort.port;
 	}
 	return *this;
 }
@@ -137,7 +139,8 @@ void								RequestConfig::setContentLocation(const std::string &path)
 }
 
 void								RequestConfig::setHostPort(const t_listen hostPort){
-	this->_hostPort= hostPort;
+	this->_hostPort.port = hostPort.port;
+	this->_hostPort.host = hostPort.host;
 }
 
 void								RequestConfig::addIndex()
