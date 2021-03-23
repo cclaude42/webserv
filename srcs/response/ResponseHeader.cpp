@@ -6,7 +6,7 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 15:17:39 by cclaude           #+#    #+#             */
-/*   Updated: 2021/03/23 16:23:56 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/23 18:00:41 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,12 @@ std::string		ResponseHeader::getHeader(size_t size, const std::string& path, int
 	return (header);
 }
 
-std::string		ResponseHeader::notAllowed(std::set<std::string> methods, const std::string& path, int code)
+std::string		ResponseHeader::notAllowed(std::set<std::string> methods, const std::string& path, int code, const std::string& lang)
 {
 	std::string	header;
 
 	resetValues();
-	setValues(0, path, code, path);
+	setValues(0, path, code, path, lang);
 	setAllow(methods);
 
 	if (code == 405)

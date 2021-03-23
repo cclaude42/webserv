@@ -6,7 +6,7 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 17:10:06 by hbaudet           #+#    #+#             */
-/*   Updated: 2021/03/22 14:08:36 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/23 17:58:04 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,8 +178,42 @@ int					Request::parse(const std::string& str)
 	}
 	this->_bodBeg = std::string::const_iterator(str.begin() + i);
 	this->_bodEnd = str.end();
+	this->setLang();
 	this->setBody(str.substr(i, std::string::npos));
 	return this->_ret;
+}
+
+/*
+**	"Cet en-tête est une indication destinée à être utilisée lorsque le serveur 
+**	n'a aucun moyen de déterminer la langue d'une autre manière, comme une URL 
+**	spécifique, qui est contrôlée par une décision explicite de l'utilisateur.
+**	Il est recommandé que le serveur ne passe jamais outre une décision explicite."
+*/
+
+void				Request::setLang()
+{
+	std::vector<std::string>	token;
+	std::string					header;
+
+	if ((header = this->_headers["Accept-Language"]) != "")
+	{
+		token = split(header, ',');
+		for (std::vector<std::string>::iterator it = token.begin(); it != token.end(); it++)
+		{
+			float			weight = 0.0;
+			std::string		lang;
+
+			lang = (*it).substr(0, (*it).find_first_of('-', 0));
+			std::cerr << GREEN << "Found lang : " << lang << RESET <<"\n";
+			if (size_t i = (*it).find_last_of(';', 0) != std::string::npos)
+			{
+				weight = atof( (*it).substr(i + 1).c_str() );
+			}
+			this->_lang.push_back(std::pair<std::string, float>(lang, weight));
+		}
+		for (std::list<std::pair<std::string, float> >::iterator it = this->_lang.begin(); it != this->_lang.end(); it++)
+			std::cerr << YELLOW << (*it).first << " - " << (*it).second << RESET << '\n';
+	}
 }
 
 void				Request::stripAll()

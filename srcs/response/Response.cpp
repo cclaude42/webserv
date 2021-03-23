@@ -6,7 +6,7 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:18:58 by cclaude           #+#    #+#             */
-/*   Updated: 2021/03/23 17:15:37 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/23 18:02:11 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void			Response::call(Request & request, RequestConfig & requestConf)
 	{
 		ResponseHeader	head;
 
-		_response = head.notAllowed(requestConf.getAllowedMethods(), requestConf.getContentLocation(), _code) + "\r\n";
+		_response = head.notAllowed(requestConf.getAllowedMethods(), requestConf.getContentLocation(), _code, requestConf.getLang()) + "\r\n";
 		return ;
 	}
 	if (request.getMethod() == "GET")
@@ -78,7 +78,7 @@ void			Response::getMethod(Request & request, RequestConfig & requestConf)
 	if (_response != "")
 		_response += "\r\n";
 	else
-		_response = head.getHeader(_response.size(), _path, _code, requestConf.getContentLocation(), reaustConf.getLang()) + "\r\n";
+		_response = head.getHeader(_response.size(), _path, _code, requestConf.getContentLocation(), requestConf.getLang()) + "\r\n";
 }
 
 void			Response::headMethod(RequestConfig & requestConf)
@@ -86,7 +86,7 @@ void			Response::headMethod(RequestConfig & requestConf)
 	ResponseHeader	head;
 
 	_code = readContent();
-	_response = head.getHeader(_response.size(), _path, _code, requestConf.getContentLocation());
+	_response = head.getHeader(_response.size(), _path, _code, requestConf.getContentLocation(), requestConf.getLang());
 }
 
 void			Response::postMethod(Request & request, RequestConfig & requestConf)
@@ -120,7 +120,7 @@ void			Response::postMethod(Request & request, RequestConfig & requestConf)
 		_code = 204;
 		_response = "";
 	}
-	_response = head.getHeader(_response.size(), _path, _code, requestConf.getContentLocation()) + "\r\n" + _response;
+	_response = head.getHeader(_response.size(), _path, _code, requestConf.getContentLocation(), requestConf.getLang()) + "\r\n" + _response;
 }
 
 void			Response::putMethod(std::string content, RequestConfig & requestConf)
@@ -128,7 +128,7 @@ void			Response::putMethod(std::string content, RequestConfig & requestConf)
 	ResponseHeader	head;
 
 	_code = writeContent(content);
-	_response = head.getHeader(_response.size(), _path, _code, requestConf.getContentLocation()) + "\r\n";
+	_response = head.getHeader(_response.size(), _path, _code, requestConf.getContentLocation(), requestConf.getLang()) + "\r\n";
 }
 
 void			Response::deleteMethod(RequestConfig & requestConf)
@@ -145,7 +145,7 @@ void			Response::deleteMethod(RequestConfig & requestConf)
 	else
 		_code = 404;
 
-	_response = head.getHeader(_response.size(), _path, _code, requestConf.getContentLocation()) + "\r\n";
+	_response = head.getHeader(_response.size(), _path, _code, requestConf.getContentLocation(), requestConf.getLang()) + "\r\n";
 }
 
 void			Response::connectMethod(RequestConfig & requestConf)
@@ -159,7 +159,7 @@ void			Response::optionsMethod(RequestConfig & requestConf)
 	ResponseHeader	head;
 
 	_code = readContent();
-	_response = head.getHeader(_response.size(), _path, _code, requestConf.getContentLocation()) + "\r\n";
+	_response = head.getHeader(_response.size(), _path, _code, requestConf.getContentLocation(), requestConf.getLang()) + "\r\n";
 
 }
 

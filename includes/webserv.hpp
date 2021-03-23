@@ -6,7 +6,7 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/31 13:44:42 by cclaude           #+#    #+#             */
-/*   Updated: 2021/03/22 15:09:24 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/23 17:29:03 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@
 # include <vector>
 # include <algorithm>
 # include <iterator>
+# include <list>
+# include <utility>
 
 
 // C Includes

@@ -6,7 +6,7 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 16:27:33 by hbaudet           #+#    #+#             */
-/*   Updated: 2021/03/22 14:05:09 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/23 17:28:20 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,18 +40,19 @@
 class Request
 {
 		private:
-			std::string							_method;
-			std::string							_version;
-			std::map<std::string, std::string>	_headers;
-			std::map<std::string, std::string>	_env_for_cgi;
-			int									_ret;
-			std::string::const_iterator			_bodBeg;
-			std::string::const_iterator			_bodEnd;
-			std::string							_body;
-			int									_port;
-			std::string							_path;
-			std::string							_query;
-			std::string							_raw;
+			std::string									_method;
+			std::string									_version;
+			std::map<std::string, std::string>			_headers;
+			std::map<std::string, std::string>			_env_for_cgi;
+			int											_ret;
+			std::string::const_iterator					_bodBeg;
+			std::string::const_iterator					_bodEnd;
+			std::string									_body;
+			int											_port;
+			std::string									_path;
+			std::string									_query;
+			std::string									_raw;
+			std::list<std::pair<std::string, float> >	_lang;
 
 			/*** PARSING ***/
 			int			readFirstLine(const std::string& line);
@@ -62,6 +63,7 @@ class Request
 			std::string	findQuery(const std::string& path);
 			std::string formatHeaderForCGI(std::string& key);
 			std::string	nextLine(const std::string &str, size_t& i);
+			void		setLang();
 
 
 			/*** AVAILABLE HTTP METHODS ***/
