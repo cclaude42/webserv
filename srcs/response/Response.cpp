@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Response.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:18:58 by cclaude           #+#    #+#             */
-/*   Updated: 2021/03/22 00:11:26 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/03/23 17:15:37 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ void			Response::getMethod(Request & request, RequestConfig & requestConf)
 	if (_response != "")
 		_response += "\r\n";
 	else
-		_response = head.getHeader(_response.size(), _path, _code, requestConf.getContentLocation()) + "\r\n";
+		_response = head.getHeader(_response.size(), _path, _code, requestConf.getContentLocation(), reaustConf.getLang()) + "\r\n";
 }
 
 void			Response::headMethod(RequestConfig & requestConf)

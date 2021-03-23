@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ResponseHeader.hpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 15:17:39 by cclaude           #+#    #+#             */
-/*   Updated: 2021/03/21 13:21:48 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/03/23 16:25:47 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@ public:
 
 	// Setter functions
 	void			setAllow(std::set<std::string> methods);
-	void			setAllow(void);
-	void			setContentLanguage(void);
+	void			setAllow(const std::string& allow = "");
+	void			setContentLanguage(const std::string& lang = "");
 	void			setContentLength(size_t size);
 	void			setContentLocation(const std::string& path, int code);
 	void			setContentType(std::string type);
@@ -39,10 +39,10 @@ public:
 	void			setWwwAuthenticate(int code);
 
 	// Member functions
-	std::string		getHeader(size_t size, const std::string& path, int code, const std::string& contentLocation);
+	std::string		getHeader(size_t size, const std::string& path, int code, const std::string& contentLocation, const std::string& lang);
 	std::string		notAllowed(std::set<std::string> methods, const std::string& path, int code);
 	std::string		writeHeader(void);
-	void			setValues(size_t size, const std::string& path, int code, const std::string& contentLocation);
+	void			setValues(size_t size, const std::string& path, int code, const std::string& contentLocation, const std::string& lang);
 	void			resetValues(void);
 	std::string		getStatusMessage(int code);
 
