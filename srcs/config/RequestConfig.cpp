@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RequestConfig.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 13:20:34 by frthierr          #+#    #+#             */
-/*   Updated: 2021/03/18 20:20:55 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/03/23 17:16:45 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ _client_body_buffer_size(config.getClientBodyBufferSize()),
 _cgi_param(config.getCgiParam()),
 _cgi_pass(config.getCgiPass()),
 _allowed_methods(config.getAllowedMethods()),
+_lang("")
 _index(config.getIndex()),
 _autoindex(config.getAutoIndex())
 {
@@ -44,8 +45,12 @@ _autoindex(config.getAutoIndex())
 	this->_path = removeAdjacentSlashes(ret);
 	// std::cout << "path : " << this->_path << "\n";
 	// std::cout << "method : " << method << "\n";
-	if (!pathIsFile(this->_path) && method == "GET" )
+	if (!pathIsFile(this->_path) && method == "GET")
 		this->addIndex();
+	else if (method == "GET")
+	{
+
+	}
 }
 
 RequestConfig::RequestConfig(RequestConfig const &src) {
@@ -85,11 +90,11 @@ RequestConfig	&RequestConfig::operator=(RequestConfig const &src) {
 }
 
 // GETER FUNCTIONS
-const std::string							&RequestConfig::getContentLocation() const {
+const std::string&							&RequestConfig::getContentLocation() const {
 	return this->_contentLocation;
 }
 
-const std::string							&RequestConfig::getPath() const {
+const std::string&							&RequestConfig::getPath() const {
 	return this->_path;
 }
 
@@ -105,8 +110,12 @@ const std::map<std::string, std::string>	&RequestConfig::getCgiParam() const {
 	return this->_cgi_param;
 }
 
-const std::string							&RequestConfig::getCgiPass() const {
+const std::string&							&RequestConfig::getCgiPass() const {
 	return this->_cgi_pass;
+}
+
+const std::string&							&RequestConfig::getLang() const {
+	return this->_lang;
 }
 
 const std::set<std::string>				&RequestConfig::getAllowedMethods() const {
