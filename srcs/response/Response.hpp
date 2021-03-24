@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Response.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
+/*   By: francisco <francisco@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:18:58 by cclaude           #+#    #+#             */
-/*   Updated: 2021/03/21 23:57:10 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/03/24 18:04:15 by francisco        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include "Request.hpp"
 # include "RequestConfig.hpp"
 # include "CgiHandler.hpp"
+# include "../config/Autoindex/AutoIndexGenerator.hpp"
 
 
 class Response {
@@ -53,6 +54,8 @@ private:
 	std::string			_path;
 	int					_code;
 	std::string			_type;
+	bool				_isAutoIndex;
+	t_listen			_hostPort;
 };
 
 #endif

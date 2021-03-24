@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RequestConfig.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: francisco <francisco@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 13:20:34 by frthierr          #+#    #+#             */
-/*   Updated: 2021/03/24 17:48:16 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/24 18:06:50 by francisco        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,6 +120,10 @@ const std::set<std::string>				&RequestConfig::getAllowedMethods() const {
 
 const t_listen							&RequestConfig::getHostPort() const {
 	return this->_hostPort;
+}
+
+bool  									RequestConfig::getAutoIndex() const {
+	return this->_autoindex;
 }
 
 

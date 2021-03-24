@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Response.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: francisco <francisco@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:18:58 by cclaude           #+#    #+#             */
-/*   Updated: 2021/03/24 16:57:10 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/24 18:12:17 by francisco        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,10 @@
 
 void			Response::call(Request & request, RequestConfig & requestConf)
 {
+	_isAutoIndex = requestConf.getAutoIndex();
 	_code = request.getRet();
+	_hostPort.host = requestConf.getHostPort().host;
+	_hostPort.port = requestConf.getHostPort().port;
 	_path = requestConf.getPath();
 
 	if (requestConf.getAllowedMethods().find(request.getMethod()) == requestConf.getAllowedMethods().end())
@@ -194,17 +197,27 @@ int				Response::readContent(void)
 
 	_response = "";
 
-	if (pathIsFile(_path) == 0)
+	if (pathIsFile(_path))
+	{
+		file.open(_path.c_str(), std::ifstream::in);
+		if (file.is_open() == false)
+			return (403);
+
+		buffer << file.rdbuf();
+		_response = buffer.str();
+
+		file.close();
+	}
+	else if (_isAutoIndex) {
+		std::cout << "HERERERE\n\n\n\n\n\n\n" << std::endl;
+		buffer << AutoIndexGenerator::getPage(_path.c_str(),\
+			to_string(_hostPort.host), _hostPort.port);
+		_response = buffer.str();
+		std::cout << AutoIndexGenerator::getPage(_path.c_str(),\
+			to_string(_hostPort.host), _hostPort.port) << std::endl;
+	}
+	else
 		return (404);
-
-	file.open(_path.c_str(), std::ifstream::in);
-	if (file.is_open() == false)
-		return (403);
-
-	buffer << file.rdbuf();
-	_response = buffer.str();
-
-	file.close();
 
 	return (200);
 }

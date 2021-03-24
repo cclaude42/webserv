@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   AutoIndexGenerator.hpp                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: francisco <francisco@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/18 16:27:32 by user42            #+#    #+#             */
-/*   Updated: 2021/01/19 15:33:24 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/24 17:32:26 by francisco        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,7 @@
 # include <string>
 # include <sys/types.h>
 # include <dirent.h>
-# include "webserv.hpp"
-
+# include <sstream>
 class AutoIndexGenerator {
     public:
         AutoIndexGenerator(void);
