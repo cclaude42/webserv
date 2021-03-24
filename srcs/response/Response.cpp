@@ -6,7 +6,7 @@
 /*   By: francisco <francisco@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:18:58 by cclaude           #+#    #+#             */
-/*   Updated: 2021/03/24 18:13:51 by francisco        ###   ########.fr       */
+/*   Updated: 2021/03/24 18:35:48 by francisco        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -212,8 +212,7 @@ int				Response::readContent(void)
 		buffer << AutoIndexGenerator::getPage(_path.c_str(),\
 			to_string(_hostPort.host), _hostPort.port);
 		_response = buffer.str();
-		std::cout << AutoIndexGenerator::getPage(_path.c_str(),\
-			to_string(_hostPort.host), _hostPort.port) << std::endl;
+		_type = "text/html";
 	}
 	else
 		return (404);
