@@ -6,7 +6,7 @@
 /*   By: francisco <francisco@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:18:58 by cclaude           #+#    #+#             */
-/*   Updated: 2021/03/24 18:35:48 by francisco        ###   ########.fr       */
+/*   Updated: 2021/03/24 21:45:23 by francisco        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 
 void			Response::call(Request & request, RequestConfig & requestConf)
 {
+	_errorMap = requestConf.getErrorPage();
 	_isAutoIndex = requestConf.getAutoIndex();
 	_code = request.getRet();
 	_hostPort.host = requestConf.getHostPort().host;

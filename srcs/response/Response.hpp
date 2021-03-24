@@ -6,7 +6,7 @@
 /*   By: francisco <francisco@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:18:58 by cclaude           #+#    #+#             */
-/*   Updated: 2021/03/24 18:04:15 by francisco        ###   ########.fr       */
+/*   Updated: 2021/03/24 21:42:44 by francisco        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ private:
 	std::string			_type;
 	bool				_isAutoIndex;
 	t_listen			_hostPort;
+	std::map<int, std::string>	_errorMap;
 };
 
 #endif

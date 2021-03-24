@@ -6,7 +6,7 @@
 /*   By: francisco <francisco@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 18:41:01 by francisz          #+#    #+#             */
-/*   Updated: 2021/03/24 18:07:04 by francisco        ###   ########.fr       */
+/*   Updated: 2021/03/24 20:03:22 by francisco        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@
 class RequestConfig {
 	public:
 		RequestConfig(void);
-		RequestConfig(ConfigServer &config, Request &request, const std::string &path,  const std::string &method, const std::string &locationName = "");
+		RequestConfig(ConfigServer &config, Request &request, const std::string &path,  const std::string &method, std::string &locationName);
 		RequestConfig(RequestConfig const &src);
 		virtual ~RequestConfig(void);
 
@@ -53,7 +53,7 @@ class RequestConfig {
 		void								setHostPort(const t_listen hostPort);
 
 		// HELPERS
-		void								addIndex(Request& request);
+		std::string							addIndex(Request& request);
 
 	private:
 		std::string							_contentLocation; // public part of the path

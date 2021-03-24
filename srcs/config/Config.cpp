@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Config.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: francisco <francisco@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 14:30:01 by user42            #+#    #+#             */
-/*   Updated: 2021/03/17 15:12:07 by frthierr         ###   ########.fr       */
+/*   Updated: 2021/03/24 19:03:29 by francisco        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int     Config::parse(const char *filename) {
 			ConfigServer  server;
 			++i;
 			if (file[i] != "{") {
-				std::cerr << "Error: expecter '{' after server directive" << std::endl;
+				std::cerr << "Error: expected '{' after server directive" << std::endl;
 				return 1;
 			}
 			++i;

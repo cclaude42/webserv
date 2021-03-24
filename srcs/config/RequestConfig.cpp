@@ -6,7 +6,7 @@
 /*   By: francisco <francisco@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 13:20:34 by frthierr          #+#    #+#             */
-/*   Updated: 2021/03/24 18:06:50 by francisco        ###   ########.fr       */
+/*   Updated: 2021/03/24 21:31:07 by francisco        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,20 +16,32 @@ RequestConfig::RequestConfig(void) {
 	return ;
 }
 
-RequestConfig::RequestConfig(ConfigServer &config, Request &request, const std::string &path,  const std::string &method, const std::string &locationName):
+RequestConfig::RequestConfig(ConfigServer &config, Request &request, const std::string &path,  const std::string &method, std::string &locationName):
 _error_page(config.getErrorPage()),
 _client_body_buffer_size(config.getClientBodyBufferSize()),
 _cgi_param(config.getCgiParam()),
 _cgi_pass(config.getCgiPass()),
 _allowed_methods(config.getAllowedMethods()),
 _lang(""),
-_index(config.getIndex()),
+// _index(config.getIndex()),
 _autoindex(config.getAutoIndex())
 {
 	std::string	alias = config.getAlias();
 	std::string	root = config.getRoot();
 	std::string	ret;
 
+	std::vector<std::string> conf_index = config.getIndex();
+	for (std::vector<std::string>::const_iterator it = conf_index.begin();\
+		it != conf_index.end(); it++) {
+		std::vector<std::string>::const_iterator it2 = _index.begin();
+		for (it2 = _index.begin();\
+			it2 != _index.end(); it2++) {
+				if (*it == *it2)
+					break;
+			}
+		if (it2 == _index.end())
+			_index.push_back(*it);
+		}
 	for (std::map<std::string, std::string>::const_iterator it = request.getEnv().begin();\
 		it != request.getEnv().end(); it++) {
 			_cgi_param[it->first] = it->second;
@@ -43,10 +55,22 @@ _autoindex(config.getAutoIndex())
 		this->_contentLocation = removeAdjacentSlashes(path);
 	}
 	this->_path = removeAdjacentSlashes(ret);
-	// std::cout << "path : " << this->_path << "\n";
-	// std::cout << "method : " << method << "\n";
-	if (!pathIsFile(this->_path) && method == "GET")
-		this->addIndex(request);
+	std::string indexPath;
+	if (!pathIsFile(this->_path) && method == "GET") {
+		if ((indexPath = this->addIndex(request)) != "") {
+			if (indexPath.find('/') != indexPath.npos)
+				indexPath = indexPath.substr(indexPath.find_last_of('/'), indexPath.npos);
+			std::cerr << "indexPath:  "  + indexPath << '\n';
+			std::cerr << "requestPath:  "  + request.getPath() << '\n';
+			locationName = "";
+		
+			config = config.getLocationForRequest(indexPath, locationName);
+			RequestConfig	requestConfIndex(config, request, indexPath, method, locationName);
+			std::cerr << "INDEX:\n";
+			std::cerr << requestConfIndex;
+			*this = requestConfIndex;
+		}
+	}
 }
 
 RequestConfig::RequestConfig(RequestConfig const &src) {
@@ -152,7 +176,7 @@ void								RequestConfig::setHostPort(const t_listen hostPort){
 	this->_hostPort.host = hostPort.host;
 }
 
-void								RequestConfig::addIndex(Request& request)
+std::string								RequestConfig::addIndex(Request& request)
 {
 	std::vector<std::string>::iterator							it;
 	std::list<std::pair<std::string, float> >::const_iterator	lang;
@@ -167,19 +191,23 @@ void								RequestConfig::addIndex(Request& request)
 			if (path[path.size() - 1] != '/')
 				path += "/";
 			// path += "/"  + *it;
-			path += (*it).substr(0, (*it).find_last_of('.') + 1) + lang->first + (*it).substr((*it).find_last_of('.'));
+			if ((*it).find('.') != (*it).npos)
+				path += (*it).substr(0, (*it).find_last_of('.') + 1) + lang->first + (*it).substr((*it).find_last_of('.'));
 			if (pathIsFile(path))
 			{
 				this->_path = path;
-				if (this->_contentLocation[this->_contentLocation.size() - 1] != '/')
+				if (this->_contentLocation.size() && this->_contentLocation[this->_contentLocation.size() - 1] != '/')
 					this->_contentLocation += "/";
-				this->_contentLocation += (*it).substr(0, (*it).find_last_of('.') + 1) + lang->first + (*it).substr((*it).find_last_of('.'));
+				// NOT PROTECTED AGAINST INDEXES WITHOUT EXTENSION
+				if ((*it).find('.') != (*it).npos)
+					this->_contentLocation += (*it).substr(0, (*it).find_last_of('.') + 1) + lang->first + (*it).substr((*it).find_last_of('.'));
 				// std::cout << "Path |" << this->_path << "| valid\n";
-				return ;
+				return this->_path;
 			}
 		}
 		it++;
 	}
+
 	it = this->_index.begin();
 	while(it != this->_index.end()) // check with index file only
 	{
@@ -193,10 +221,11 @@ void								RequestConfig::addIndex(Request& request)
 			if (this->_contentLocation[this->_contentLocation.size() - 1] != '/')
 				this->_contentLocation += "/";
 			this->_contentLocation += *it;
-			return ;
+			return this->_path;
 		}
 		it++;
 	}
+	return "";
 }
 
 
