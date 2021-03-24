@@ -6,7 +6,7 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 17:10:06 by hbaudet           #+#    #+#             */
-/*   Updated: 2021/03/23 17:58:04 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/24 11:00:30 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,6 +194,7 @@ void				Request::setLang()
 {
 	std::vector<std::string>	token;
 	std::string					header;
+	size_t						i;
 
 	if ((header = this->_headers["Accept-Language"]) != "")
 	{
@@ -203,12 +204,13 @@ void				Request::setLang()
 			float			weight = 0.0;
 			std::string		lang;
 
-			lang = (*it).substr(0, (*it).find_first_of('-', 0));
-			std::cerr << GREEN << "Found lang : " << lang << RESET <<"\n";
-			if (size_t i = (*it).find_last_of(';', 0) != std::string::npos)
+			lang = (*it).substr(0, (*it).find_first_of('-'));
+			strip(lang, ' ');
+			if ( (i = lang.find_last_of(';') ) != std::string::npos)
 			{
-				weight = atof( (*it).substr(i + 1).c_str() );
+				weight = atof( (*it).substr(i + 4).c_str() );
 			}
+			lang.resize(i > 2 ? 2 : i);
 			this->_lang.push_back(std::pair<std::string, float>(lang, weight));
 		}
 		for (std::list<std::pair<std::string, float> >::iterator it = this->_lang.begin(); it != this->_lang.end(); it++)

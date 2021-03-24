@@ -6,7 +6,7 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:18:58 by cclaude           #+#    #+#             */
-/*   Updated: 2021/03/23 18:02:11 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/24 11:46:54 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,28 +55,42 @@ void			Response::getMethod(Request & request, RequestConfig & requestConf)
 {
 	ResponseHeader	head;
 
-	(void)request;
-	// if (requestConf.getCgiPass() != "")
-	// {
-	// 	CgiHandler	cgi(request, requestConf);
-
-	// 	std::cout << "Executing CGI\n";
-	// 	_response = cgi.executeCgi(requestConf.getCgiPass());
-	// 	std::cout << "Finished executing CGI\n";
-
-	// 	_code = 200;// Placeholder
-	// }
-	if  (_code == 200)
+	if (requestConf.getCgiPass() != "")
 	{
-		_code = readContent();
-	}
-	else
-	{
-		_response = "";
-	}
+		std::cerr << "Running cgi ...\n";
+		CgiHandler	cgi(request, requestConf);
+		size_t		i = 0;
+		size_t		j = _response.size() - 2;
 
+		_response = cgi.executeCgi(requestConf.getCgiPass());
+
+		while (_response.find("\r\n\r\n", i) != std::string::npos || _response.find("\r\n", i) == i)
+		{
+			std::string	str = _response.substr(i, _response.find("\r\n", i) - i);
+			if (str.find("Status: ") == 0)
+				_code = std::atoi(str.substr(8, 3).c_str());
+			else if (str.find("Content-Type: ") == 0)
+				_type = str.substr(14, str.size());
+			i += str.size() + 2;
+		}
+		while (_response.find("\r\n", j) == j)
+			j -= 2;
+
+		_response = _response.substr(i, j - i);
+	}
+	else {
+		if  (_code == 200)
+		{
+			_code = readContent();
+		}
+		else
+		{
+			_response = "";
+		}
+	}
 	if (_response != "")
-		_response += "\r\n";
+		_response = head.getHeader(_response.size(), _path, _code, requestConf.getContentLocation(), requestConf.getLang())
+					+ "\r\n" + _response;
 	else
 		_response = head.getHeader(_response.size(), _path, _code, requestConf.getContentLocation(), requestConf.getLang()) + "\r\n";
 }

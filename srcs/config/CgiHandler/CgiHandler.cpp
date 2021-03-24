@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CgiHandler.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/13 15:07:29 by frthierr          #+#    #+#             */
-/*   Updated: 2021/03/22 00:05:07 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/03/24 11:00:23 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,26 +53,15 @@ void		CgiHandler::_initEnv(Request &request, RequestConfig &config) {
 	this->_env["PATH_INFO"] = request.getPath(); //might need some change, using config path/contentLocation
 	this->_env["PATH_TRANSLATED"] = request.getPath(); //might need some change, using config path/contentLocation
 	this->_env["QUERY_STRING"] = request.getQuery();
-
-	// DANGER !!
-	std::cerr << YELLOW << "Before to_string config.getHostPort.host : " << config.getHostPort().host << RESET << '\n';
-	this->_env["REMOTEaddr"] = to_string(config.getHostPort().host); // UNINITIALIZED VALUE!!!!
-	// /DANGER
-
+	this->_env["REMOTEaddr"] = to_string(config.getHostPort().host);
 	this->_env["REMOTE_IDENT"] = headers["Authorization"];
 	this->_env["REMOTE_USER"] = headers["Authorization"];
 	this->_env["REQUEST_URI"] = request.getPath() + request.getQuery();
-
 	if (headers.find("Hostname") != headers.end())
 		this->_env["SERVER_NAME"] = headers["Hostname"];
 	else
 		this->_env["SERVER_NAME"] = this->_env["REMOTEaddr"];
-
-	// DANGER !!
-	std::cerr << YELLOW << "Before to_string config.getHostPort().port : " << config.getHostPort().port << RESET << '\n';
-	this->_env["SERVER_PORT"] = to_string(config.getHostPort().port);  // UNINITIALIZED VALUE!!!! 
-	// /DANGER
-
+	this->_env["SERVER_PORT"] = to_string(config.getHostPort().port); 
 	this->_env["SERVER_PROTOCOL"] = "HTTP/1.1";
 	this->_env["SERVER_SOFTWARE"] = "Weebserv/1.0";
 

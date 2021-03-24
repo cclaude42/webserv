@@ -8,7 +8,7 @@ CC = clang++
 
 CFLAGS = -Wall -Wextra -Werror -g -std=c++98 #-fsanitize=address
 
-# DEFINES = -D OUT=0 -D TIME=1
+DEFINES = -D OUT=1 #-D TIME=1
 
 ifeq ($(shell uname -s),Darwin)
 OS = mac

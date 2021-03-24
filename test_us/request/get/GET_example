@@ -1,5 +1,5 @@
 GET /index_example.html HTTP/1.1
 User-Agent: custom-client
 Host: weebserv
-Accept-Language: en-US, fr-CH, fr;q=0.2, de-DE;q=0.2
+Accept-Language: fr-CH, fr;q=0.9, en;q=0.8, de;q=0.7, *;q=0.5
 Connection: Keep-Alive

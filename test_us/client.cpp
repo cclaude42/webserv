@@ -142,7 +142,9 @@ void	send(int port, std::string filename)
 		return ;
 	}
 
+	content += "\r\n";
 	send(sock, content.c_str(), content.size(), 0);
+	std::cerr << RED << "SENT :\n" << content << '\n' << RESET;
 	read(sock, buffer, 4095);
 
 	std::cout << std::endl << "Response :" << std::endl;

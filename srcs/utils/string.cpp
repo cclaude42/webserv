@@ -6,7 +6,7 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/31 18:58:08 by cclaude           #+#    #+#             */
-/*   Updated: 2021/03/22 14:03:22 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/24 10:15:31 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,8 @@ std::string&					strip(std::string& str, char c)
 	while (i && str[i - 1] == c)
 		i--;
 	str.resize(i);
+	for (i = 0; str[i] == c; i++);
+	str = str.substr(i, std::string::npos);
 	return str;
 }
 
