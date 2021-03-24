@@ -6,7 +6,7 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/31 13:44:42 by cclaude           #+#    #+#             */
-/*   Updated: 2021/03/23 17:29:03 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/24 17:53:44 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,6 +120,7 @@ std::string&				pop(std::string& str);
 // UTILS
 int							pathIsFile(const std::string & path);
 void						timeit(std::string breakpoint);
+bool 						compare_langs(const std::pair<std::string, float> first, const std::pair<std::string, float> second);
 
 
 #endif
