@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RequestConfig.hpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: francisco <francisco@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 18:41:01 by francisz          #+#    #+#             */
-/*   Updated: 2021/03/23 17:52:22 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/24 17:09:02 by francisco        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ class RequestConfig {
 		const std::string&							getLang() const;
 		const std::set<std::string>				&getAllowedMethods() const;
 		const t_listen							&getHostPort() const;
+		const bool								&getAutoIndex() const;
 
 		//SETTERS
 		void								setPath(int code);

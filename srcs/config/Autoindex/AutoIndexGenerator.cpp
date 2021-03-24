@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   AutoIndexGenerator.cpp                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: francisco <francisco@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/18 16:29:01 by user42            #+#    #+#             */
-/*   Updated: 2021/01/19 15:33:02 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/24 17:33:06 by francisco        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,5 +61,8 @@ std::string         AutoIndexGenerator::getPage(const char *path, std::string co
 }
 
 std::string         AutoIndexGenerator::getLink(std::string const &dirEntry, std::string const &dirName, std::string const &host, int port) {
-    return "\t\t<p><a href=\"http://" + host + ":" + to_string(port) + dirName + "/" + dirEntry + "\">" + dirEntry + "</a></p>\n";  
+    std::stringstream   ss;
+    ss << "\t\t<p><a href=\"http://" + host + ":" <<\
+        port << dirName + "/" + dirEntry + "\">" + dirEntry + "</a></p>\n";
+    return ss.str();  
 }

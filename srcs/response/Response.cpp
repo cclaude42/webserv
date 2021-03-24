@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Response.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: francisco <francisco@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:18:58 by cclaude           #+#    #+#             */
-/*   Updated: 2021/03/24 11:46:54 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/24 17:16:00 by francisco        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ void			Response::call(Request & request, RequestConfig & requestConf)
 {
 	_code = request.getRet();
 	_path = requestConf.getPath();
+	_isAutoIndex = requestConf.getAutoIndex();
+	_hostPort = requestConf.getHostPort();
 
 	if (requestConf.getAllowedMethods().find(request.getMethod()) == requestConf.getAllowedMethods().end())
 		_code = 405;
@@ -192,17 +194,25 @@ int				Response::readContent(void)
 
 	_response = "";
 
-	if (pathIsFile(_path) == 0)
+	if (pathIsFile(_path)) {
+		file.open(_path.c_str(), std::ifstream::in);
+		if (file.is_open() == false)
+			return (403);
+
+		buffer << file.rdbuf();
+		_response = buffer.str();
+
+		file.close();
+	}
+	else if (this->_isAutoIndex) {
+			AutoIndexGenerator	gen;
+
+			buffer << gen.getPage(_path.c_str(), to_string(_hostPort.host), _hostPort.port);
+			_response = buffer.str();
+		}
+	else
 		return (404);
 
-	file.open(_path.c_str(), std::ifstream::in);
-	if (file.is_open() == false)
-		return (403);
-
-	buffer << file.rdbuf();
-	_response = buffer.str();
-
-	file.close();
 
 	return (200);
 }
@@ -258,7 +268,8 @@ Response & Response::operator=(const Response & src)
 
 // Constructors and destructors
 
-Response::Response(void)
+Response::Response(void):
+_isAutoIndex(false)
 {
 }
 
