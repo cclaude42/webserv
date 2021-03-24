@@ -6,7 +6,7 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 16:27:33 by hbaudet           #+#    #+#             */
-/*   Updated: 2021/03/23 17:28:20 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/24 17:30:42 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,16 +77,17 @@ class Request
 			Request&	operator=(const Request&);
 
 			/*** GETTERS ***/
-			const	std::map<std::string, std::string>&	getHeaders() const;
-			const	std::map<std::string, std::string>&	getEnv() const;
-			const	std::string&						getMethod() const;
-			const	std::string&						getVersion() const;
-			int											getRet() const;
-			const	std::string&						getBody() const;
-			int											getPort() const;
-			std::string									getPath() const;
-			std::string									getQuery() const;
-			std::string									getRaw() const;
+			const	std::map<std::string, std::string>&			getHeaders() const;
+			const	std::map<std::string, std::string>&			getEnv() const;
+			const	std::string&								getMethod() const;
+			const	std::string&								getVersion() const;
+			int													getRet() const;
+			const	std::string&								getBody() const;
+			int													getPort() const;
+			const std::string&									getPath() const;
+			const std::string&									getQuery() const;
+			const std::string&									getRaw() const;
+			const std::list<std::pair<std::string, float> >&	getLang() const;
 
 			/*** SETTERS **/
 		//	void	setHeader(const std::string& key, const std::string& value);

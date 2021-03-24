@@ -78,6 +78,7 @@ std::string		choose_target(void)
 	std::cout << "(c) Wrong permissions" << std::endl;
 	std::cout << "(d) Bonus (CGI)" << std::endl;
 	std::cout << "(e) Bad request" << RESET << std::endl;
+	std::cout << "(f) no_file" << RESET << std::endl;
 	getline(std::cin, choice);
 
 	if (choice == "a")
@@ -90,6 +91,8 @@ std::string		choose_target(void)
 		return ("_bonus");
 	else if (choice == "e")
 		return ("_bad");
+	else if (choice == "f")
+		return ("");
 	return ("_example");
 }
 

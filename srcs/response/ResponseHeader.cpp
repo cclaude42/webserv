@@ -6,7 +6,7 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 15:17:39 by cclaude           #+#    #+#             */
-/*   Updated: 2021/03/23 18:00:41 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/24 16:54:47 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,12 @@
 
 // Member functions
 
-std::string		ResponseHeader::getHeader(size_t size, const std::string& path, int code, const std::string& contentLocation, const std::string& lang)
+std::string		ResponseHeader::getHeader(size_t size, const std::string& path, int code, std::string type, const std::string& contentLocation, const std::string& lang)
 {
 	std::string	header;
 
 	resetValues();
-	setValues(size, path, code, contentLocation, lang);
+	setValues(size, path, code, type, contentLocation, lang);
 
 	header = "HTTP/1.1 " + to_string(code) + " " + getStatusMessage(code) + "\r\n";
 	header += writeHeader();
@@ -32,7 +32,7 @@ std::string		ResponseHeader::notAllowed(std::set<std::string> methods, const std
 	std::string	header;
 
 	resetValues();
-	setValues(0, path, code, path, lang);
+	setValues(0, path, code, "", path, lang);
 	setAllow(methods);
 
 	if (code == 405)
@@ -97,13 +97,13 @@ void			ResponseHeader::initErrorMap()
 	_errors[413] = "Payload Too Large";
 }
 
-void			ResponseHeader::setValues(size_t size, const std::string& path, int code, const std::string& contentLocation, const std::string& lang)
+void			ResponseHeader::setValues(size_t size, const std::string& path, int code, std::string type, const std::string& contentLocation, const std::string& lang)
 {
 	setAllow();
 	setContentLanguage(lang);
 	setContentLength(size);
 	setContentLocation(contentLocation, code);
-	setContentType(path);
+	setContentType(type, path);
 	setDate();
 	setLastModified(path);
 	setLocation(code, path);
@@ -167,11 +167,14 @@ void			ResponseHeader::setContentLocation(const std::string& path, int code)
 		_contentLocation = path;
 }
 
-void			ResponseHeader::setContentType(std::string type)
+void			ResponseHeader::setContentType(std::string type, std::string path)
 {
-	if (type == "")
+	if (type != "")
+	{
+		_contentType = type;
 		return ;
-	type = type.substr(type.rfind(".") + 1, type.size() - type.rfind("."));
+	}
+	type = path.substr(path.rfind(".") + 1, path.size() - path.rfind("."));
 	if (type == "html")
 		_contentType = "text/html";
 	else if (type == "css")

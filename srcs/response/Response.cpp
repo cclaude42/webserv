@@ -6,7 +6,7 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:18:58 by cclaude           #+#    #+#             */
-/*   Updated: 2021/03/24 11:46:54 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/24 16:57:10 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,9 +67,10 @@ void			Response::getMethod(Request & request, RequestConfig & requestConf)
 		while (_response.find("\r\n\r\n", i) != std::string::npos || _response.find("\r\n", i) == i)
 		{
 			std::string	str = _response.substr(i, _response.find("\r\n", i) - i);
+			std::cerr << "Found [" << str << "]" << std::endl;
 			if (str.find("Status: ") == 0)
 				_code = std::atoi(str.substr(8, 3).c_str());
-			else if (str.find("Content-Type: ") == 0)
+			else if (str.find("Content-type: ") == 0)
 				_type = str.substr(14, str.size());
 			i += str.size() + 2;
 		}
@@ -88,11 +89,12 @@ void			Response::getMethod(Request & request, RequestConfig & requestConf)
 			_response = "";
 		}
 	}
+	std::cerr << "TYPE IS" << _type << std::endl;
 	if (_response != "")
-		_response = head.getHeader(_response.size(), _path, _code, requestConf.getContentLocation(), requestConf.getLang())
+		_response = head.getHeader(_response.size(), _path, _code, _type, requestConf.getContentLocation(), requestConf.getLang())
 					+ "\r\n" + _response;
 	else
-		_response = head.getHeader(_response.size(), _path, _code, requestConf.getContentLocation(), requestConf.getLang()) + "\r\n";
+		_response = head.getHeader(_response.size(), _path, _code, _type, requestConf.getContentLocation(), requestConf.getLang()) + "\r\n";
 }
 
 void			Response::headMethod(RequestConfig & requestConf)
@@ -100,7 +102,7 @@ void			Response::headMethod(RequestConfig & requestConf)
 	ResponseHeader	head;
 
 	_code = readContent();
-	_response = head.getHeader(_response.size(), _path, _code, requestConf.getContentLocation(), requestConf.getLang());
+	_response = head.getHeader(_response.size(), _path, _code, _type, requestConf.getContentLocation(), requestConf.getLang());
 }
 
 void			Response::postMethod(Request & request, RequestConfig & requestConf)
@@ -134,7 +136,7 @@ void			Response::postMethod(Request & request, RequestConfig & requestConf)
 		_code = 204;
 		_response = "";
 	}
-	_response = head.getHeader(_response.size(), _path, _code, requestConf.getContentLocation(), requestConf.getLang()) + "\r\n" + _response;
+	_response = head.getHeader(_response.size(), _path, _code, _type, requestConf.getContentLocation(), requestConf.getLang()) + "\r\n" + _response;
 }
 
 void			Response::putMethod(std::string content, RequestConfig & requestConf)
@@ -142,7 +144,7 @@ void			Response::putMethod(std::string content, RequestConfig & requestConf)
 	ResponseHeader	head;
 
 	_code = writeContent(content);
-	_response = head.getHeader(_response.size(), _path, _code, requestConf.getContentLocation(), requestConf.getLang()) + "\r\n";
+	_response = head.getHeader(_response.size(), _path, _code, _type, requestConf.getContentLocation(), requestConf.getLang()) + "\r\n";
 }
 
 void			Response::deleteMethod(RequestConfig & requestConf)
@@ -159,7 +161,7 @@ void			Response::deleteMethod(RequestConfig & requestConf)
 	else
 		_code = 404;
 
-	_response = head.getHeader(_response.size(), _path, _code, requestConf.getContentLocation(), requestConf.getLang()) + "\r\n";
+	_response = head.getHeader(_response.size(), _path, _code, _type, requestConf.getContentLocation(), requestConf.getLang()) + "\r\n";
 }
 
 void			Response::connectMethod(RequestConfig & requestConf)
@@ -173,7 +175,7 @@ void			Response::optionsMethod(RequestConfig & requestConf)
 	ResponseHeader	head;
 
 	_code = readContent();
-	_response = head.getHeader(_response.size(), _path, _code, requestConf.getContentLocation(), requestConf.getLang()) + "\r\n";
+	_response = head.getHeader(_response.size(), _path, _code, _type, requestConf.getContentLocation(), requestConf.getLang()) + "\r\n";
 
 }
 

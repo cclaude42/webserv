@@ -6,7 +6,7 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 16:27:33 by hbaudet           #+#    #+#             */
-/*   Updated: 2021/03/22 14:08:34 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/24 17:30:56 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,20 +122,26 @@ int					Request::getPort() const
 	return this->_port;
 }
 
-std::string			Request::getPath() const
+const std::string&			Request::getPath() const
 {
 	return this->_path;
 }
 
-std::string			Request::getQuery() const
+const std::string&			Request::getQuery() const
 {
 	return this->_query;
 }
 
-std::string			Request::getRaw() const
+const std::string&			Request::getRaw() const
 {
 	return this->_raw;
 }
+
+const std::list<std::pair<std::string, float> >&	Request::getLang() const
+{
+	return this->_lang;
+}
+
 
 /*** SETTERS ***/
 

@@ -6,7 +6,7 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 13:20:34 by frthierr          #+#    #+#             */
-/*   Updated: 2021/03/23 17:53:37 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/24 17:48:16 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ RequestConfig::RequestConfig(void) {
 	return ;
 }
 
-RequestConfig::RequestConfig(ConfigServer &config, Request request, const std::string &path,  const std::string &method, const std::string &locationName):
+RequestConfig::RequestConfig(ConfigServer &config, Request &request, const std::string &path,  const std::string &method, const std::string &locationName):
 _error_page(config.getErrorPage()),
 _client_body_buffer_size(config.getClientBodyBufferSize()),
 _cgi_param(config.getCgiParam()),
@@ -46,11 +46,7 @@ _autoindex(config.getAutoIndex())
 	// std::cout << "path : " << this->_path << "\n";
 	// std::cout << "method : " << method << "\n";
 	if (!pathIsFile(this->_path) && method == "GET")
-		this->addIndex();
-	else if (method == "GET")
-	{
-
-	}
+		this->addIndex(request);
 }
 
 RequestConfig::RequestConfig(RequestConfig const &src) {
@@ -152,27 +148,51 @@ void								RequestConfig::setHostPort(const t_listen hostPort){
 	this->_hostPort.host = hostPort.host;
 }
 
-void								RequestConfig::addIndex()
+void								RequestConfig::addIndex(Request& request)
 {
-	std::vector<std::string>::iterator	it;
-	std::string							path;
+	std::vector<std::string>::iterator							it;
+	std::list<std::pair<std::string, float> >::const_iterator	lang;
+	std::string													path;
 
 	it = this->_index.begin();
-	while(it != this->_index.end())
+	while(it != this->_index.end()) // Check with language prefs
+	{
+		for (lang = request.getLang().begin(); lang != request.getLang().end(); lang++)
+		{
+			path = this->_path;
+			if (path[path.size() - 1] != '/')
+				path += "/";
+			// path += "/"  + *it;
+			path += (*it).substr(0, (*it).find_last_of('.') + 1) + lang->first + (*it).substr((*it).find_last_of('.'));
+			if (pathIsFile(path))
+			{
+				this->_path = path;
+				if (this->_contentLocation[this->_contentLocation.size() - 1] != '/')
+					this->_contentLocation += "/";
+				this->_contentLocation += (*it).substr(0, (*it).find_last_of('.') + 1) + lang->first + (*it).substr((*it).find_last_of('.'));
+				// std::cout << "Path |" << this->_path << "| valid\n";
+				return ;
+			}
+		}
+		it++;
+	}
+	it = this->_index.begin();
+	while(it != this->_index.end()) // check with index file only
 	{
 		path = this->_path;
-		path += "/"  + *it;
-		// std::cout << "Testing path ; " << path << '\n';
+		if (path[path.size() - 1] != '/')
+			path += "/";
+		path += *it;
 		if (pathIsFile(path))
 		{
 			this->_path = path;
-			this->_contentLocation += "/" + *it;
-			// std::cout << "Path |" << this->_path << "| valid\n";
+			if (this->_contentLocation[this->_contentLocation.size() - 1] != '/')
+				this->_contentLocation += "/";
+			this->_contentLocation += *it;
 			return ;
 		}
 		it++;
 	}
-	// std::cout << "No valid index to add\n";
 }
 
 

@@ -6,7 +6,7 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 15:17:39 by cclaude           #+#    #+#             */
-/*   Updated: 2021/03/23 18:00:29 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/24 16:52:03 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ public:
 	void			setContentLanguage(const std::string& lang = "");
 	void			setContentLength(size_t size);
 	void			setContentLocation(const std::string& path, int code);
-	void			setContentType(std::string type);
+	void			setContentType(std::string type, std::string path);
 	void			setDate(void);
 	void			setLastModified(const std::string& path);
 	void			setLocation(int code, const std::string& redirect);
@@ -39,10 +39,10 @@ public:
 	void			setWwwAuthenticate(int code);
 
 	// Member functions
-	std::string		getHeader(size_t size, const std::string& path, int code, const std::string& contentLocation, const std::string& lang);
+	std::string		getHeader(size_t size, const std::string& path, int code, std::string type, const std::string& contentLocation, const std::string& lang);
 	std::string		notAllowed(std::set<std::string> methods, const std::string& path, int code, const std::string& lang);
 	std::string		writeHeader(void);
-	void			setValues(size_t size, const std::string& path, int code, const std::string& contentLocation, const std::string& lang);
+	void			setValues(size_t size, const std::string& path, int code, std::string type, const std::string& contentLocation, const std::string& lang);
 	void			resetValues(void);
 	std::string		getStatusMessage(int code);
 
