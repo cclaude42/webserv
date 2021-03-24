@@ -6,7 +6,7 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 17:10:06 by hbaudet           #+#    #+#             */
-/*   Updated: 2021/03/24 11:00:30 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/24 17:54:02 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -213,6 +213,7 @@ void				Request::setLang()
 			lang.resize(i > 2 ? 2 : i);
 			this->_lang.push_back(std::pair<std::string, float>(lang, weight));
 		}
+		this->_lang.sort(compare_langs);
 		for (std::list<std::pair<std::string, float> >::iterator it = this->_lang.begin(); it != this->_lang.end(); it++)
 			std::cerr << YELLOW << (*it).first << " - " << (*it).second << RESET << '\n';
 	}

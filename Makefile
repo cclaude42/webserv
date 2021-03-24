@@ -44,7 +44,7 @@ RESPONSE = Response ResponseHeader
 
 SERVER = Server Cluster
 
-TOOLS = ntoh string pathIsFile
+TOOLS = ntoh string pathIsFile list_sort
 
 ##################################################
 # SRC
