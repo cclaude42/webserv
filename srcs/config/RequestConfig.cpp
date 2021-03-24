@@ -6,7 +6,7 @@
 /*   By: francisco <francisco@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 13:20:34 by frthierr          #+#    #+#             */
-/*   Updated: 2021/03/24 21:31:07 by francisco        ###   ########.fr       */
+/*   Updated: 2021/03/24 22:00:55 by francisco        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,8 @@ _autoindex(config.getAutoIndex())
 	if (!pathIsFile(this->_path) && method == "GET") {
 		if ((indexPath = this->addIndex(request)) != "") {
 			if (indexPath.find('/') != indexPath.npos)
-				indexPath = indexPath.substr(indexPath.find_last_of('/'), indexPath.npos);
+				indexPath = removeAdjacentSlashes(request.getPath() +\
+				indexPath.substr(indexPath.find_first_of('/'), indexPath.npos));
 			std::cerr << "indexPath:  "  + indexPath << '\n';
 			std::cerr << "requestPath:  "  + request.getPath() << '\n';
 			locationName = "";
