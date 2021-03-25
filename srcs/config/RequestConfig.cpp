@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RequestConfig.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 13:20:34 by frthierr          #+#    #+#             */
-/*   Updated: 2021/03/25 12:23:24 by frthierr         ###   ########.fr       */
+/*   Updated: 2021/03/25 13:21:09 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,12 +58,6 @@ _autoindex(config.getAutoIndex())
 			config = config.getLocationForRequest(indexPath, locationName);
 			this->_cgi_pass = config.getCgiPass();
 			this->_cgi_param = config.getCgiParam();
-			std::cout << "SERVER CONF BEGIN" << std::endl;
-			std::cout << config	 << std::endl;
-			std::cout << "SERVER CONF END" << std::endl;
-
-			std::cerr << "OG" << '\n' << *this << "\n";
-			std::cerr << "END" << '\n';
 		}
 	}
 }

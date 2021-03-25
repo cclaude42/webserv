@@ -6,7 +6,7 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:18:58 by cclaude           #+#    #+#             */
-/*   Updated: 2021/03/25 12:40:12 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/25 13:22:34 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,6 @@ void			Response::call(Request & request, RequestConfig & requestConf)
 	_hostPort.port = requestConf.getHostPort().port;
 	_path = requestConf.getPath();
 
-	for (std::set<std::string>::iterator it = requestConf.getAllowedMethods().begin(); it != requestConf.getAllowedMethods().end(); it++)
-		std::cerr << *it << '\n';
 	if (requestConf.getAllowedMethods().find(request.getMethod()) == requestConf.getAllowedMethods().end())
 		_code = 405;
 	else if (requestConf.getClientBodyBufferSize() < request.getBody().size())
