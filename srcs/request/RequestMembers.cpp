@@ -6,7 +6,7 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 17:10:06 by hbaudet           #+#    #+#             */
-/*   Updated: 2021/03/25 14:18:58 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/03/25 16:54:53 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,6 +175,8 @@ int					Request::parse(const std::string& str)
 		if (key.find("Secret") != std::string::npos)
 			this->_env_for_cgi[formatHeaderForCGI(key)] = value;
 	}
+	if (this->_headers["Www-Authenticate"] != "")
+		this->_env_for_cgi["Www-Authenticate"] = this->_headers["Www-Authenticate"];
 	this->_bodBeg = std::string::const_iterator(str.begin() + i);
 	this->_bodEnd = str.end();
 	this->setLang();
