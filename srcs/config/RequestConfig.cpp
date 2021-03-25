@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RequestConfig.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: francisco <francisco@student.42.fr>        +#+  +:+       +#+        */
+/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 13:20:34 by frthierr          #+#    #+#             */
-/*   Updated: 2021/03/24 22:00:55 by francisco        ###   ########.fr       */
+/*   Updated: 2021/03/25 10:56:54 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,18 +58,19 @@ _autoindex(config.getAutoIndex())
 	std::string indexPath;
 	if (!pathIsFile(this->_path) && method == "GET") {
 		if ((indexPath = this->addIndex(request)) != "") {
-			if (indexPath.find('/') != indexPath.npos)
-				indexPath = removeAdjacentSlashes(request.getPath() +\
-				indexPath.substr(indexPath.find_first_of('/'), indexPath.npos));
-			std::cerr << "indexPath:  "  + indexPath << '\n';
-			std::cerr << "requestPath:  "  + request.getPath() << '\n';
-			locationName = "";
+			// if (indexPath.find('/') != indexPath.npos)
+			// 	indexPath = removeAdjacentSlashes(request.getPath() +\
+			// 	indexPath.substr(indexPath.find_first_of('/'), indexPath.npos));
+			// std::cerr << "indexPath:  "  + indexPath << '\n';
+			// std::cerr << "contentLocation:  "  + this->_contentLocation << '\n';
+			// std::cerr << "requestPath:  "  + request.getPath() << '\n';
+			// locationName = "";
 		
-			config = config.getLocationForRequest(indexPath, locationName);
-			RequestConfig	requestConfIndex(config, request, indexPath, method, locationName);
-			std::cerr << "INDEX:\n";
-			std::cerr << requestConfIndex;
-			*this = requestConfIndex;
+			// config = config.getLocationForRequest(indexPath, locationName);
+			// RequestConfig	requestConfIndex(config, request, indexPath, method, locationName);
+			// // std::cerr << "INDEX:\n";
+			// // std::cerr << requestConfIndex;
+			// *this = requestConfIndex;
 		}
 	}
 }
@@ -191,7 +192,6 @@ std::string								RequestConfig::addIndex(Request& request)
 			path = this->_path;
 			if (path[path.size() - 1] != '/')
 				path += "/";
-			// path += "/"  + *it;
 			if ((*it).find('.') != (*it).npos)
 				path += (*it).substr(0, (*it).find_last_of('.') + 1) + lang->first + (*it).substr((*it).find_last_of('.'));
 			if (pathIsFile(path))
