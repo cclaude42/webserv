@@ -6,7 +6,7 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 17:10:06 by hbaudet           #+#    #+#             */
-/*   Updated: 2021/03/24 17:54:02 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/25 14:18:58 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 void				Request::displayHeaders() const
 {
-	std::cout << *this;
 }
 
 std::ostream&		operator<<(std::ostream& os, const Request& re)
@@ -72,7 +71,7 @@ int					Request::readFirstLine(const std::string& str)
 	if (i == std::string::npos)
 	{
 		this->_ret = 400;
-		std::cout << "RFL no space after method" << '\n';
+		std::cerr << RED << "RFL no space after method" << RESET << std::endl;
 		return 400;
 	}
 	this->_method.assign(line, 0, i);
@@ -86,13 +85,13 @@ int					Request::readPath(const std::string& line, size_t i)
 	if ((j = line.find_first_not_of(' ', i)) == std::string::npos)
 	{
 		this->_ret = 400;
-		std::cout << "No PATH / HTTP version\n";
+		std::cerr << RED << "No PATH / HTTP version" << RESET << std::endl;
 		return 400;
 	}
 	if ((i = line.find_first_of(' ', j)) == std::string::npos)
 	{
 		this->_ret = 400;
-		std::cout << "No HTTP version\n";
+		std::cerr << RED << "No HTTP version" << RESET << std::endl;
 		return 400;
 	}
 	this->_path.assign(line, j, i - j);
@@ -104,7 +103,7 @@ int					Request::readVersion(const std::string& line, size_t i)
 	if ((i = line.find_first_not_of(' ', i)) == std::string::npos)
 	{
 		this->_ret = 400;
-		std::cout << "No HTTP version\n";
+		std::cerr << RED << "No HTTP version" << RESET << std::endl;
 		return 400;
 	}
 	if (line[i] == 'H' && line[i + 1] == 'T' && line[i + 2] == 'T' &&
@@ -113,7 +112,7 @@ int					Request::readVersion(const std::string& line, size_t i)
 	if (this->_version != "1.0" && this->_version != "1.1")
 	{
 		this->_ret = 400;
-		std::cout << "BAD HTTP VERSION (" << this->_version << ")\n";
+		std::cerr << RED << "BAD HTTP VERSION (" << this->_version << ")" << RESET << std::endl;
 		return (this->_ret);
 	}
 	return (this->checkMethod());
@@ -124,7 +123,7 @@ int					Request::checkMethod()
 	for (size_t i = 0; i < this->methods.size(); i++)
 		if (this->methods[i] == this->_method)
 			return this->_ret;
-	std::cout << "Invalid method requested\n";
+	std::cerr << RED << "Invalid method requested" << RESET << std::endl;
 	this->_ret = 400;
 	return this->_ret;
 }
@@ -184,8 +183,8 @@ int					Request::parse(const std::string& str)
 }
 
 /*
-**	"Cet en-tête est une indication destinée à être utilisée lorsque le serveur 
-**	n'a aucun moyen de déterminer la langue d'une autre manière, comme une URL 
+**	"Cet en-tête est une indication destinée à être utilisée lorsque le serveur
+**	n'a aucun moyen de déterminer la langue d'une autre manière, comme une URL
 **	spécifique, qui est contrôlée par une décision explicite de l'utilisateur.
 **	Il est recommandé que le serveur ne passe jamais outre une décision explicite."
 */
@@ -214,8 +213,6 @@ void				Request::setLang()
 			this->_lang.push_back(std::pair<std::string, float>(lang, weight));
 		}
 		this->_lang.sort(compare_langs);
-		for (std::list<std::pair<std::string, float> >::iterator it = this->_lang.begin(); it != this->_lang.end(); it++)
-			std::cerr << YELLOW << (*it).first << " - " << (*it).second << RESET << '\n';
 	}
 }
 

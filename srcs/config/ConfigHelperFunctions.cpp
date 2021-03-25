@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ConfigHelperFunctions.cpp                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/18 14:28:07 by user42            #+#    #+#             */
-/*   Updated: 2021/03/01 12:24:51 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/25 14:16:49 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,9 +48,8 @@ std::string	removeAdjacentSlashes(const std::string &str) {
 		}
 		else {
 			lastIsSlash = false;
-			ret.push_back(str[i]);	
+			ret.push_back(str[i]);
 		}
 	}
-	// std::cout << "removed slashes : " << RED << ret << '\n' << RESET;
 	return ret;
 }

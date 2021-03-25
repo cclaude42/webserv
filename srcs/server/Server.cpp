@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:29:28 by cclaude           #+#    #+#             */
-/*   Updated: 2021/03/22 15:08:54 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/25 15:31:28 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,18 +78,16 @@ void		Server::process(long socket, Config & conf)
 			std::cout << "\nRequest :" << std::endl << "[" << YELLOW << _requests[socket].substr(0, 1000) << "..." << _requests[socket].substr(_requests[socket].size() - 10, 15) << RESET << "]" << std::endl;
 	}
 
-	timeit("Process");
 	if (_requests[socket] != "")
 	{
 		if (request.parse(_requests[socket]) != 200)
 			request.setMethod("GET");
-		timeit("Parse");
 		_requests.erase(socket);
 
 		requestConf = conf.getConfigForRequest(this->_listen,  request.getPath(), request.getHeaders().at("Host"), request.getMethod(), request);
-		timeit("Conf");
+
 		response.call(request, requestConf);
-		timeit("Response");
+
 		_requests.insert(std::make_pair(socket, response.getResponse()));
 	}
 }
@@ -132,7 +130,6 @@ int			Server::recv(long socket)
 	{
 		if ((!checkStart(_requests[socket], "POST") || !checkStart(_requests[socket], "PUT")) && countSubstr(_requests[socket], "\r\n\r\n") < 2)
 			return (1);
-		timeit("READ");
 		return (0);
 	}
 
@@ -144,7 +141,6 @@ void		Server::send(long socket)
 	int		ret = 0;
 	size_t	sent = 0;
 
-	timeit("SEND");
 	if (OUT)
 	{
 		if (_requests[socket].size() < 1000)

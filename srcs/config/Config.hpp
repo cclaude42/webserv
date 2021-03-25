@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Config.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 14:29:38 by user42            #+#    #+#             */
-/*   Updated: 2021/03/25 12:07:21 by frthierr         ###   ########.fr       */
+/*   Updated: 2021/03/25 14:22:12 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 # define CONFIG_HPP
 
-
 # include "webserv.hpp"
+
 # include "ConfigDataStructures.hpp"
 # include "ConfigHelperFunctions.hpp"
 # include "ConfigReader.hpp"

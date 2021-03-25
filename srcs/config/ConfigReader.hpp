@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ConfigReader.hpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 14:33:47 by user42            #+#    #+#             */
-/*   Updated: 2021/03/25 12:01:19 by frthierr         ###   ########.fr       */
+/*   Updated: 2021/03/25 14:20:52 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,7 @@
 
 # define CONFIG_READER_HPP
 
-# include <iostream>
-# include <string>
-# include <vector>
-# include <sstream>
-# include <fcntl.h>
-# include <unistd.h>
+# include "webserv.hpp"
 
 # define READER_BUFFER_SIZE 1024
 

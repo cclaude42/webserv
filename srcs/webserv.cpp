@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   webserv.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/31 20:40:00 by cclaude           #+#    #+#             */
-/*   Updated: 2021/03/25 12:18:28 by frthierr         ###   ########.fr       */
+/*   Updated: 2021/03/25 14:07:19 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int		main(int ac, char **av)
 	}
 	else
 	{
-		std::cerr << "Invalid number of argument." << std::endl;
+		std::cerr << RED << "Invalid number of arguments." << RESET << std::endl;
 		return (1);
 	}
 	return (0);

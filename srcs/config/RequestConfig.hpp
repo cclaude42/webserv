@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RequestConfig.hpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: francisz <francisz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 18:41:01 by francisz          #+#    #+#             */
-/*   Updated: 2021/03/25 11:20:42 by frthierr         ###   ########.fr       */
+/*   Updated: 2021/03/25 14:21:49 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,10 @@
 
 # define REQUEST_CONFIG_HPP
 
-#include "webserv.hpp"
-#include "Request.hpp"
+# include "webserv.hpp"
+
+# include "Request.hpp"
 # include "Config.hpp"
-# include "fstream"
-# include <sys/types.h>
-# include <sys/stat.h>
-# include <unistd.h>
 
 
 class RequestConfig {

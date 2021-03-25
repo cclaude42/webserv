@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Config.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 14:30:01 by user42            #+#    #+#             */
-/*   Updated: 2021/03/25 12:40:44 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/25 14:14:17 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ Config::Config(std::string	defaultServerPath) {
 		ConfigServer::_initDefaultServer(defaultServerPath.c_str());
 	}
 	catch (ConfigReader::FileNotFoundException &e) {
-		std::cerr << "Could not open default config file\n";
+		std::cerr << RED << "Could not open default config file." << RESET << std::endl;
 	}
 	return ;
 }
@@ -41,7 +41,7 @@ Config::~Config(void) {
 std::vector<ConfigServer>		Config::getServers() const {
 	return this->_servers;
 }
-	
+
 int     Config::parse(const char *filename) {
 	fileVector				   file;
 	unsigned int               fileSize;
@@ -53,18 +53,18 @@ int     Config::parse(const char *filename) {
 			ConfigServer  server;
 			++i;
 			if (file[i] != "{") {
-				std::cerr << "Error: expected '{' after server directive" << std::endl;
+				std::cerr << RED << "Error: expected '{' after server directive." << RESET << std::endl;
 				return 1;
 			}
 			++i;
 			if (!server.parseServer(i, file)) {
-				std::cerr << "Error: error in config file \"" << filename << "\"" <<  std::endl;
-				return 1;			
+				std::cerr << RED << "Error: error in config file [" << filename << "]" << RESET <<  std::endl;
+				return 1;
 			}
 			this->_servers.push_back(server);
 		}
 		else {
-			std::cerr << "Error: unknown directive " << file[i] << std::endl;
+			std::cerr << RED << "Error: unknown directive [" << file[i] << "]" << RESET << std::endl;
 			return 1;
 		}
 	}
@@ -123,7 +123,7 @@ std::ostream	&operator<<(std::ostream &out, const Config &config) {
 
 std::vector<t_listen>				Config::getAllListens() const {
 	std::vector<t_listen>	ret;
-	
+
 	for (std::vector<ConfigServer>::const_iterator server = this->_servers.begin(); server != this->_servers.end(); server++) {
 		std::vector<t_listen>	listenVec = server->getListen();
 		for (std::vector<t_listen>::iterator listen = listenVec.begin(); listen != listenVec.end(); listen++) {

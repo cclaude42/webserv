@@ -6,7 +6,7 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 13:20:34 by frthierr          #+#    #+#             */
-/*   Updated: 2021/03/25 13:21:09 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/25 16:45:16 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,7 +189,6 @@ std::string								RequestConfig::addIndex(Request& request)
 				// NOT PROTECTED AGAINST INDEXES WITHOUT EXTENSION
 				if ((*it).find('.') != (*it).npos)
 					this->_contentLocation += (*it).substr(0, (*it).find_last_of('.') + 1) + lang->first + (*it).substr((*it).find_last_of('.'));
-				// std::cout << "Path |" << this->_path << "| valid\n";
 				return this->_path;
 			}
 		}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Cluster.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/12 16:53:41 by cclaude           #+#    #+#             */
-/*   Updated: 2021/03/25 12:41:13 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/25 14:00:34 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,15 +56,9 @@ void	Cluster::run(void)
 {
 	std::string	dot[3] = {".  ", ".. ", "..."};
 	int			n = 0;
-	// int			counter = 0;
 
 	while (1)
 	{
-		// counter++;
-		// if (counter == 150000)
-		// 	break ;
-		// else if (counter % 10000 == 0)
-		// 	std::cerr << RED << "10000 rounds have passed\n" << RESET;
 		fd_set		reading_set;
 		fd_set		writing_set;
 		struct timeval	timeout;

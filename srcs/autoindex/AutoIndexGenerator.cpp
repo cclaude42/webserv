@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   AutoIndexGenerator.cpp                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: francisco <francisco@student.42.fr>        +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/18 16:29:01 by user42            #+#    #+#             */
-/*   Updated: 2021/03/24 17:33:06 by francisco        ###   ########.fr       */
+/*   Updated: 2021/03/25 14:13:14 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ std::string         AutoIndexGenerator::getPage(const char *path, std::string co
     <p>\n";
 
     if (dir == NULL) {
-        std::cerr << "Error: could not open " << path << std::endl;
+        std::cerr << RED << "Error: could not open [" << path << "]" << RESET << std::endl;
         return "";
     }
     if (dirName[0] != '/')
@@ -64,5 +64,5 @@ std::string         AutoIndexGenerator::getLink(std::string const &dirEntry, std
     std::stringstream   ss;
     ss << "\t\t<p><a href=\"http://" + host + ":" <<\
         port << dirName + "/" + dirEntry + "\">" + dirEntry + "</a></p>\n";
-    return ss.str();  
+    return ss.str();
 }

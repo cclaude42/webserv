@@ -6,7 +6,7 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 16:27:33 by hbaudet           #+#    #+#             */
-/*   Updated: 2021/03/24 17:30:56 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/25 15:27:24 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,9 @@ std::vector<std::string>		Request::initMethods()
 	methods.push_back("POST");
 	methods.push_back("PUT");
 	methods.push_back("DELETE");
-	methods.push_back("CONNECT");
 	methods.push_back("OPTIONS");
 	methods.push_back("TRACE" );
-	
+
 	return methods;
 }
 
@@ -34,42 +33,30 @@ std::vector<std::string>	Request::methods = Request::initMethods();
 Request::Request() :
 	_method(""), _version(""), _ret(200), _body(""), _port(80), _path(""), _query(""), _raw("")
 {
-	if (PRINT)
-		std::cout << "Constructor called\n";
-
 	this->resetHeaders();
 }
 
 Request::Request(const std::string& str) :
 	_method (""), _version(""), _ret(200), _body(""), _port(80), _path(""), _query(""), _raw("")
 {
-	if (PRINT)
-		std::cout << "std:string constructor called\n";
-
 	this->resetHeaders();
 	this->_env_for_cgi.clear();
-	this->parse(str); 
+	this->parse(str);
 	if (this->_ret != 200)
-		std::cout << "Parse error : " << this->_ret << '\n';
+		std::cerr << RED << "Parse error : " << this->_ret << RESET << std::endl;
 }
 
 Request::~Request()
 {
-	if (PRINT)
-		std::cout << "Destructor called\n";
 }
 
 Request::Request(const Request& obj)
 {
-	if (PRINT)
-		std::cout << "Copy Constructor called\n";
 	*this = obj;
 }
 
 Request&	Request::operator=(const Request& obj)
 {
-	if (PRINT)
-		std::cout << "Assignation operator called\n";
 	this->_headers = obj.getHeaders();
 	this->_env_for_cgi = obj.getEnv();
 	this->_method = obj.getMethod();
@@ -111,9 +98,6 @@ int					Request::getRet() const
 
 const std::string&	Request::getBody() const
 {
-	// std::string test(this->_bodBeg, this->_bodEnd);
-
-	// std::cerr << YELLOW << "body (" << test.size() << ") - |" << test.substr(0, 20) << "|\n";
 	return this->_body;
 }
 
