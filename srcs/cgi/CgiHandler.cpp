@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CgiHandler.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/13 15:07:29 by frthierr          #+#    #+#             */
-/*   Updated: 2021/03/25 12:39:35 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/25 15:36:20 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void		CgiHandler::_initEnv(Request &request, RequestConfig &config) {
 		this->_env["SERVER_NAME"] = headers["Hostname"];
 	else
 		this->_env["SERVER_NAME"] = this->_env["REMOTEaddr"];
-	this->_env["SERVER_PORT"] = to_string(config.getHostPort().port); 
+	this->_env["SERVER_PORT"] = to_string(config.getHostPort().port);
 	this->_env["SERVER_PROTOCOL"] = "HTTP/1.1";
 	this->_env["SERVER_SOFTWARE"] = "Weebserv/1.0";
 
@@ -92,7 +92,7 @@ std::string		CgiHandler::executeCgi(const std::string& scriptName) {
 		env = this->_getEnvAsCstrArray();
 	}
 	catch (std::bad_alloc &e) {
-		std::cout << e.what() << std::endl;
+		std::cerr << RED << e.what() << RESET << std::endl;
 	}
 
 	// SAVING STDIN AND STDOUT IN ORDER TO TURN THEM BACK TO NORMAL LATER
@@ -111,7 +111,10 @@ std::string		CgiHandler::executeCgi(const std::string& scriptName) {
 	pid = fork();
 
 	if (pid == -1)
-		std::cerr << "Fork crashed, plz handle error senpai\n";
+	{
+		std::cerr << RED << "Fork crashed." << RESET << std::endl;
+		return ("Status: 500\r\n\r\n");
+	}
 	else if (!pid)
 	{
 		char * const * nll = NULL;
@@ -119,7 +122,8 @@ std::string		CgiHandler::executeCgi(const std::string& scriptName) {
 		dup2(fdIn, STDIN_FILENO);
 		dup2(fdOut, STDOUT_FILENO);
 		execve(scriptName.c_str(), nll, env);
-		std::cerr << "Execve crashed, errno : " << errno << "\n";
+		std::cerr << RED << "Execve crashed." << RESET << std::endl;
+		write(STDOUT_FILENO, "Status: 500\r\n\r\n", 15);
 	}
 	else
 	{
@@ -133,7 +137,6 @@ std::string		CgiHandler::executeCgi(const std::string& scriptName) {
 		{
 			memset(buffer, 0, CGI_BUFSIZE);
 			ret = read(fdOut, buffer, CGI_BUFSIZE - 1);
-			// std::cerr << "Reading " << ret << " characters from file" << std::endl;
 			newBody += buffer;
 		}
 	}

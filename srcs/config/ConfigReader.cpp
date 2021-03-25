@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ConfigReader.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 14:34:43 by user42            #+#    #+#             */
-/*   Updated: 2021/03/25 12:04:21 by frthierr         ###   ########.fr       */
+/*   Updated: 2021/03/25 14:18:34 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,6 @@ fileVector	ConfigReader::readFile(const char *filename) {
 	int							fd;
 	fileVector					file;
 
-	std::cout << "FILENAME " << filename << std::endl;
 	for (int i = 0; i < READER_BUFFER_SIZE + 1;  i++)
 		buffer[i] = '\0';
 	if ((fd = open(filename, O_RDONLY)) <= 0)
@@ -72,7 +71,7 @@ fileVector	ConfigReader::readFile(const char *filename) {
 
 	//	Get the last line, which is ignored otherwise
 	if (ret == -1) {
-		std::cerr << "error reading file" << std::endl;
+		std::cerr << RED << "Error while reading config file." << RESET << std::endl;
 		return file;
 	}
 	file = ConfigReader::split(line, std::string(" \n\t"));

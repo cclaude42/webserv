@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ConfigServer.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 15:28:08 by user42            #+#    #+#             */
-/*   Updated: 2021/03/25 12:02:06 by frthierr         ###   ########.fr       */
+/*   Updated: 2021/03/25 14:18:40 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,10 +52,10 @@ parseMap ConfigServer::locationParsingMap = ConfigServer::_initLocationMap();
 ConfigServer				ConfigServer::_initDefaultServer(const char *filename) {
 	ConfigServer	server;
 	fileVector		file;
-	
+
 	file = ConfigReader::readFile(filename);
 	if (file.empty()) {
-		std::cerr << "Could not open default file at location " << filename << std::endl;
+		std::cerr << RED << "Could not open default file at location [" << filename << "]" << RESET << std::endl;
 		throw ConfigReader::FileNotFoundException();
 	}
 	fileVector	begin;
@@ -65,7 +65,7 @@ ConfigServer				ConfigServer::_initDefaultServer(const char *filename) {
 	file.insert(file.end(), "}");
 	unsigned int	index = 2;
 	if (!server.parseServer(index, file)) {
-		std::cerr << "invalid default file" << std::endl;
+		std::cerr << RED << "Invalid default config file." << RESET << std::endl;
 		throw ConfigServer::ExceptionInvalidArguments();
 	}
 	ConfigServer::_defaultServer = server;
@@ -85,10 +85,10 @@ _aliasSet(false)
 
 ConfigServer::ConfigServer(ConfigServer const &src) {
 	if (this != &src) {
-		this->_listen = src._listen;		
-		this->_root = src._root;		
-		this->_server_name = src._server_name;		
-		this->_error_page = src._error_page;		
+		this->_listen = src._listen;
+		this->_root = src._root;
+		this->_server_name = src._server_name;
+		this->_error_page = src._error_page;
 		this->_client_body_buffer_size = src._client_body_buffer_size;
 		this->_cgi_param = src._cgi_param;
 		this->_cgi_pass = src._cgi_pass;
@@ -137,7 +137,7 @@ int     ConfigServer::parseServer(unsigned int &index, fileVector &file) {
 			if (file[index] == "location") {
 				ConfigServer	location;
 				std::string	locationName;
-				
+
 				if (directive != "") {
 					(this->*ConfigServer::serverParsingMap[directive])(args);
 					args.clear();
@@ -150,7 +150,6 @@ int     ConfigServer::parseServer(unsigned int &index, fileVector &file) {
 				index++;
 				if (!location.parseLocation(index, file))
 					return 0;
-				// std::cout << "LOCATION::PARSE END" << std::endl;
 				this->_location[locationName] = location;
 				if (file[index] == "}")
 					continue ;
@@ -214,17 +213,15 @@ int     ConfigServer::parseLocation(unsigned int &index, fileVector &file) {
 	parseMap::iterator          iter;
 	std::string                 directive = "";
 
-	// std::cout << "IN LOCATION::PARSE" << std::endl;
 	if (file[index++] != "{")
 		return 0;
-	// std::cout << "index: " << file[index] << std::endl;
 	//	calling the function that corresponds to a directive with its args as parameters
 	for ( ; index < file.size() && file[index] != "}" ; index++) {
 		if ((iter = ConfigServer::locationParsingMap.find(file[index])) == ConfigServer::locationParsingMap.end()) {
 			if (file[index] == "location") {
 				ConfigServer	location;
 				std::string		locationName;
-				
+
 				if (directive != "") {
 					(this->*ConfigServer::locationParsingMap[directive])(args);
 					args.clear();
@@ -268,7 +265,7 @@ int     ConfigServer::parseLocation(unsigned int &index, fileVector &file) {
 void        ConfigServer::addListen(std::vector<std::string> args) {
 	t_listen    listen;
 	size_t      separator;
-	
+
 	if (args.size() != 1)
 		throw ConfigServer::ExceptionInvalidArguments();
 	if ((separator = args[0].find(":")) == std::string::npos) {
@@ -295,14 +292,12 @@ void        ConfigServer::addListen(std::vector<std::string> args) {
 }
 
 void        ConfigServer::addRoot(std::vector<std::string> args) {
-	// std::cout << "in addRoot" << std::endl;
 	if (args.size() != 1 || this->_root != "")
 		throw ConfigServer::ExceptionInvalidArguments();
 	this->_root = args[0];
 }
 
 void        ConfigServer::addServerName(std::vector<std::string> args) {
-	// std::cout << "in addServerName" << std::endl;
 	if (args.size() == 0)
 		throw ConfigServer::ExceptionInvalidArguments();
 	for (unsigned int i = 0; i < args.size(); i++)
@@ -310,11 +305,10 @@ void        ConfigServer::addServerName(std::vector<std::string> args) {
 }
 
 void        ConfigServer::addErrorPage(std::vector<std::string> args) {
-	// std::cout << "in addErrorPage" << std::endl;
 	std::vector<int>	codes;
 	std::string			uri = "";
 	size_t				len = args.size();
-	
+
 	for (size_t i = 0; i < len; i++) {
 		if (isDigits(args[i]))
 			codes.push_back(ft_atoi(args[i].c_str()));
@@ -323,7 +317,7 @@ void        ConfigServer::addErrorPage(std::vector<std::string> args) {
 		else if (i == len - 1)
 			uri = args[i];
 		else
-			throw ConfigServer::ExceptionInvalidArguments();		
+			throw ConfigServer::ExceptionInvalidArguments();
 	}
 	if (uri == "")
 		throw ConfigServer::ExceptionInvalidArguments();
@@ -332,7 +326,6 @@ void        ConfigServer::addErrorPage(std::vector<std::string> args) {
 }
 
 void        ConfigServer::addClientBodyBufferSize(std::vector<std::string> args) {
-	// std::cout << "in addBodySize" << std::endl;
 	if (args.size() != 1 || !isDigits(args[0]))
 		throw ConfigServer::ExceptionInvalidArguments();
 	this->_client_body_buffer_size = ft_atoi(args[0].c_str());
@@ -341,11 +334,11 @@ void        ConfigServer::addClientBodyBufferSize(std::vector<std::string> args)
 void		ConfigServer::addCgiParam(std::vector<std::string> args) {
 	if (args.size() != 2)
 		throw ConfigServer::ExceptionInvalidArguments();
-	
+
 	this->_cgi_param[args[0]] = args[1];
 }
 
-void    	ConfigServer::addCgiPass(std::vector<std::string> args) {	
+void    	ConfigServer::addCgiPass(std::vector<std::string> args) {
 	if (args.size() != 1)
 		throw ConfigServer::ExceptionInvalidArguments();
 	this->_cgi_pass = args[0];
@@ -490,7 +483,7 @@ ConfigServer						ConfigServer::getLocationForRequest(std::string const path, st
 
 	if (!tryLen)
 		return *this;
-	if (!this->_location.empty()) {	
+	if (!this->_location.empty()) {
 		do {
 			tryLocation = path.substr(0, tryLen);
 			iter = this->_location.find(tryLocation);

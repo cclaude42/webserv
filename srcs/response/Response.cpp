@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Response.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:18:58 by cclaude           #+#    #+#             */
-/*   Updated: 2021/03/25 12:40:12 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/25 16:24:34 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,15 @@
 
 // Static Assets
 
-std::map<std::string, void (Response::*)(Request &, RequestConfig &)>	Response::initMethods() 
+std::map<std::string, void (Response::*)(Request &, RequestConfig &)>	Response::initMethods()
 {
 	std::map<std::string, void (Response::*)(Request &, RequestConfig &)> map;
-	
+
 	map["GET"] = &Response::getMethod;
 	map["HEAD"] = &Response::headMethod;
 	map["POST"] = &Response::postMethod;
 	map["PUT"] = &Response::putMethod;
 	map["DELETE"] = &Response::deleteMethod;
-	map["CONNECT"] = &Response::connectMethod;
 	map["OPTIONS"] = &Response::optionsMethod;
 	map["TRACE"] = &Response::traceMethod;
 
@@ -43,8 +42,6 @@ void			Response::call(Request & request, RequestConfig & requestConf)
 	_hostPort.port = requestConf.getHostPort().port;
 	_path = requestConf.getPath();
 
-	for (std::set<std::string>::iterator it = requestConf.getAllowedMethods().begin(); it != requestConf.getAllowedMethods().end(); it++)
-		std::cerr << *it << '\n';
 	if (requestConf.getAllowedMethods().find(request.getMethod()) == requestConf.getAllowedMethods().end())
 		_code = 405;
 	else if (requestConf.getClientBodyBufferSize() < request.getBody().size())
@@ -58,12 +55,11 @@ void			Response::call(Request & request, RequestConfig & requestConf)
 		return ;
 	}
 
-	
+
 	(this->*Response::_method[request.getMethod()])(request, requestConf);
 }
 
 // Methods
-
 void			Response::getMethod(Request & request, RequestConfig & requestConf)
 {
 	ResponseHeader	head;
@@ -79,6 +75,7 @@ void			Response::getMethod(Request & request, RequestConfig & requestConf)
 		while (_response.find("\r\n\r\n", i) != std::string::npos || _response.find("\r\n", i) == i)
 		{
 			std::string	str = _response.substr(i, _response.find("\r\n", i) - i);
+				std::cerr << str << std::endl;
 			if (str.find("Status: ") == 0)
 				_code = std::atoi(str.substr(8, 3).c_str());
 			else if (str.find("Content-type: ") == 0)
@@ -94,6 +91,9 @@ void			Response::getMethod(Request & request, RequestConfig & requestConf)
 		_code = readContent();
 	else
 		_response = this->readHtml(_errorMap[_code]);
+	if (_code == 500)
+		_response = this->readHtml(_errorMap[_code]);
+
 	_response = head.getHeader(_response.size(), _path, _code, _type, requestConf.getContentLocation(), requestConf.getLang()) + "\r\n" + _response;
 }
 
@@ -137,6 +137,8 @@ void			Response::postMethod(Request & request, RequestConfig & requestConf)
 		_code = 204;
 		_response = "";
 	}
+	if (_code == 500)
+		_response = this->readHtml(_errorMap[_code]);
 	_response = head.getHeader(_response.size(), _path, _code, _type, requestConf.getContentLocation(), requestConf.getLang()) + "\r\n" + _response;
 }
 
@@ -172,14 +174,7 @@ void			Response::deleteMethod(Request & request, RequestConfig & requestConf)
 		_response = this->readHtml(_errorMap[_code]);
 	_response = head.getHeader(_response.size(), _path, _code, _type, requestConf.getContentLocation(), requestConf.getLang()) + "\r\n" + _response;
 
-		
-}
 
-void			Response::connectMethod(Request & request, RequestConfig & requestConf)
-{
-	// LINK TO OTHER SERVER ?
-	(void)request;
-	(void)requestConf;
 }
 
 void			Response::optionsMethod(Request & request, RequestConfig & requestConf)
@@ -212,7 +207,7 @@ int				Response::readContent(void)
 		file.open(_path.c_str(), std::ifstream::in);
 		if (file.is_open() == false)
 		{
-			_response = _errorMap[403];
+			_response = this->readHtml(_errorMap[403]);
 			return (403);
 		}
 
@@ -263,7 +258,7 @@ std::string		Response::readHtml(const std::string& path)
 {
 	std::ofstream		file;
 	std::stringstream	buffer;
-	
+
 	if (pathIsFile(path))
 	{
 		file.open(path.c_str(), std::ifstream::in);
@@ -272,6 +267,8 @@ std::string		Response::readHtml(const std::string& path)
 
 		buffer << file.rdbuf();
 		file.close();
+		_type = "text/html";
+
 		return (buffer.str());
 	}
 	else

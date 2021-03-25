@@ -6,7 +6,7 @@
 /*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 13:20:34 by frthierr          #+#    #+#             */
-/*   Updated: 2021/03/25 12:23:24 by frthierr         ###   ########.fr       */
+/*   Updated: 2021/03/25 14:18:52 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,12 +58,6 @@ _autoindex(config.getAutoIndex())
 			config = config.getLocationForRequest(indexPath, locationName);
 			this->_cgi_pass = config.getCgiPass();
 			this->_cgi_param = config.getCgiParam();
-			std::cout << "SERVER CONF BEGIN" << std::endl;
-			std::cout << config	 << std::endl;
-			std::cout << "SERVER CONF END" << std::endl;
-
-			std::cerr << "OG" << '\n' << *this << "\n";
-			std::cerr << "END" << '\n';
 		}
 	}
 }
@@ -195,7 +189,6 @@ std::string								RequestConfig::addIndex(Request& request)
 				// NOT PROTECTED AGAINST INDEXES WITHOUT EXTENSION
 				if ((*it).find('.') != (*it).npos)
 					this->_contentLocation += (*it).substr(0, (*it).find_last_of('.') + 1) + lang->first + (*it).substr((*it).find_last_of('.'));
-				// std::cout << "Path |" << this->_path << "| valid\n";
 				return this->_path;
 			}
 		}

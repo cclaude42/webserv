@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ConfigServer.hpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 15:27:44 by user42            #+#    #+#             */
-/*   Updated: 2021/03/25 11:55:00 by frthierr         ###   ########.fr       */
+/*   Updated: 2021/03/25 14:21:53 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@
 //  add_header [http methods]: list all of the allowed http methods for a certain route, separated by whitespace
 //      by default, all methods should be allowed
 
+# include "webserv.hpp"
+
 # include "Config.hpp"
 
 class ConfigServer {
@@ -42,7 +44,7 @@ class ConfigServer {
 		};
 
 		static ConfigServer					_initDefaultServer(const char *filename);
-		
+
 		// GETERS
 		std::vector<t_listen>				getListen() const;
 		std::string							getRoot() const;
@@ -63,7 +65,7 @@ class ConfigServer {
 		ConfigServer						getLocationForRequest(std::string const path, std::string &locationPath);
 
 		friend	std::ostream &operator<<(std::ostream &out, const ConfigServer &server);
-		
+
 	private:
 		int				parseLocation(unsigned int &i, std::vector<std::string> &file);
 		// ADD MEMBER FUNCTIONS
@@ -100,7 +102,7 @@ class ConfigServer {
 		static	parseMap					locationParsingMap;
 		static parseMap 					_initServerMap();
 		static parseMap 					_initLocationMap();
-		
+
 
 };
 

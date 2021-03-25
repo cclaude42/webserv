@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   webserv.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/31 13:44:42 by cclaude           #+#    #+#             */
-/*   Updated: 2021/03/25 12:05:38 by frthierr         ###   ########.fr       */
+/*   Updated: 2021/03/25 14:23:18 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@
 # include <time.h>
 # include <limits.h>
 # include <errno.h>
+# include <dirent.h>
 
 // C System
 # include <sys/types.h>
@@ -86,7 +87,7 @@ extern "C" {
 
 // Output
 # ifndef OUT
-#  define OUT 0
+#  define OUT 1
 # endif
 # ifndef TIME
 #  define TIME 0

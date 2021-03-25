@@ -6,7 +6,7 @@
 /*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/13 15:08:57 by frthierr          #+#    #+#             */
-/*   Updated: 2021/03/11 12:34:56 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/03/25 14:22:18 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,12 @@
 
 # define CGI_HANDLER_HPP
 
-
 # include "webserv.hpp"
+
 # include "Config.hpp"
 # include "Request.hpp"
-# include "webserv.hpp"
 # include "RequestConfig.hpp"
+
 
 class CgiHandler {
 	public:

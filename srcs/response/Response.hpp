@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Response.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:18:58 by cclaude           #+#    #+#             */
-/*   Updated: 2021/03/25 10:46:25 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/25 14:08:31 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 # include "Request.hpp"
 # include "RequestConfig.hpp"
 # include "CgiHandler.hpp"
-# include "../config/Autoindex/AutoIndexGenerator.hpp"
+# include "AutoIndexGenerator.hpp"
 
 
 class Response {
@@ -41,7 +41,6 @@ public:
 	void			postMethod(Request & request, RequestConfig & requestConf);
 	void			putMethod(Request & request, RequestConfig & requestConf);
 	void			deleteMethod(Request & request, RequestConfig & requestConf);
-	void			connectMethod(Request & request, RequestConfig & requestConf);
 	void			optionsMethod(Request & request, RequestConfig & requestConf);
 	void			traceMethod(Request & request, RequestConfig & requestConf);
 

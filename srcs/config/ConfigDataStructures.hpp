@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ConfigDataStructures.hpp                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/18 14:24:34 by user42            #+#    #+#             */
-/*   Updated: 2021/01/27 14:50:17 by frthierr         ###   ########.fr       */
+/*   Updated: 2021/03/25 14:22:07 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,7 @@
 
 # define CONFIG_DATA_STRUCTURES_HPP
 
-# include <vector>
-# include <string>
-# include <algorithm>
-# include <iterator>
-# include <map>
-# include <set>
-
+# include "webserv.hpp"
 
 # define parseMap std::map<std::string, void (ConfigServer::*)(fileVector)>
 
