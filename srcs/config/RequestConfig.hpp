@@ -6,7 +6,7 @@
 /*   By: francisco <francisco@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 18:41:01 by francisz          #+#    #+#             */
-/*   Updated: 2021/03/24 20:03:22 by francisco        ###   ########.fr       */
+/*   Updated: 2021/03/25 10:26:38 by francisco        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@
 class RequestConfig {
 	public:
 		RequestConfig(void);
-		RequestConfig(ConfigServer &config, Request &request, const std::string &path,  const std::string &method, std::string &locationName);
+		RequestConfig(ConfigServer &config, Request &request, const std::string &path, \
+			const std::string &method, std::string &locationName, bool isIndexPath = false);
 		RequestConfig(RequestConfig const &src);
 		virtual ~RequestConfig(void);
 
