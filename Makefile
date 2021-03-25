@@ -113,6 +113,7 @@ clean:
 	@echo "\n\033[0;31mDeleting objects..."
 	@rm -rf $(OBJ_DIR) $(OBJ_SUBDIR)
 	@rm -rf test_us/root
+	@rm -rf client
 	@rm -rf YoupiBanane/put_here
 	@echo "\033[0m"
 
@@ -135,11 +136,15 @@ test_setup: all
 	@cp test_us/index/* test_us/root/
 	@cp test_us/root/index.html test_us/root/index_permission.html
 	@chmod 000 test_us/root/index_permission.html
+	@clang++ -o client test_us/client.cpp
 
 test_mac: test_setup
+	@osascript -e 'tell application "Terminal" to do script "cd $(PWD) && clear && ./client"'
+	@osascript -e 'tell application "Terminal" to activate'
 	./webserv test_us/conf/webserv.conf
 
 test_linux: test_setup
+	@x-terminal-emulator --working-directory=$$(pwd) -x "./client"
 	./webserv test_us/conf/webserv.conf
 
 bocal: bocal_$(OS)

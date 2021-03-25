@@ -6,7 +6,7 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 16:27:33 by hbaudet           #+#    #+#             */
-/*   Updated: 2021/03/24 17:30:42 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/25 21:18:59 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ class Request
 			int													getRet() const;
 			const	std::string&								getBody() const;
 			int													getPort() const;
-			const std::string&									getPath() const;
+			const std::string									getPath() const;
 			const std::string&									getQuery() const;
 			const std::string&									getRaw() const;
 			const std::list<std::pair<std::string, float> >&	getLang() const;
