@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RequestConfig.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 13:20:34 by frthierr          #+#    #+#             */
-/*   Updated: 2021/03/25 10:56:54 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/25 12:23:24 by frthierr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ _cgi_param(config.getCgiParam()),
 _cgi_pass(config.getCgiPass()),
 _allowed_methods(config.getAllowedMethods()),
 _lang(""),
-// _index(config.getIndex()),
 _autoindex(config.getAutoIndex())
 {
 	std::string	alias = config.getAlias();
@@ -33,6 +32,7 @@ _autoindex(config.getAutoIndex())
 	std::vector<std::string> conf_index = config.getIndex();
 	for (std::vector<std::string>::const_iterator it = conf_index.begin();\
 		it != conf_index.end(); it++) {
+
 		std::vector<std::string>::const_iterator it2 = _index.begin();
 		for (it2 = _index.begin();\
 			it2 != _index.end(); it2++) {
@@ -42,10 +42,7 @@ _autoindex(config.getAutoIndex())
 		if (it2 == _index.end())
 			_index.push_back(*it);
 		}
-	for (std::map<std::string, std::string>::const_iterator it = request.getEnv().begin();\
-		it != request.getEnv().end(); it++) {
-			_cgi_param[it->first] = it->second;
-		}
+	_cgi_param = request.getEnv();
 	if (locationName[0] != '*' && config.getAliasSet()) {
 		ret = root + alias + path.substr(locationName.length());
 		this->_contentLocation = alias + removeAdjacentSlashes(path.substr(locationName.length()));
@@ -58,19 +55,15 @@ _autoindex(config.getAutoIndex())
 	std::string indexPath;
 	if (!pathIsFile(this->_path) && method == "GET") {
 		if ((indexPath = this->addIndex(request)) != "") {
-			// if (indexPath.find('/') != indexPath.npos)
-			// 	indexPath = removeAdjacentSlashes(request.getPath() +\
-			// 	indexPath.substr(indexPath.find_first_of('/'), indexPath.npos));
-			// std::cerr << "indexPath:  "  + indexPath << '\n';
-			// std::cerr << "contentLocation:  "  + this->_contentLocation << '\n';
-			// std::cerr << "requestPath:  "  + request.getPath() << '\n';
-			// locationName = "";
-		
-			// config = config.getLocationForRequest(indexPath, locationName);
-			// RequestConfig	requestConfIndex(config, request, indexPath, method, locationName);
-			// // std::cerr << "INDEX:\n";
-			// // std::cerr << requestConfIndex;
-			// *this = requestConfIndex;
+			config = config.getLocationForRequest(indexPath, locationName);
+			this->_cgi_pass = config.getCgiPass();
+			this->_cgi_param = config.getCgiParam();
+			std::cout << "SERVER CONF BEGIN" << std::endl;
+			std::cout << config	 << std::endl;
+			std::cout << "SERVER CONF END" << std::endl;
+
+			std::cerr << "OG" << '\n' << *this << "\n";
+			std::cerr << "END" << '\n';
 		}
 	}
 }
@@ -232,6 +225,7 @@ std::string								RequestConfig::addIndex(Request& request)
 
 std::ostream	&operator<<(std::ostream &out, RequestConfig &request) {
 	out << "path: " << request._path << std::endl;
+	out << "content_location: " << request._contentLocation << std::endl;
 	out << "error_page:" << std::endl;
 	for (std::map<int, std::string>::iterator i = request._error_page.begin(); i != request._error_page.end(); i++) {
 		out << "\t" << i->first << " " << i->second << std::endl;

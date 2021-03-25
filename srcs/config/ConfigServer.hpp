@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ConfigServer.hpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: francisco <francisco@student.42.fr>        +#+  +:+       +#+        */
+/*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 15:27:44 by user42            #+#    #+#             */
-/*   Updated: 2021/03/24 20:18:48 by francisco        ###   ########.fr       */
+/*   Updated: 2021/03/25 11:55:00 by frthierr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ class ConfigServer {
 		bool								getAutoIndex() const;
 		std::string							getAlias() const;
 		bool								getAliasSet() const;
+		static ConfigServer					&getDefaultServer();
 
 		// RETURN CONFIG ACCORDING TO URI
 		ConfigServer						getLocationForRequest(std::string const path, std::string &locationPath);

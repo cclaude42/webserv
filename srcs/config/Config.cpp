@@ -3,17 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   Config.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: francisco <francisco@student.42.fr>        +#+  +:+       +#+        */
+/*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 14:30:01 by user42            #+#    #+#             */
-/*   Updated: 2021/03/24 19:03:29 by francisco        ###   ########.fr       */
+/*   Updated: 2021/03/25 12:11:58 by frthierr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Config.hpp"
 
 Config::Config(std::string	defaultServerPath) {
-	ConfigServer::_initDefaultServer(defaultServerPath.c_str());
+	try {
+		std::cout << "CONFIG CONSTUCT" << std::endl;
+		ConfigServer::_initDefaultServer(defaultServerPath.c_str());
+	}
+	catch (ConfigReader::FileNotFoundException &e) {
+		std::cerr << "Could not open default config file\n";
+	}
 	return ;
 }
 
@@ -108,6 +114,7 @@ bool		Config::getServerForRequest(ConfigServer &ret, t_listen const address, std
 }
 
 std::ostream	&operator<<(std::ostream &out, const Config &config) {
+	out << "DEFAULT_CONFIG\n" << ConfigServer::getDefaultServer() << '\n';
 	for (size_t index = 0; index < config._servers.size(); index++) {
 		out << "SERVER " << index << std::endl;
 		out << config._servers[index] << std::endl;

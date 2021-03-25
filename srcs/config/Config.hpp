@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Config.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 14:29:38 by user42            #+#    #+#             */
-/*   Updated: 2021/03/17 15:04:33 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/25 12:07:21 by frthierr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 
 class Config {
 	public:
-		Config(std::string defaultServerPath = "./default");
+		Config(std::string defaultServerPath = DEFAULT_CONFIG);
 		Config(Config const &src);
 		virtual ~Config(void);
 
