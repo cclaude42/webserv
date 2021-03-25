@@ -6,7 +6,7 @@
 /*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 14:34:43 by user42            #+#    #+#             */
-/*   Updated: 2021/01/29 16:05:34 by frthierr         ###   ########.fr       */
+/*   Updated: 2021/03/25 12:04:21 by frthierr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ fileVector	ConfigReader::readFile(const char *filename) {
 	int							fd;
 	fileVector					file;
 
+	std::cout << "FILENAME " << filename << std::endl;
 	for (int i = 0; i < READER_BUFFER_SIZE + 1;  i++)
 		buffer[i] = '\0';
 	if ((fd = open(filename, O_RDONLY)) <= 0)

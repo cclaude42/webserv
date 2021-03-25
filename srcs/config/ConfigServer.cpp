@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ConfigServer.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: francisco <francisco@student.42.fr>        +#+  +:+       +#+        */
+/*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 15:28:08 by user42            #+#    #+#             */
-/*   Updated: 2021/03/24 20:18:50 by francisco        ###   ########.fr       */
+/*   Updated: 2021/03/25 12:02:06 by frthierr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,10 @@ ConfigServer				ConfigServer::_initDefaultServer(const char *filename) {
 	fileVector		file;
 	
 	file = ConfigReader::readFile(filename);
-	if (file.empty())
+	if (file.empty()) {
 		std::cerr << "Could not open default file at location " << filename << std::endl;
+		throw ConfigReader::FileNotFoundException();
+	}
 	fileVector	begin;
 	begin.push_back("server");
 	begin.push_back("{");
@@ -474,6 +476,10 @@ std::string							ConfigServer::getAlias() const {
 
 bool								ConfigServer::getAliasSet() const {
 	return this->_aliasSet;
+}
+
+ConfigServer						&ConfigServer::getDefaultServer() {
+	return ConfigServer::_defaultServer;
 }
 
 // GET CONFIG FOR HTTP REQUEST

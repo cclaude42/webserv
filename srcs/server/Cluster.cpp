@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Cluster.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/12 16:53:41 by cclaude           #+#    #+#             */
-/*   Updated: 2021/03/24 11:09:10 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/25 12:18:53 by frthierr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 void	Cluster::config(std::string fileconf)
 {
 	_config.parse(fileconf.c_str());
+	std::cerr << _config << '\n';
 }
 
 int		Cluster::setup(void)
@@ -177,13 +178,15 @@ Cluster & Cluster::operator=(const Cluster & src)
 
 // Constructors and destructors
 
-Cluster::Cluster(void) : _config(DEFAULT_CONFIG)
+Cluster::Cluster(void): _config(DEFAULT_CONFIG)
 {
 }
 
-Cluster::Cluster(const Cluster & src) : _config(DEFAULT_CONFIG)
+Cluster::Cluster(const Cluster & src)
 {
-	*this = src;
+	if (this != &src) {
+		*this = src;
+	}
 }
 
 Cluster::~Cluster(void)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RequestConfig.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: francisco <francisco@student.42.fr>        +#+  +:+       +#+        */
+/*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 13:20:34 by frthierr          #+#    #+#             */
-/*   Updated: 2021/03/25 10:36:23 by francisco        ###   ########.fr       */
+/*   Updated: 2021/03/25 11:39:09 by frthierr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ RequestConfig::RequestConfig(void) {
 	return ;
 }
 
-RequestConfig::RequestConfig(ConfigServer &config, Request &request, const std::string &path,  const std::string &method, std::string &locationName, bool isIndexPath):
+RequestConfig::RequestConfig(ConfigServer &config, Request &request, const std::string &path,  const std::string &method, std::string &locationName):
 _error_page(config.getErrorPage()),
 _client_body_buffer_size(config.getClientBodyBufferSize()),
 _cgi_param(config.getCgiParam()),
@@ -43,35 +43,27 @@ _autoindex(config.getAutoIndex())
 			_index.push_back(*it);
 		}
 	_cgi_param = request.getEnv();
-	if (!isIndexPath) {
-		if (locationName[0] != '*' && config.getAliasSet()) {
-			ret = root + alias + path.substr(locationName.length());
-			this->_contentLocation = alias + removeAdjacentSlashes(path.substr(locationName.length()));
-		}
-		else {
-			ret = root + path;
-			this->_contentLocation = removeAdjacentSlashes(path);
-		}
-		this->_path = removeAdjacentSlashes(ret);
-		std::string indexPath;
-		if (!pathIsFile(this->_path) && method == "GET") {
-			if ((indexPath = this->addIndex(request)) != "") {
-				config = config.getLocationForRequest(indexPath, locationName);
-				this->_cgi_pass = config.getCgiPass();
-				this->_cgi_param = config.getCgiParam();
-				std::cout << "SERVER CONF BEGIN" << std::endl;
-				std::cout << config	 << std::endl;
-				std::cout << "SERVER CONF END" << std::endl;
+	if (locationName[0] != '*' && config.getAliasSet()) {
+		ret = root + alias + path.substr(locationName.length());
+		this->_contentLocation = alias + removeAdjacentSlashes(path.substr(locationName.length()));
+	}
+	else {
+		ret = root + path;
+		this->_contentLocation = removeAdjacentSlashes(path);
+	}
+	this->_path = removeAdjacentSlashes(ret);
+	std::string indexPath;
+	if (!pathIsFile(this->_path) && method == "GET") {
+		if ((indexPath = this->addIndex(request)) != "") {
+			config = config.getLocationForRequest(indexPath, locationName);
+			this->_cgi_pass = config.getCgiPass();
+			this->_cgi_param = config.getCgiParam();
+			std::cout << "SERVER CONF BEGIN" << std::endl;
+			std::cout << config	 << std::endl;
+			std::cout << "SERVER CONF END" << std::endl;
 
-				std::cerr << "OG" << '\n' << *this << "\n";
-				std::cerr << "END" << '\n';
-			}
-		}
-		else {
-			this->_path = path;
-			this->_contentLocation = path;
-			std::cerr << "FINAL REQUEST" << '\n';
-			std::cerr << *this;
+			std::cerr << "OG" << '\n' << *this << "\n";
+			std::cerr << "END" << '\n';
 		}
 	}
 }

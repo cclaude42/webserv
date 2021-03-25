@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   webserv.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/31 13:44:42 by cclaude           #+#    #+#             */
-/*   Updated: 2021/03/24 17:53:44 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/25 12:05:38 by frthierr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ extern "C" {
 // Default
 # define RECV_SIZE 65536
 # define CGI_BUFSIZE 65536
-# define DEFAULT_CONFIG "test_us/conf/default"
+# define DEFAULT_CONFIG "./srcs/config/files/default.conf"
 
 // Colors
 # define RED "\033[31m"

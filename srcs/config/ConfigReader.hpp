@@ -6,7 +6,7 @@
 /*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 14:33:47 by user42            #+#    #+#             */
-/*   Updated: 2021/01/29 15:28:46 by frthierr         ###   ########.fr       */
+/*   Updated: 2021/03/25 12:01:19 by frthierr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,10 @@ class ConfigReader {
 		ConfigReader			&operator=(ConfigReader const &src);
 		static fileVector  		readFile(const char *filename);
 		static fileVector		split(std::string str, std::string charset);
-	private:
 		class	FileNotFoundException: public std::exception{
 			virtual const char	*what() const throw();
 		};
+	private:
 };
 
 #endif
