@@ -6,7 +6,7 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:18:58 by cclaude           #+#    #+#             */
-/*   Updated: 2021/03/25 10:55:28 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/25 12:40:12 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,6 @@ void			Response::call(Request & request, RequestConfig & requestConf)
 	_hostPort.port = requestConf.getHostPort().port;
 	_path = requestConf.getPath();
 
-	std::cerr << "Requested Method : " << request.getMethod() << '\n';
-	std::cerr << "Allowed Methods : " << '\n';
 	for (std::set<std::string>::iterator it = requestConf.getAllowedMethods().begin(); it != requestConf.getAllowedMethods().end(); it++)
 		std::cerr << *it << '\n';
 	if (requestConf.getAllowedMethods().find(request.getMethod()) == requestConf.getAllowedMethods().end())
@@ -62,23 +60,6 @@ void			Response::call(Request & request, RequestConfig & requestConf)
 
 	
 	(this->*Response::_method[request.getMethod()])(request, requestConf);
-
-	// if (request.getMethod() == "GET")
-	// 	getMethod(request, requestConf);
-	// else if (request.getMethod() == "HEAD")
-	// 	headMethod(request, requestConf);
-	// else if (request.getMethod() == "POST")
-	// 	postMethod(request, requestConf);
-	// else if (request.getMethod() == "PUT")
-	// 	putMethod(request, requestConf);
-	// else if (request.getMethod() == "DELETE")
-	// 	deleteMethod(request, requestConf);
-	// else if (request.getMethod() == "CONNECT")
-	// 	connectMethod(request, requestConf);
-	// else if (request.getMethod() == "OPTIONS")
-	// 	optionsMethod(request, requestConf);
-	// else if (request.getMethod() == "TRACE")
-	// 	traceMethod(request, requestConf);
 }
 
 // Methods
@@ -89,7 +70,6 @@ void			Response::getMethod(Request & request, RequestConfig & requestConf)
 
 	if (requestConf.getCgiPass() != "")
 	{
-		std::cerr << "Running cgi ...\n";
 		CgiHandler	cgi(request, requestConf);
 		size_t		i = 0;
 		size_t		j = _response.size() - 2;
@@ -99,7 +79,6 @@ void			Response::getMethod(Request & request, RequestConfig & requestConf)
 		while (_response.find("\r\n\r\n", i) != std::string::npos || _response.find("\r\n", i) == i)
 		{
 			std::string	str = _response.substr(i, _response.find("\r\n", i) - i);
-			std::cerr << "Found [" << str << "]" << std::endl;
 			if (str.find("Status: ") == 0)
 				_code = std::atoi(str.substr(8, 3).c_str());
 			else if (str.find("Content-type: ") == 0)
@@ -115,7 +94,6 @@ void			Response::getMethod(Request & request, RequestConfig & requestConf)
 		_code = readContent();
 	else
 		_response = this->readHtml(_errorMap[_code]);
-	std::cerr << "TYPE IS" << _type << std::endl;
 	_response = head.getHeader(_response.size(), _path, _code, _type, requestConf.getContentLocation(), requestConf.getLang()) + "\r\n" + _response;
 }
 

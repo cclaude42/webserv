@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Config.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 14:30:01 by user42            #+#    #+#             */
-/*   Updated: 2021/03/25 12:11:58 by frthierr         ###   ########.fr       */
+/*   Updated: 2021/03/25 12:40:44 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 Config::Config(std::string	defaultServerPath) {
 	try {
-		std::cout << "CONFIG CONSTUCT" << std::endl;
 		ConfigServer::_initDefaultServer(defaultServerPath.c_str());
 	}
 	catch (ConfigReader::FileNotFoundException &e) {

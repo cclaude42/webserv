@@ -6,7 +6,7 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/13 15:07:29 by frthierr          #+#    #+#             */
-/*   Updated: 2021/03/24 11:00:23 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/25 12:39:35 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,22 +88,12 @@ std::string		CgiHandler::executeCgi(const std::string& scriptName) {
 	char		**env;
 	std::string	newBody;
 
-	// GETTING ENV VARIABLES
-	// this->_env["SCRIPT_NAME"] = scriptName;
-	// std::cout << "Running CGI with : " << scriptName << '\n';
 	try {
 		env = this->_getEnvAsCstrArray();
 	}
 	catch (std::bad_alloc &e) {
 		std::cout << e.what() << std::endl;
 	}
-
-	// PRINT PATH
-	// for (int i = 0 ; env[i] ; i++)
-	// {
-	// 	if (!ft_strncmp(env[i], "PATH_INFO", 9))
-	// 		std::cerr << env[i] << std::endl;
-	// }
 
 	// SAVING STDIN AND STDOUT IN ORDER TO TURN THEM BACK TO NORMAL LATER
 	saveStdin = dup(STDIN_FILENO);
