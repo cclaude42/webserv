@@ -58,7 +58,6 @@ fileVector	ConfigReader::readFile(const char *filename) {
 	int							fd;
 	fileVector					file;
 
-	std::cout << "FILENAME " << filename << std::endl;
 	for (int i = 0; i < READER_BUFFER_SIZE + 1;  i++)
 		buffer[i] = '\0';
 	if ((fd = open(filename, O_RDONLY)) <= 0)
