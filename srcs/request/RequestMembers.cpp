@@ -6,7 +6,7 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 17:10:06 by hbaudet           #+#    #+#             */
-/*   Updated: 2021/03/25 21:34:21 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/25 16:54:53 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,21 +181,7 @@ int					Request::parse(const std::string& str)
 	this->_bodEnd = str.end();
 	this->setLang();
 	this->setBody(str.substr(i, std::string::npos));
-	this->findQuery(this->_path);
 	return this->_ret;
-}
-
-void				Request::queryToEnv()
-{
-	std::vector<std::string>	token;
-
-	token = split(this->_query, '&');
-	for (std::vector<std::string>::iterator it = token.begin(); it != token.end(); it++)
-	{
-		std::cerr << (*it).substr(0, (*it).find_first_of('=')) << '\t';
-		std::cerr << (*it).substr((*it).find_first_of('=') + 1) << '\n';
-		this->_env_for_cgi[(*it).substr(0, (*it).find_first_of('='))] = (*it).substr((*it).find_first_of('=') + 1);
-	}
 }
 
 /*
@@ -252,11 +238,8 @@ std::string			Request::findQuery(const std::string& path)
 
 	i = path.find_first_of('?');
 	if (i != std::string::npos)
-		this->_query.assign(path, i + 1, std::string::npos);
+		ret.assign(path, i + 1, std::string::npos);
 
-	std::cerr << "query : " <<  this->_query << '\n';
-	if (this->_query != "")
-		this->queryToEnv();
 	return ret;
 }
 

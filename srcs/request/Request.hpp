@@ -6,11 +6,7 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 16:27:33 by hbaudet           #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2021/03/25 21:19:35 by hbaudet          ###   ########.fr       */
-=======
 /*   Updated: 2021/03/25 21:18:59 by cclaude          ###   ########.fr       */
->>>>>>> 0fdfe6f05a993277eaa510b2e71ab8a3430abd91
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +64,6 @@ class Request
 			std::string formatHeaderForCGI(std::string& key);
 			std::string	nextLine(const std::string &str, size_t& i);
 			void		setLang();
-			void		queryToEnv();
 
 
 			/*** AVAILABLE HTTP METHODS ***/
