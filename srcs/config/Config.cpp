@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Config.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
+/*   By: francisco <francisco@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 14:30:01 by user42            #+#    #+#             */
-/*   Updated: 2021/03/25 14:14:17 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/03/26 21:16:15 by francisco        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,11 +72,12 @@ int     Config::parse(const char *filename) {
 }
 
 RequestConfig	Config::getConfigForRequest(t_listen const address,\
-					std::string const uri, std::string const hostName, const std::string& method,\
+					std::string const uri, std::string hostName, const std::string& method,\
 					Request &request) const {
 	ConfigServer	server;
 	std::string		locationPath;
 
+	hostName = hostName.substr(0, hostName.find_last_of(':'));
 	this->getServerForRequest(server, address, hostName);
 	server = server.getLocationForRequest(uri, locationPath);
 	if (*(--locationPath.end()) == '/')

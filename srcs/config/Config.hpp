@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Config.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
+/*   By: francisco <francisco@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 14:29:38 by user42            #+#    #+#             */
-/*   Updated: 2021/03/25 14:22:12 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/03/26 21:10:42 by francisco        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ class Config {
 		int         						parse(const char *filename);
 		std::vector<ConfigServer>			getServers() const;
 		RequestConfig						getConfigForRequest(t_listen const address,\
-												std::string const uri, std::string const hostName, const std::string& method,\
+												std::string const uri, std::string hostName, const std::string& method,\
 												Request &request) const;
 		friend	std::ostream				&operator<<(std::ostream &out, const Config &config);
 
