@@ -6,7 +6,7 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 16:27:33 by hbaudet           #+#    #+#             */
-/*   Updated: 2021/03/25 21:18:51 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/03/27 15:46:05 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,14 +30,8 @@ std::vector<std::string>		Request::initMethods()
 
 std::vector<std::string>	Request::methods = Request::initMethods();
 
-Request::Request() :
-	_method(""), _version(""), _ret(200), _body(""), _port(80), _path(""), _query(""), _raw("")
-{
-	this->resetHeaders();
-}
-
 Request::Request(const std::string& str) :
-	_method (""), _version(""), _ret(200), _body(""), _port(80), _path(""), _query(""), _raw("")
+	_method (""), _version(""), _ret(200), _body(""), _port(80), _path(""), _query(""), _raw(str)
 {
 	this->resetHeaders();
 	this->_env_for_cgi.clear();
@@ -48,11 +42,6 @@ Request::Request(const std::string& str) :
 
 Request::~Request()
 {
-}
-
-Request::Request(const Request& obj)
-{
-	*this = obj;
 }
 
 Request&	Request::operator=(const Request& obj)
@@ -106,12 +95,9 @@ int					Request::getPort() const
 	return this->_port;
 }
 
-const std::string			Request::getPath() const
+const std::string&			Request::getPath() const
 {
-	if (_path.find("?") == std::string::npos)
-		return this->_path;
-	else
-		return _path.substr(0, _path.find("?"));
+	return this->_path;
 }
 
 const std::string&			Request::getQuery() const

@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:29:28 by cclaude           #+#    #+#             */
-/*   Updated: 2021/03/25 21:17:05 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/03/27 15:47:58 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,6 @@ long		Server::accept(void)
 
 void		Server::process(long socket, Config & conf)
 {
-	Request			request;
 	RequestConfig	requestConf;
 	Response		response;
 	std::string		recvd = "";
@@ -80,7 +79,8 @@ void		Server::process(long socket, Config & conf)
 
 	if (_requests[socket] != "")
 	{
-		if (request.parse(_requests[socket]) != 200)
+		Request			request(_requests[socket]);
+		if (request.getRet() != 200)
 			request.setMethod("GET");
 		_requests.erase(socket);
 

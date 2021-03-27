@@ -6,7 +6,7 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 16:27:33 by hbaudet           #+#    #+#             */
-/*   Updated: 2021/03/25 21:18:59 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/03/27 15:50:14 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,14 +45,12 @@ class Request
 			std::map<std::string, std::string>			_headers;
 			std::map<std::string, std::string>			_env_for_cgi;
 			int											_ret;
-			std::string::const_iterator					_bodBeg;
-			std::string::const_iterator					_bodEnd;
 			std::string									_body;
 			int											_port;
 			std::string									_path;
 			std::string									_query;
-			std::string									_raw;
 			std::list<std::pair<std::string, float> >	_lang;
+			const std::string&							_raw;
 
 			/*** PARSING ***/
 			int			readFirstLine(const std::string& line);
@@ -60,7 +58,7 @@ class Request
 			int			readVersion(const std::string& line, size_t i);
 			int			checkMethod();
 			int			checkPort();
-			std::string	findQuery(const std::string& path);
+			void		findQuery();
 			std::string formatHeaderForCGI(std::string& key);
 			std::string	nextLine(const std::string &str, size_t& i);
 			void		setLang();
@@ -69,29 +67,29 @@ class Request
 			/*** AVAILABLE HTTP METHODS ***/
 			static	std::vector<std::string>	methods;
 
-		public:
+			/*** UNAVAILABLE CTORS ***/
 			Request();
-			Request(const std::string& str);
 			Request(const Request&);
+
+		public:
+			Request(const std::string& str);
 			~Request();
 			Request&	operator=(const Request&);
 
 			/*** GETTERS ***/
-			const	std::map<std::string, std::string>&			getHeaders() const;
-			const	std::map<std::string, std::string>&			getEnv() const;
-			const	std::string&								getMethod() const;
-			const	std::string&								getVersion() const;
+			const std::map<std::string, std::string>&			getHeaders() const;
+			const std::map<std::string, std::string>&			getEnv() const;
+			const std::string&									getMethod() const;
+			const std::string&									getVersion() const;
 			int													getRet() const;
-			const	std::string&								getBody() const;
+			const std::string&									getBody() const;
 			int													getPort() const;
-			const std::string									getPath() const;
+			const std::string&									getPath() const;
 			const std::string&									getQuery() const;
 			const std::string&									getRaw() const;
 			const std::list<std::pair<std::string, float> >&	getLang() const;
 
 			/*** SETTERS **/
-		//	void	setHeader(const std::string& key, const std::string& value);
-													//not needed as of now
 			void	setBody(const std::string& line);
 			void	setRet(int);
 			void	setMethod(const std::string &method);
@@ -101,6 +99,7 @@ class Request
 			void	resetHeaders();
 			void	stripAll();
 			void	displayHeaders() const;
+
 			static std::vector<std::string>		initMethods();
 
 };
