@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ConfigServer.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
+/*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 15:28:08 by user42            #+#    #+#             */
-/*   Updated: 2021/03/25 14:18:40 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/03/28 15:41:04 by frthierr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -272,6 +272,11 @@ void        ConfigServer::addListen(std::vector<std::string> args) {
 		if (isDigits(args[0])) {
 			listen.host = 0;
 			listen.port = ft_atoi(args[0].c_str());
+			for (std::vector<t_listen>::const_iterator it = _listen.begin();\
+				it != _listen.end(); it++) {
+					if (it->port == listen.port)
+						throw ConfigServer::ExceptionInvalidArguments();
+				}
 			this->_listen.push_back(listen);
 			return ;
 		}
