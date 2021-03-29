@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:29:28 by cclaude           #+#    #+#             */
-/*   Updated: 2021/03/21 22:57:22 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/03/29 15:46:43 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ public:
 	void	process(long socket, Config & conf);
 	void	processChunk(long socket);
 	int		recv(long socket);
-	void	send(long socket);
+	int		send(long socket);
 	void	close(int socket);
 	void	clean(void);
 

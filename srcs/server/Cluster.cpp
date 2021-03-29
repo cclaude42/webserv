@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/12 16:53:41 by cclaude           #+#    #+#             */
-/*   Updated: 2021/03/25 14:00:34 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/03/29 17:31:12 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,10 +77,7 @@ void	Cluster::run(void)
 			if (n == 3)
 				n = 0;
 
-			if (_ready.empty())
-				ret = select(_max_fd + 1, &reading_set, NULL, NULL, &timeout);
-			else
-				ret = select(_max_fd + 1, &reading_set, &writing_set, NULL, &timeout);
+			ret = select(_max_fd + 1, &reading_set, &writing_set, NULL, &timeout);
 		}
 
 		if (ret > 0)
@@ -89,8 +86,18 @@ void	Cluster::run(void)
 			{
 				if (FD_ISSET(*it, &writing_set))
 				{
-					_sockets[*it]->send(*it);
-					_ready.erase(it);
+					long	ret = _sockets[*it]->send(*it);
+
+					if (ret == 0)
+						_ready.erase(it);
+					else if (ret == -1)
+					{
+						FD_CLR(*it, &_fd_set);
+						FD_CLR(*it, &reading_set);
+						_sockets.erase(*it);
+						_ready.erase(it);
+					}
+
 					ret = 0;
 					break;
 				}

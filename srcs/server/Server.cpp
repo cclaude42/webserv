@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:29:28 by cclaude           #+#    #+#             */
-/*   Updated: 2021/03/27 15:47:58 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/29 18:30:17 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,14 +80,15 @@ void		Server::process(long socket, Config & conf)
 	if (_requests[socket] != "")
 	{
 		Request			request(_requests[socket]);
+
 		if (request.getRet() != 200)
 			request.setMethod("GET");
-		_requests.erase(socket);
 
 		requestConf = conf.getConfigForRequest(this->_listen,  request.getPath(), request.getHeaders().at("Host"), request.getMethod(), request);
 
 		response.call(request, requestConf);
 
+		_requests.erase(socket);
 		_requests.insert(std::make_pair(socket, response.getResponse()));
 	}
 }
@@ -115,33 +116,57 @@ void		Server::processChunk(long socket)
 
 int			Server::recv(long socket)
 {
-	char		buffer[RECV_SIZE] = {0};
+	char	buffer[RECV_SIZE] = {0};
+	int		ret;
 
-	if (!::recv(socket, buffer, RECV_SIZE - 1, 0))
+	ret = ::recv(socket, buffer, RECV_SIZE - 1, 0);
+
+	if (ret == 0 || ret == -1)
 	{
 		this->close(socket);
-		std::cout << "\rConnection was closed.    \n" << std::endl;
+		if (!ret)
+			std::cout << "\rConnection was closed by client.\n" << std::endl;
+		else
+			std::cout << "\rRead error, closing connection.\n" << std::endl;
 		return (-1);
 	}
 
 	_requests[socket] += std::string(buffer);
 
-	if (!checkEnd(_requests[socket], "\r\n\r\n"))
+	size_t	i = _requests[socket].find("\r\n\r\n");
+	if (i != std::string::npos)
 	{
-		if ((!checkStart(_requests[socket], "POST") || !checkStart(_requests[socket], "PUT")) && countSubstr(_requests[socket], "\r\n\r\n") < 2)
+		if (_requests[socket].find("Content-Length: ") == std::string::npos)
+		{
+			if (_requests[socket].find("Transfer-Encoding: chunked") != std::string::npos)
+			{
+				if (checkEnd(_requests[socket], "0\r\n\r\n") == 0)
+					return (0);
+				else
+					return (1);
+			}
+			else
+				return (0);
+		}
+
+		size_t	len = std::atoi(_requests[socket].substr(_requests[socket].find("Content-Length: ") + 16, 10).c_str());
+		if (_requests[socket].size() >= len + i + 4)
+			return (0);
+		else
 			return (1);
-		return (0);
 	}
 
 	return (1);
 }
 
-void		Server::send(long socket)
+int			Server::send(long socket)
 {
-	int		ret = 0;
-	size_t	sent = 0;
+	static std::map<long, size_t>	sent;
 
-	if (OUT)
+	if (sent.find(socket) == sent.end())
+		sent[socket] = 0;
+
+	if (OUT && sent[socket] == 0)
 	{
 		if (_requests[socket].size() < 1000)
 			std::cout << "\rResponse :                " << std::endl << "[" << GREEN << _requests[socket] << RESET << "]\n" << std::endl;
@@ -149,16 +174,27 @@ void		Server::send(long socket)
 			std::cout << "\rResponse :                " << std::endl << "[" << GREEN << _requests[socket].substr(0, 1000) << "..." << _requests[socket].substr(_requests[socket].size() - 10, 15) << RESET << "]\n" << std::endl;
 	}
 
-	while (sent < _requests[socket].size())
+	std::string	str = _requests[socket].substr(sent[socket], RECV_SIZE);
+	int	ret = ::send(socket, str.c_str(), str.size(), 0);
+
+	if (ret == -1)
 	{
-		std::string	str = _requests[socket].substr(sent, RECV_SIZE);
-		ret = ::send(socket, str.c_str(), str.size(), 0);
-
-		if (ret != -1)
-			sent += ret;
+		this->close(socket);
+		sent[socket] = 0;
+		return (-1);
 	}
-
-	_requests.erase(socket);
+	else
+	{
+		sent[socket] += ret;
+		if (sent[socket] >= _requests[socket].size())
+		{
+			_requests.erase(socket);
+			sent[socket] = 0;
+			return (0);
+		}
+		else
+			return (1);
+	}
 }
 
 void		Server::close(int socket)
