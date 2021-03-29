@@ -6,7 +6,7 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:18:58 by cclaude           #+#    #+#             */
-/*   Updated: 2021/03/29 22:39:49 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/29 22:41:56 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,6 @@ void			Response::getMethod(Request & request, RequestConfig & requestConf)
 		while (_response.find("\r\n\r\n", i) != std::string::npos || _response.find("\r\n", i) == i)
 		{
 			std::string	str = _response.substr(i, _response.find("\r\n", i) - i);
-			// std::cerr << str << std::endl;
 			if (str.find("Status: ") == 0)
 				_code = std::atoi(str.substr(8, 3).c_str());
 			else if (str.find("Content-type: ") == 0)

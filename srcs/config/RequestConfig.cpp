@@ -6,7 +6,7 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 13:20:34 by frthierr          #+#    #+#             */
-/*   Updated: 2021/03/25 16:45:16 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/29 22:38:27 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,6 @@ const t_listen							&RequestConfig::getHostPort() const {
 bool  									RequestConfig::getAutoIndex() const {
 	return this->_autoindex;
 }
-
 
 //SETTERS
 

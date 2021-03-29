@@ -6,7 +6,7 @@
 /*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/12 16:53:41 by cclaude           #+#    #+#             */
-/*   Updated: 2021/03/29 17:31:12 by cclaude          ###   ########.fr       */
+/*   Updated: 2021/03/29 22:25:07 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,7 +152,16 @@ void	Cluster::run(void)
 			}
 		}
 		else
+		{
 			std::cerr << RED << "Problem with select !" << RESET << std::endl;
+			for (std::map<long, Server *>::iterator it = _sockets.begin() ; it != _sockets.end() ; it++)
+				it->second->close(it->first);
+			_sockets.clear();
+			_ready.clear();
+			FD_ZERO(&_fd_set);
+			for (std::map<long, Server>::iterator it = _servers.begin() ; it != _servers.end() ; it++)
+				FD_SET(it->first, &_fd_set);
+		}
 
 		n = 0;
 	}
