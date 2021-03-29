@@ -6,7 +6,7 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 16:27:33 by hbaudet           #+#    #+#             */
-/*   Updated: 2021/03/27 15:50:14 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/29 09:26:47 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@
 #endif
 
 /* USAGE :
--	char * constructor turns the output of a read call into a map of strings
 -	Method and version are stored separtely in a string.
 	Any version other than 1.0 or 1.1 is considered invalid
 	if the method or the HTTP version is invalid, ret is set to 400 (BAD Request)
@@ -32,8 +31,6 @@
 	OWS = optionnal whitespace
 -	An empty line ended by CRLF is considered to be the end of the header section
 	anything that follows is stored in a single string labelled "_body"
--	Calling 'reset' and 'parse' methods would have the same effect as
-	calling the char * constructor
 */
 
 
