@@ -6,7 +6,7 @@
 /*   By: hbaudet <hbaudet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 17:10:06 by hbaudet           #+#    #+#             */
-/*   Updated: 2021/03/29 22:32:28 by hbaudet          ###   ########.fr       */
+/*   Updated: 2021/03/29 22:50:31 by hbaudet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,7 +180,6 @@ int					Request::parse(const std::string& str)
 	this->setLang();
 	this->setBody(str.substr(i, std::string::npos));
 	this->findQuery();
-	std::cerr << RED << "Host : " << this->_headers["Host"] << RESET << '\n';
 	return this->_ret;
 }
 
