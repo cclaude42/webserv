@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Response.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: frthierr <frthierr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cclaude <cclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 14:18:58 by cclaude           #+#    #+#             */
-/*   Updated: 2021/03/25 16:52:57 by frthierr         ###   ########.fr       */
+/*   Updated: 2021/03/29 22:39:04 by cclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,6 @@ void			Response::getMethod(Request & request, RequestConfig & requestConf)
 		while (_response.find("\r\n\r\n", i) != std::string::npos || _response.find("\r\n", i) == i)
 		{
 			std::string	str = _response.substr(i, _response.find("\r\n", i) - i);
-			// std::cerr << str << std::endl;
 			if (str.find("Status: ") == 0)
 				_code = std::atoi(str.substr(8, 3).c_str());
 			else if (str.find("Content-type: ") == 0)
@@ -103,7 +102,7 @@ void			Response::headMethod(Request & request, RequestConfig & requestConf)
 	(void)request;
 
 	_code = readContent();
-	_response = head.getHeader(_response.size(), _path, _code, _type, requestConf.getContentLocation(), requestConf.getLang());
+	_response = head.getHeader(_response.size(), _path, _code, _type, requestConf.getContentLocation(), requestConf.getLang()) + "\r\n";
 }
 
 void			Response::postMethod(Request & request, RequestConfig & requestConf)
